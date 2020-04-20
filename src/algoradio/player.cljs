@@ -37,12 +37,13 @@
 
          _ (.on audio "load"
                 (fn []
+                  (js/console.log "sound loaded")
                   (if-not (play? @app-state type)
                     (do
                       (js/console.log "shouldn't play audio")
                       (js/setTimeout #(.stop audio) 100))
                     (do
-                      (js/console.log "sound loaded")
+                      (js/console.log "starting playback")
                       (.fade audio 0 1 5000)
                       (let [duration (.duration audio)
                             >5? (> duration 5)]
