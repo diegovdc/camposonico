@@ -1,6 +1,7 @@
 (ns algoradio.core
   (:require
    [algoradio.state :refer [app-state]]
+   [cljs.user]
    [reagent.core :as reagent]
    [algoradio.freesound :as freesound]
    [algoradio.player :as player]))
@@ -30,7 +31,7 @@
 
 (defn hello-world []
   [:div
-   [:h1 "Radio algorítmica"]
+   [:h1 "Campo Sonoro/Radio algorítmica"]
    [:h3 {:style {:margin-bottom "5px"}}
     "Escribe el nombre de algún tipo de paisaje (en inglés funciona mejor)."]
    [:div {:style {:margin-bottom "10px"}}
