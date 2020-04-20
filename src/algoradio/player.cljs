@@ -21,9 +21,6 @@
     (play-sound! type))
   (freesound/get-audios! app-state type))
 
-#_(do (user-play-sound! "river")
-      (js/setTimeout
-       #(rand-stop! "river") 1000))
 (defn play-sound!
   ([type] (play-sound! nil type))
   ([index type]
@@ -64,7 +61,7 @@
                               :audio audio
                               :src src
                               :type type}))))))))
-(play? @app-state "river")
+
 (defn update-density! [op type]
   "Op should be `inc` or `dec`"
   (js/console.log "update density")

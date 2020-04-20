@@ -24,12 +24,13 @@
   [:div
    [:h1 "Campo Sonoro/Radio algorítmica"]
    [:h3 {:style {:margin-bottom "5px"}}
-    "Escribe el nombre de algún tipo de paisaje (en inglés funciona mejor)."]
+    "Escribe el nombre de algún tipo de paisaje o \"tag\" relacionado (en inglés funciona mejor)."]
    [:div {:style {:margin-bottom "10px"}}
     [:small "Fuente de los sonidos: "
      [:a {:href "https://freesound.org"} "freesound.org"]]]
    [:input {:type "text"
-            :placeholder "e.g. river, birds..."
+            :style {:width "250px"}
+            :placeholder "e.g. river, birds, amazon, felix blume..."
             :value (get @app-state ::search "")
             :on-change (fn [e]
                          (swap! app-state assoc ::search
