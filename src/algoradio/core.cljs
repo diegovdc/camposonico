@@ -1,31 +1,23 @@
 (ns algoradio.core
   (:require
    [algoradio.state :refer [app-state]]
-   [cljs.user]
+   [cljs.user :refer [spy]]
    [reagent.core :as reagent]
    [algoradio.freesound :as freesound]
    [algoradio.player :as player]))
-
-(def spy cljs.user/spy)
 
 (defn fields
   [app-state]
   (spy "fields renders")
   (let [freesounds (get app-state :freesounds)
-        now-playing (->> (get app-state ::player/now-playing)
-                         (group-by :type)
-                         (map (fn [[k v]]
-                                [k (->> v
-                                        (filter (comp #(.playing %) :audio))
-                                        count)]))
-                         (into {}))]
+        now-playing (get app-state ::player/fields-density)]
     (when freesounds
       (map (fn [name] [:p {:key name}
                       [:b name] ", "
                       "sonando: " (get now-playing name 0) "/"
                       (-> freesounds (get name 0) count)
                       [:button {:on-click #(player/rand-stop! name)} "-"]
-                      [:button {:on-click #(player/play-sound! name)} "+"]])
+                      [:button {:on-click #(player/user-play-sound! name)} "+"]])
            (keys freesounds)))))
 
 
@@ -52,7 +44,7 @@
                                (-> (freesound/get-audios!
                                     app-state
                                     search)
-                                   (.then #(player/play-sound! search))
+                                   (.then #(player/user-play-sound! search))
                                    (.then #(swap! app-state
                                                   assoc ::search ""))))))}
     "Buscar"]

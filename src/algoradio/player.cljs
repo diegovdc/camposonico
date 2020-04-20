@@ -1,14 +1,29 @@
 (ns algoradio.player
   (:require [algoradio.state :refer [app-state]]
+            [cljs.user :refer [spy]]
             [algoradio.freesound :as freesound]
             ["howler" :refer [Howl]]))
 
 (declare play-sound!)
+(defn get-playing-audio-by-type [app-state type]
+  (->> (app-state ::now-playing)
+       (filter (fn [s] (and (= type (:type s))
+                           (.playing (:audio s)))))))
+
+(defn play? [app-state type]
+  (let [density (get-in app-state [::fields-density type] 0)
+        total (count (get-playing-audio-by-type app-state type))]
+    (spy "should play?" (< (max 0 total) density))))
+
 (defn notify-finished! [src type]
   (js/console.log "ended")
-  (play-sound! type)
+  (if (play? @app-state type)
+    (play-sound! type))
   (freesound/get-audios! app-state type))
 
+#_(do (user-play-sound! "river")
+      (js/setTimeout
+       #(rand-stop! "river") 1000))
 (defn play-sound!
   ([type] (play-sound! nil type))
   ([index type]
@@ -20,40 +35,65 @@
                                 :html5 true
                                 :volume 0}))
 
-         _ (.on audio "load" (fn []
-                               (js/console.log "sound loaded")
-                               (.fade audio 0 1 5000)
-                               (let [duration (.duration audio)]
-                                 (when (> duration 5)
-                                   (js/setTimeout
-                                    #(do
-                                       ;; TODO what happens if user pauses this field's stream
-                                       (notify-finished! src type)
-                                       (.fade audio 1 0 5000))
-                                    (* 1000 (- duration 5)))))))
-         id (.play audio)]
-     (.on audio "play" #(swap! app-state update ::now-playing conj
-                               {:id id
-                                :audio audio
-                                :src src
-                                :type type})))))
+         _ (.on audio "load"
+                (fn []
+                  (if-not (play? @app-state type)
+                    (do
+                      (js/console.log "shouldn't play audio")
+                      (js/setTimeout #(.stop audio) 100))
+                    (do
+                      (js/console.log "sound loaded")
+                      (.fade audio 0 1 5000)
+                      (let [duration (.duration audio)
+                            >5? (> duration 5)]
+                        (js/console.log "dur" duration)
+                        ;; TODO improve callback scheduling based on audio duration
+                        (js/setTimeout #(when >5? (.fade audio 1 0 5000))
+                                       (* 1000 (- duration (if >5? 5 0))))
+                        (js/setTimeout #(notify-finished! src type)
+                                       (* 1000 (+ 0.5 duration))))))))
+         id (.play audio)
+         _ (js/console.log "sound playing" src)]
+     (.on audio "play"
+          (fn [] (swap! app-state
+                       #(-> %
+                            (update
+                             ::now-playing conj
+                             {:id id
+                              :audio audio
+                              :src src
+                              :type type}))))))))
+(play? @app-state "river")
+(defn update-density! [op type]
+  "Op should be `inc` or `dec`"
+  (js/console.log "update density")
+  (swap! app-state update-in [::fields-density type]
+         #(if % (max 0 (op %)) 1)))
 
-(defn get-playing-audio-by-type [app-state type]
-  (->> (app-state ::now-playing)
-       (filter (fn [s] (and (= type (:type s))
-                           (.playing (:audio s)))))))
+(defn user-play-sound!
+  ([type] (user-play-sound! nil type))
+  ([index type]
+   (update-density! inc type)
+   (play-sound! index type)))
 
 (defn rand-stop! [type]
   (js/console.log "stoping sound" type)
-  (let [audios (-> (get-playing-audio-by-type
-                    @app-state
-                    type))
-        {:keys [src audio]} (when-not (empty? audios) (rand-nth audios))]
+  (let [audios (spy (-> (get-playing-audio-by-type
+                         @app-state
+                         type)))
+        {:keys [id audio]} (when-not
+                               (empty? audios)
+                             (rand-nth audios))]
+    (update-density! dec type)
     (when audio
       (.stop audio)
       (swap! app-state update ::now-playing
-             (fn [np] (remove #(= src (% :src)) np))))))
+             (fn [np] (remove #(= id (% :src)) np))))))
 
 (comment
   (reset! app-state)
   (play-sound! "mountain"))
+(comment
+  (-> @app-state ::fields-density)
+  (update-density! dec "river")
+  (count (get-playing-audio-by-type @app-state "river")))
