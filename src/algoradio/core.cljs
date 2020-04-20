@@ -38,7 +38,7 @@
     [:small "Fuente de los sonidos: "
      [:a {:href "https://freesound.org"} "freesound.org"]]]
    [:input {:type "text"
-            :placeholder "e.g. river, mountain..."
+            :placeholder "e.g. river, birds..."
             :value (get @app-state ::search "")
             :on-change (fn [e]
                          (swap! app-state assoc ::search
