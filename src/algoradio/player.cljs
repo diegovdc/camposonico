@@ -6,8 +6,8 @@
 (declare play-sound!)
 (defn notify-finished! [src type]
   (js/console.log "ended")
-  (-> (freesound/get-audios! app-state type)
-      (.then #(play-sound! type))))
+  (play-sound! type)
+  (freesound/get-audios! app-state type))
 
 (defn play-sound!
   ([type] (play-sound! nil type))
@@ -33,10 +33,10 @@
                                     (* 1000 (- duration 5)))))))
          id (.play audio)]
      (.on audio "play" #(swap! app-state update ::now-playing conj
-                              {:id id
-                               :audio audio
-                               :src src
-                               :type type})))))
+                               {:id id
+                                :audio audio
+                                :src src
+                                :type type})))))
 
 (defn get-playing-audio-by-type [app-state type]
   (->> (app-state ::now-playing)
