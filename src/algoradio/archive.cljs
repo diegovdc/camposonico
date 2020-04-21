@@ -3,10 +3,9 @@
             [cljs.user :refer [spy]]))
 
 (def sounds
-  #{#_ #_ #_#{:url "https://ia801407.us.archive.org/31/items/fuego-2020-02-22/fuego-2020-02-22.mp3"}
+  #{#{:url "https://ia801407.us.archive.org/31/items/fuego-2020-02-22/fuego-2020-02-22.mp3"}
     {:url "https://ia802809.us.archive.org/25/items/espirales_1-2020-02-22_toma_1/espirales_1-2020-02-22_toma_2.mp3"}
-    {:url "https://ia801407.us.archive.org/31/items/fuego-2020-02-22/fuego-2020-02-2223432.mp3"}
-    {:url "https://ia801709.us.archive.org/35/items/drum_overlapping_sounds_db_audio/36_38d0_l100.mid.mp3"}})
+    {:url "https://ia801407.us.archive.org/31/items/fuego-2020-02-22/fuego-2020-02-2223432.mp3"}})
 
 (defn random-interval [min max]
   (+ min (rand-int (- max min))))
