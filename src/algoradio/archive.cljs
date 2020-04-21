@@ -85,11 +85,7 @@
    (-> sound-promise
        (.then #(delay* % (spy "Delaying for (ms):" (% :schedule))))
        (.then #(do (.play (:audio %)) %))
-       (.then spy)
-       (.catch (fn [e]
-                 (js/console.log e)
-                 (js/console.log "Retrying in 5 seconds")
-                 (js/setTimeout #(apply init! retry-args) 5000))))))
+       (.then spy))))
 
 (defn init! [min-wait-time max-wait-time on-end app-state sounds]
   (when (@app-state ::should-play?)
@@ -98,8 +94,17 @@
              on-end
              (@app-state ::already-played)
              sounds)]
-      (swap! app-state assoc ::already-played (s :already-played))
-      (play! s [min-wait-time max-wait-time app-state sounds]))))
+      (-> (play! s [min-wait-time max-wait-time app-state sounds])
+          (.then (swap! app-state assoc ::already-played (s :already-played)))
+          (.catch (fn [e]
+                    (js/console.log e)
+                    (js/console.log "Retrying in 5 seconds")
+                    (js/setTimeout #(init! min-wait-time
+                                           max-wait-time
+                                           on-end
+                                           app-state
+                                           sounds)
+                                   5000)))))))
 
 (comment
   (init! 100
