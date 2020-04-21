@@ -2,7 +2,8 @@
   (:require [algoradio.state :refer [app-state]]
             [cljs.user :refer [spy]]
             [algoradio.freesound :as freesound]
-            ["howler" :refer [Howl]]))
+            ["howler" :refer [Howl]]
+            [algoradio.archive :as archive]))
 
 (declare play-sound!)
 (defn get-playing-audio-by-type [app-state type]
@@ -87,6 +88,21 @@
       (.stop audio)
       (swap! app-state update ::now-playing
              (fn [np] (remove #(= id (% :src)) np))))))
+
+(declare init-archive!)
+(defn notify-finished-archive! []
+  (spy "archive track is finished")
+  (when (spy "play next archive track?"
+             (@app-state ::archive/should-play?))
+    (init-archive! (* 1000 60) (* 1000 60 3))))
+
+(defn init-archive!
+  "Starts a track from the archive"
+  [min-wait max-wait]
+  (archive/init! min-wait max-wait
+                 notify-finished-archive!
+                 app-state
+                 archive/sounds))
 
 (comment
   (reset! app-state)

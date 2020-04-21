@@ -2,6 +2,7 @@
   (:require
    [algoradio.state :refer [app-state]]
    [cljs.user :refer [spy]]
+   [algoradio.archive :as archive]
    [reagent.core :as reagent]
    [algoradio.freesound :as freesound]
    [algoradio.player :as player]))
@@ -28,22 +29,33 @@
    [:div {:style {:margin-bottom "10px"}}
     [:small "Fuente de los sonidos: "
      [:a {:href "https://freesound.org"} "freesound.org"]]]
-   [:input {:type "text"
-            :style {:width "250px"}
-            :placeholder "e.g. river, birds, amazon, felix blume..."
-            :value (get @app-state ::search "")
-            :on-change (fn [e]
-                         (swap! app-state assoc ::search
-                                (-> e .-target .-value)))}]
-   [:button {:on-click (fn []
-                         (let [search (@app-state ::search)]
-                           (when
-                               search
-                             (-> (freesound/get-audios! app-state search)
-                                   (.then #(player/user-play-sound! search))
-                                   (.then #(swap! app-state
-                                                  assoc ::search ""))))))}
-    "Buscar"]
+   [:div {:style {:display "flex"
+                  :justify-content "space-between"}}
+    [:div
+     [:input {:type "text"
+              :style {:width "250px"}
+              :placeholder "e.g. river, birds, amazon, felix blume..."
+              :value (get @app-state ::search "")
+              :on-change (fn [e]
+                           (swap! app-state assoc ::search
+                                  (-> e .-target .-value)))}]
+     [:button {:on-click (fn []
+                           (let [search (@app-state ::search)]
+                             (when
+                                 search
+                                 (-> (freesound/get-audios! app-state search)
+                                     (.then #(player/user-play-sound! search))
+                                     (.then #(swap! app-state
+                                                    assoc ::search ""))))))}
+      "Buscar"]]
+    [:label [:input {:type "checkbox"
+                     :checked (get @app-state ::archive/should-play? false)
+                     :on-change (fn [_]
+                                  (swap! app-state update
+                                         ::archive/should-play? not)
+                                  (when (@app-state ::archive/should-play?)
+                                    (player/init-archive! 0 0)))}]
+     "Agregar música"]]
    [:div {:class "field-list"}
     (fields @app-state)]])
 
@@ -71,3 +83,4 @@
   (defn set-text! [text] (swap! app-state assoc :text text) nil)
   (set! (.. js/window -sayHello) say-hello)
   (set! (.. js/window -resetText) set-text!))
+(-> @app-state ::archive/should-play? spy )

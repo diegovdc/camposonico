@@ -1,6 +1,8 @@
 (ns algoradio.state
-  (:require [reagent.core :as reagent]))
+  (:require [reagent.core :as reagent]
+            [algoradio.archive :as archive]))
 
 (defonce app-state
   (reagent/atom {:text "Hello world!"
-                 :freesounds {}}))
+                 :freesounds {}
+                 ::archive/already-played #{}}))
