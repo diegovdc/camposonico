@@ -2,17 +2,24 @@
   "scripts": {
     "deps": "yarn install",
     "watch": "shadow-cljs watch app;",
-    "release": "shadow-cljs release app;",
+    "dev:styles": "node-sass src/styles/mazorca.scss public/css/mazorca.css --watch",
+    "release": "node-sass src/styles/mazorca.scss public/mazorca.css && shadow-cljs release app;",
     "server": "shadow-cljs server;",
     "clean": "rm -rf target; rm -rf public/js/compiled"
   },
   "dependencies": {
     "axios": "^0.19.2",
+    "codemirror": "^5.53.2",
     "create-react-class": "^15.6.2",
     "howler": "^2.1.3",
     "react": "^16.0.0",
+    "react-codemirror": "^1.0.0",
     "react-dom": "^16.0.0",
     "shadow-cljs": "^2.0.80",
     "tone": "^13.8.25"
+  },
+  "devDependencies": {
+    "mazorca-core": "^1.6.2",
+    "node-sass": "^4.13.1"
   }
 }
