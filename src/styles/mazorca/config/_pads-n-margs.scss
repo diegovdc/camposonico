@@ -1,0 +1,49 @@
+$pads: (
+	p: $base-px,
+	pt: $base-px,
+	pb: $base-px,
+	pl: $base-px,
+	pr: $base-px,
+	gutter: 50px,
+);
+
+$margs: (
+	m: $base-px,
+	mt: $base-px,
+	mb: $base-px,
+	ml: $base-px,
+	mr: $base-px,
+);
+
+$lh : (
+	base: 1.2,
+);
+
+$mb: (
+	base: $base-px
+);
+
+$spacings: (mb: $mb, pads:$pads, margs:$margs, lh: $lh);
+
+@function s($multiplier: 1, $spacing:'') {
+	@if map-has-key($pads, $spacing) {
+		@return map-get($pads, $spacing) * $multiplier;
+	}
+	@if map-has-key($margs, $spacing) {
+		@return map-get($margs, $spacing) * $multiplier;
+	}
+
+	@return $base-px * $multiplier;
+}
+
+@function lh($spacing: base) {
+	@if map-has-key($lh, $spacing) {
+		@return map-get($lh, $spacing);
+	}
+}
+
+@function mb($spacing: base) {
+	@if map-has-key($mb, $spacing) {
+		@return map-get($mb, $spacing);
+	}
+}

@@ -1,0 +1,13 @@
+$z: (
+    base:0,
+    footer: 0,
+    main-wrap:1,
+    menu-main:2
+    );
+
+
+@function z($z-index: base) {
+    @if map-has-key($z, $z-index) {
+        @return map-get($z, $z-index);
+    }
+}

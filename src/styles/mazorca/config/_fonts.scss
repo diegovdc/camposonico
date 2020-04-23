@@ -1,0 +1,17 @@
+//_________________________ Config:Fuentes _________________________ \\
+
+/**
+ * Declare fonts using the Mixin
+ */
+
+/// Refer to font families through mapped variables.
+/// Font families must be written as lists, that is, between parenthesis.
+///
+///
+$fonts:(
+	sans:	(sans-serif),
+);
+
+@function f($font) {
+	@return map-get($fonts, $font);
+}

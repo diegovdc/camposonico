@@ -1,0 +1,97 @@
+/*_________________________ Grid _________________________ */
+.grid {
+	$gutter: 20px;
+	$gutter-sm: 20px;
+
+	&__row {
+		position:relative;
+		width: 100%;
+		min-height: 1px;
+	}
+	&__container {
+		position:relative;
+		display: flex;
+		flex-wrap: wrap;
+		padding: 0 $gutter;
+		margin-left: auto;
+		margin-right: auto;
+		max-width: $container-max-width;
+		width: 100%;
+	}
+	&__col {
+
+		&-1-1,
+		&-1-2,
+		&-1-3 {
+			position:relative;
+		}
+		&-1-1 {
+			width: 100%;
+		}
+		&-1-2 {
+			@include binary-column-maker($gutter:$gutter)
+		}
+
+		&-1-3{
+			@include ternary-column-maker($gutter:$gutter)
+		}		
+
+		&-1-4{
+			@include cuaternary-column-maker($gutter:$gutter)
+		}
+	}
+
+	&__box {
+		position:relative;
+		width: 100%;
+	}
+}
+
+
+// /*Grid Debug*/
+
+// .debug {
+// 	.grid {
+// 		&__row {
+// 			position:relative;
+// 			background-color: c();
+// 			min-height: 200px;
+// 		}
+// 		&__container {
+// 			position:relative;
+// 			background-color: c(gold);
+// 			min-height: 100px;
+// 			margin-bottom: 20px;
+// 		}
+// 		&__col-1-2,
+// 		&__col-1-3 {
+// 			position:relative;
+// 			display: flex;
+// 			&:nth-of-type(even) {
+// 	 			background-color: c(ocher);
+// 	 			min-height: 100px;
+// 			}
+// 			&:nth-of-type(odd) {
+// 				background-color: c(beige);
+// 	 			min-height: 100px;
+// 			}
+// 			&--contain-fixed {
+// 				background-color: c(dark);
+// 			}
+// 		}
+
+// 		&__box {
+// 			position: relative;
+// 			background-color: (white);
+// 			min-height: 50px;
+// 			&--fixed {
+// 				background-color: c(dark);
+// 			}
+// 		}
+
+// 		&__fixedElem {
+// 			background-color: c(dark);
+// 			height: 200px;
+// 		}
+// 	}
+// }

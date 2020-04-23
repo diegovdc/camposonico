@@ -1,0 +1,30 @@
+////
+///-_________________________ Config _________________________ \\
+////
+////Config
+////The various configuration files for the framework
+////@since 1.0.0
+////@author Diego Villaseñor
+////
+
+//IMPORTANT: _base must appear after _widths
+@import "_widths";//row-max-width y otros
+@import "_base";//base, base-px, base-%
+@import "_pads-n-margs";//
+@import "_z-index";
+@import "_html-body";
+@import "_breaks";//Breakpoints
+
+@import "_colors";//
+@import "_fonts";//
+@import "_inputs";// Form Inputs
+
+// Map to hold whatever maps of the theme and framework that might need to be accessed somehow, or printed into the console (for easy consultation) via the maps() mixin. It takes a key:value pair, where key is the name of the map and the value is the corresponding map.
+/// @example $maps:(breaks:$breaks, colors:$colors);
+/// @see {mixin} maps()
+/// @since 0.0.1;
+$maps:(	breaks: $breaks,
+	colors: $colors,
+	fonts: $fonts,
+	spacings: $spacings
+	);

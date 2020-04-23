@@ -1,0 +1,14 @@
+@import "_colors";
+@include reset;
+// Tamaño base. Todos los tamaños se ajustan a esta unidad.
+//
+$base: 20;
+$base-px: 10px;
+$base-porcentaje: percentage($base-px / $row-max-width); // no cambiar
+
+html{font-size: $base-px;}
+
+h1, h2, h3, h4, h5, h6, p, a {
+	&::selection{ background: $colorFeatured; }
+	&::-moz-selection{background: $colorFeatured; }
+}

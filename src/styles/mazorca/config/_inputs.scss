@@ -1,0 +1,94 @@
+//_________________________ Input Styles _________________________ \\
+
+
+
+/*
+*   The Variables
+*   Feel free to play with them!
+*/
+
+//Borders
+$border_color:      c(white);
+$border_type:       solid;
+$border_radius:     2px;
+
+//Colors
+$input_bg_color:    rgba(0,0,0,0);
+$button_bg_color:   c(background);
+$text_color:        c(white);
+$datetime_color:    black;
+$placeholder_color: c(light-grey);
+$checked-color:     c(checked);
+$checkbox-height:   12px;
+
+//Appearance (Booleans)
+$inputAppearance:   true;/*Set to "true" for -webkit-,-moz-appereance:none
+                            useful for editing radio buttons amog other things*/
+$selectAppearance:  true;/*similar as above but for selects*/
+
+
+/*
+*   If you need to style basic layout and stuff go to your
+*   "modules/_contactForm.scss" or similar file
+*/
+
+
+/*Input Elements' Params*/
+
+
+//The meat of it, don't play with it
+input, textarea{
+    background-color: $input_bg_color;
+    color: $text_color;
+	border: 1px $border_type $border_color;
+    border-radius: $border_radius;
+	padding: 0 .5em;
+    @include custom-appearance($inputAppearance);
+}
+
+input, textarea { width: 100%;}
+
+textarea { resize:vertical;}
+
+input[type="submit"],
+input[type="button"] {
+    background-color: $button_bg_color;
+    display: block;
+}
+
+input[type="date"],
+input[type="time"],
+// input[type="submit"],
+input[type="button"] { width: auto;}
+
+input::-webkit-datetime-edit  {color: $datetime_color;}
+input::-webkit-inner-spin-button,
+input::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 1;
+}
+
+input[type="checkbox"],
+input[type="radio"]{
+    cursor: pointer;
+    padding: 0;
+    height: $checkbox-height;
+    width: $checkbox-height;
+    vertical-align: text-top;
+
+    &:checked{
+        background-color: $checked-color;
+    }
+}
+input[type="radio"]{border-radius: 100%;}
+
+
+
+select {
+    @include custom-appearance($selectAppearance);
+    cursor: pointer;
+}
+
+//The weird stuff
+input:focus, select:focus, textarea:focus, button:focus { outline: none;}
+@include placeholder($placeholder_color);

@@ -1,0 +1,7 @@
+$transition-speeds: (
+	slow: 3s ease-in,
+	medium: 2s ease-in,
+	fast: 0.7s ease-in,
+	);
+/*Default Transitions*/
+@include make-transitions();

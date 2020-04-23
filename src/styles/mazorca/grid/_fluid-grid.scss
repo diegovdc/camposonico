@@ -1,0 +1,56 @@
+/**
+* The Fluid Grid
+* -----------
+*
+* A percentage based grid (with responsive breaks). See "config/_grid" for adjusting the settings.
+*/
+
+// Las filas
+.row, .cuadricula {
+  
+  display: block;
+  overflow: hidden;
+  max-width: $row-max-width;
+  min-width: $min-device-width;
+  margin: 0 auto;
+  padding-left: $base-px;
+  padding-right: $base-px;  
+  position: relative;
+  .cuadricula, .row {
+    min-width: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+// Row ocupa el 100%
+.row{
+  width: 100%;
+}
+
+//Cuadricula ocupa el 100% mas el margen de la ultima columna
+.cuadricula {
+  width: 100% + $base-porcentaje;
+}
+
+// La columnas y cuadros
+.columns, .cuadro{
+  
+  display: block;
+  float: left;
+  position: relative;
+}
+
+// Primer hijo
+.columns:first-child {
+  margin-left: 0;
+}
+
+
+@each $clase in $fluid-grid-clases{
+  @each $break, $size in $breaks {
+    @include respond-to($break) {
+      @include generador-de-columnas($break, $number_of_columns, $clase);
+    }
+  }
+}

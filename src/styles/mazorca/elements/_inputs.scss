@@ -1,0 +1,17 @@
+%input {
+    -webkit-appearance: none;
+    -moz-appereance: none;
+    appereance: none;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+    outline: none;
+
+    @mixin placeholder-styles {
+    }
+
+    &::-webkit-input-placeholder { @include placeholder-styles; }
+    &:-moz-placeholder {@include placeholder-styles;}
+  	&::-moz-placeholder {@include placeholder-styles;}
+    &:-ms-input-placeholder { @include placeholder-styles;}
+}

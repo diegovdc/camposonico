@@ -1,0 +1,127 @@
+@charset "UTF-8";
+//===Mazorca Core===//
+@import "../../node_modules/mazorca-core/_mazorca-core.scss";
+
+//===Configs===//
+@import "mazorca/config/_config";
+
+//===Vendor===//Css begins compling here
+// @import "vendor/bootstrap/_bootstrap.scss";
+
+//===Mazorca===//
+@import "mazorca/_elements";
+@import "mazorca/_grid";//
+@import "mazorca/_components";
+@import "mazorca/_theme-helpers";
+@import "mazorca/_modules";
+
+body {
+  background-color: c(background);
+}
+
+h1 {
+  color: c(white);
+  font-size: 40px;
+  font-weight: bold;
+  padding: 20px 16px;
+  text-align: center;
+}
+
+.main {
+  padding: 16px 16px 0;
+
+}
+
+.intro {
+  &__p {
+    color: c(white);
+    font-size: 20px;
+    padding: 0 16px;
+    text-align: center;
+  }
+}
+
+.ReactCodeMirror .CodeMirror.cm-s-oceanic-next {
+  background-color: rgba(0,0,0,0);
+}
+
+.container {
+  display: flex;
+}
+
+.editor {
+  width: calc(100% - 400px);
+  font-size: 18px;
+}
+
+.sidebar {
+  max-width: 400px;
+  width: 100%;
+  padding-right: 8px;
+  &__input {
+    padding: 5px;
+    color: white;
+    font-size: 18px;
+  }
+
+
+  &__button {
+    &-container {
+      text-align: center;
+      padding-bottom: 8px;
+    }
+    padding: 7px;
+    font-size: 16px;
+    font-weight: bold;
+    border-color: whitpe;
+    border-width: 3px;
+    border-style: solid;
+    border-radius: 3px;
+    background-color: c(background);
+    color: white;
+  }
+
+  &__checkbox {
+    &-container {
+      text-align: right;
+      margin-bottom: 24px;
+    }
+    &-label {
+      font-size: 14px;
+      padding-left: 3px;
+      color: c(white);
+      position: relative;
+      top: 5px;
+    }
+
+  }
+
+  &__source {
+    padding: 5px 0 10px;
+    color: c(white);
+    font-size: 10px;
+    a{
+      color: c(checked);
+    }
+  }
+}
+
+.fields {
+  &__field {
+    font-size: 14px;
+    color: c(white);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+  }
+  &__separator {
+    padding: 0 3px;
+  }
+  &__input {
+    color: c(background);
+    background-color: c(white);
+    padding-right: 0px;
+    width: 50px;
+  }
+}
