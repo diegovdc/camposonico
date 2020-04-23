@@ -3,7 +3,7 @@
     "deps": "yarn install",
     "watch": "shadow-cljs watch app;",
     "dev:styles": "node-sass src/styles/mazorca.scss public/css/mazorca.css --watch",
-    "release": "node-sass src/styles/mazorca.scss public/mazorca.css && shadow-cljs release app;",
+    "release": "shadow-cljs release app && node-sass src/styles/mazorca.scss public/mazorca.css",
     "server": "shadow-cljs server;",
     "clean": "rm -rf target; rm -rf public/js/compiled"
   },
