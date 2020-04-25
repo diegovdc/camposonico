@@ -49,13 +49,14 @@
                              (get-results-and-next-page))]
                      (if-not (empty? results)
                        (do (swap! app-state
-                                  assoc-in
-                                  [:freesounds-pages query-]
-                                  next-page)
-                           (swap! app-state
-                                  update-in
-                                  [:freesounds query-]
-                                  concat results))
+                                  (fn [state]
+                                    (-> state
+                                        (assoc-in
+                                         [:freesounds-pages query-]
+                                         next-page)
+                                        (update-in
+                                         [:freesounds query-]
+                                         concat results)))))
                        (js/alert (str "No se encontraron resultados para: "
                                       query))))))
           (.then js/console.log )

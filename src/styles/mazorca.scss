@@ -27,9 +27,19 @@ h1 {
   text-align: center;
 }
 
+b {font-weight: bold;}
+
+.link {
+  color: c(checked);
+  cursor: pointer;
+  &:hover {
+    color: lighten(c(checked), 15%);
+  }
+}
+
 .main {
   padding: 16px 16px 0;
-
+  position: relative;;
 }
 
 .intro {
@@ -43,42 +53,58 @@ h1 {
 
 .ReactCodeMirror .CodeMirror.cm-s-oceanic-next {
   background-color: rgba(0,0,0,0);
+  min-heigh: 100%;
 }
 
 .container {
-  display: flex;
+  //  display: flex;
 }
 
 .editor {
+  max-width: 100%;
   width: 100%;
+  min-height: 100%;
+  height: 100%;
   font-size: 18px;
+  &__flashed-text {
+    background-color: c(checked);
+  }
 }
 
-.sidebar {
+.search {
+  position: absolute;
+  top: 8px;
+  right: 8px;
   max-width: 400px;
   width: 100%;
   padding-right: 8px;
+  z-index: 9;
   &__input {
+    &-container {
+      display: flex;
+      position: relative;
+    }
     padding: 5px;
     color: white;
     font-size: 18px;
+    border-radius: 3px;
+    &:focus {
+      border-color: c(checked);
+    }
   }
 
 
   &__button {
-    &-container {
-      text-align: center;
-      padding-bottom: 8px;
-    }
-    padding: 7px;
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    padding: 6px;
     font-size: 16px;
     font-weight: bold;
-    border-color: whitpe;
-    border-width: 3px;
-    border-style: solid;
-    border-radius: 3px;
-    background-color: c(background);
+    border: none;
+    background-color: transparent;
     color: white;
+    cursor: pointer;
   }
 
   &__checkbox {
@@ -98,6 +124,7 @@ h1 {
 
   &__source {
     padding: 5px 0 10px;
+    text-align: right;
     color: c(white);
     font-size: 10px;
     a{
@@ -107,13 +134,32 @@ h1 {
 }
 
 .fields {
+  position: absolute;
+  z-index: 9;
+  right: 8px;
+  top: 110px;
   &__field {
+    &-container {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      justify-content: right;
+    }
+    &-name {padding-right: 8px;}
+    &-color {
+      &-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 5px;
+      }
+      height: 16px;
+      width: 16px;
+      opacity: 0.7;
+      cursor: pointer;
+    }
+    margin-bottom: 4px;;
     font-size: 14px;
     color: c(white);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
   }
   &__separator {
     padding: 0 3px;
@@ -123,5 +169,68 @@ h1 {
     background-color: c(white);
     padding-right: 0px;
     width: 50px;
+  }
+}
+
+.source-info {
+  position: fixed;
+  width: 100%;
+  font-size: 16px;
+  z-index: 9;
+  line-height: 21px;
+  color: white;
+  opacity: 0.8;
+  &__container {
+   padding: 12px;
+  }
+  &.center, &.centro {
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+  }
+  &.bottom, &.abajo {
+    left: 0;
+    bottom: 0;
+    width: 100%;
+  }
+  &.top, &.arriba {
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  &.right, &.derecha {// Another option
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 300px;
+  }
+  &.left, &.izquierda {// Another option
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 300px;
+  }
+  &.as-background {
+    opacity: 0.3;
+    z-index: 1;
+  }
+  span {background-color: rgba(33,33,33, 0.5)}
+  .link {
+    font-size: 14px;
+    position: relative;
+    span {
+      padding: 5px 5px 5px 0;
+    }
+  }
+  &__close {
+    padding: 3px 8px;
+    font-size: 14px;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
   }
 }

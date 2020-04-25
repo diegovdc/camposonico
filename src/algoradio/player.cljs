@@ -16,10 +16,18 @@
         total (count (get-playing-audio-by-type app-state type))]
     (spy "should play?" (< (max 0 total) density))))
 
+(defn update-now-playing [now-playing]
+  (filter (fn [{:keys [audio]}]
+            (let [loading? (= "loading" (.state audio))
+                  playing? (.playing audio)]
+              (or loading? playing?)))
+          now-playing))
+
 (defn notify-finished! [src type]
   (js/console.log "ended")
   (if (play? @app-state type)
     (play-sound! type))
+  (swap! app-state update ::now-playing update-now-playing)
   (freesound/get-audios! app-state type))
 
 (defn play-sound!
@@ -28,7 +36,7 @@
    (let [idx-fn (if index
                   #(nth % index (count %))
                   #(rand-nth %))
-         src (-> @app-state :freesounds (get type) idx-fn :mp3)
+         {src :mp3 :as sound} (-> @app-state :freesounds (get type) idx-fn)
          audio (Howl. (clj->js {:src [src]
                                 :html5 true
                                 :volume 0}))
@@ -54,14 +62,14 @@
          id (.play audio)
          _ (js/console.log "sound playing" src)]
      (.on audio "play"
-          (fn [] (swap! app-state
+          (fn [] (swap! app-state update ::now-playing
                        #(-> %
-                            (update
-                             ::now-playing conj
-                             {:id id
-                              :audio audio
-                              :src src
-                              :type type}))))))))
+                            update-now-playing
+                            (conj {:id id
+                                   :audio audio
+                                   :src src
+                                   :sound sound
+                                   :type type}))))))))
 
 (defn update-density! [op type]
   "Op should be `inc` or `dec`"
@@ -86,8 +94,7 @@
     (update-density! dec type)
     (when audio
       (.stop audio)
-      (swap! app-state update ::now-playing
-             (fn [np] (remove #(= id (% :src)) np))))))
+      (swap! app-state update ::now-playing update-now-playing))))
 
 (declare init-archive!)
 (defn notify-finished-archive! []
