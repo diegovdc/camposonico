@@ -171,7 +171,7 @@
          (fn [e]
            (when (and (.-ctrlKey e)
                       (= 13 #_enter (.-keyCode e)))
-             (editor/eval! (editor/get-cm app-state))))}
+             (editor/eval! (editor/get-cm! app-state))))}
    [:> react-codemirror
     {
 :ref  (fn [ref] (when-not (@app-state ::editor/instance)
@@ -232,23 +232,18 @@
                       (drop-while empty?)
                       (str/join "\n"))
                  spy)]
-    [text (-> (get @app-state ::editor/text "")
-              (str/split "\n")
-              (->> (remove #(re-find #"^//" %))
-                   (drop-while empty?)
-                   (str/join "\n"))
-              spy)]
     (swap! app-state #(-> %
+                          (update ::editor/key inc)
                           (assoc ::editor/text text)
-                          (update ::editor/key inc)))
+                          (dissoc ::editor/instance)))
     nil))
 
+(comment
+  (remove-comment-lines!))
 
 (defn stop-rand-info! []
   (let [id (@app-state ::source-info-rand-interval)]
     (when id (js/clearInterval id))))
-
-(set-info-position! "completa")
 
 (set! (.. js/window -load) load!)
 (set! (.. js/window -showInfo) rand-info!)
@@ -258,7 +253,6 @@
 (set! (.. js/window -stop) player/rand-stop!)
 (set! (.. js/window -play) player/user-play-sound!)
 (set! (.. js/window -traerAudios) get-audios!)
-
 
 (defn start []
   (reagent/render-component [campo-sonoro]
@@ -284,5 +278,3 @@
   (defn set-text! [text] (swap! app-state assoc :text text) nil)
   (set! (.. js/window -debounce) debounce)
   (-> @app-state ::archive/should-play? spy ))
-
-(-> (editor/get-cm app-state) spy)
