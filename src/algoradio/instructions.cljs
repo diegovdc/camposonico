@@ -18,13 +18,13 @@
 //    Se activará la reproducción del archivo de música y sonido experimental
 
 
-// Método 2 (interfáz de código):
+// Método 2 (interfáz de código -JavaScript-):
 // A) (Para aprender) ejecuta en órden las siguientes lineas de código
 
 // ctrl+enter sobre la linea para ejecutarla
 load(\"ocean\")
 
-play(\"ocean\")
+play(\"ocean\") // dale ctrl+enter varias veces :)
 
 load(\"song bird\")
 
@@ -46,6 +46,20 @@ infoAsBackground(true)
 //Para cambiar la posición del editor
 setInfoPosition(\"completa\") //opciones: \"completa\", \"izquierda\", \"derecha\" \"abajo\" \"arriba\"
 
-// quitar la mayoria de las instrucciones
-clearComments() // y sigue explorando sonidos...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ")

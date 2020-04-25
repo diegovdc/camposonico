@@ -164,7 +164,8 @@
         [:a {:href (sound :url) :class "link" :target "_blank"} [:span "[Link]"]]]])))
 
 (defn editor []
-  [:div {:id "editor-container"
+  [:div {:key (get @app-state ::editor/key)
+         :id "editor-container"
          :class "editor"
          :on-key-down
          (fn [e]
@@ -172,7 +173,7 @@
                       (= 13 #_enter (.-keyCode e)))
              (editor/eval! (editor/get-cm app-state))))}
    [:> react-codemirror
-    {:key (get @app-state ::editor/key)
+    {
 :ref  (fn [ref] (when-not (@app-state ::editor/instance)
                       (swap! app-state assoc ::editor/instance ref)))
      :options {:theme "oceanic-next"
@@ -204,12 +205,10 @@
   (swap! app-state assoc ::source-info-as-background? bool))
 
 (defn set-info-position! [position]
-  (let [background? (get @app-state ::source-info-as-background? false)
-        available-positions #{"abajo" "izquierda" "derecha" "centro"
+  (let [available-positions #{"abajo" "izquierda" "derecha" "centro"
                               "arriba" "top" "bottom" "left"
                               "right" "center" "full" "completa"}]
-    (spy (available-positions position) position)
-    (when (and background? (available-positions position))
+    (when (available-positions position)
       (swap! app-state assoc ::source-info-position position))))
 
 (defn rand-info!
