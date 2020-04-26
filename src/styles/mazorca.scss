@@ -77,7 +77,6 @@ b {font-weight: bold;}
   right: 8px;
   max-width: 400px;
   width: 100%;
-  padding-right: 8px;
   z-index: 9;
   &__input {
     &-container {
@@ -109,7 +108,9 @@ b {font-weight: bold;}
 
   &__checkbox {
     &-container {
-      text-align: right;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
       margin-bottom: 24px;
     }
     &-label {
@@ -135,7 +136,7 @@ b {font-weight: bold;}
 
 .fields {
   position: absolute;
-  z-index: 9;
+  z-index: 10;
   right: 8px;
   top: 110px;
   &__field {
@@ -180,39 +181,45 @@ b {font-weight: bold;}
   line-height: 21px;
   color: white;
   opacity: 0.8;
+  display: flex;
+  left: 0;
+  bottom: 0;
+  top:0;
+  right:0;
   &__container {
-   padding: 12px;
-  }
-  &.center, &.centro {
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
     display: flex;
-    align-items: center;
-  }
-  &.bottom, &.abajo {
-    left: 0;
-    bottom: 0;
-    width: 100%;
+    flex-direction: column;
+    padding: 12px;
+    &.bottom, &.abajo {
+      justify-content: flex-end;
+    }
+    &.center, &.centro {
+      justify-content: center;
+    }
+    &.left, &.izquierda {
+      justify-content: center;
+      align-items: flex-start;
+      max-width: 400px;
+    }
+    &.right, &.derecha {
+      justify-content: center;
+      align-items: flex-start;
+      max-width: 600px;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+    }
   }
   &.top, &.arriba {
     left: 0;
     top: 0;
     width: 100%;
   }
-  &.right, &.derecha {// Another option
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 300px;
+  &.right, &.derecha {
+    justify-content:flex-end;
   }
-  &.left, &.izquierda {// Another option
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 300px;
-  }
+
   &.as-background {
     opacity: 0.3;
     z-index: 1;
@@ -231,6 +238,18 @@ b {font-weight: bold;}
     cursor: pointer;
     position: absolute;
     top: 0;
-    right: 0;
+    left: 0;
+    background-color: c(checked);
+  }
+  &__send-to-back {
+    position: absolute;
+    top: 0;
+    left: 28px;
+    font-size: 16px;
+    padding: 3px 4px;
+    cursor: pointer;
+    &:hover {
+      background-color: c(checked);
+    }
   }
 }

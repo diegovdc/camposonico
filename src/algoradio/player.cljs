@@ -23,11 +23,14 @@
               (or loading? playing?)))
           now-playing))
 
+(defn update-now-playing! []
+  (swap! app-state update ::now-playing update-now-playing))
+
 (defn notify-finished! [src type]
   (js/console.log "ended")
   (if (play? @app-state type)
     (play-sound! type))
-  (swap! app-state update ::now-playing update-now-playing)
+  (update-now-playing!)
   (freesound/get-audios! app-state type))
 
 (defn play-sound!
@@ -94,24 +97,40 @@
     (update-density! dec type)
     (when audio
       (.stop audio)
-      (swap! app-state update ::now-playing update-now-playing))))
+      (update-now-playing!))))
 
 (declare init-archive!)
 (defn notify-finished-archive! []
   (spy "archive track is finished")
   (when (spy "play next archive track?"
              (@app-state ::archive/should-play?))
-    (init-archive! (* 1000 60) (* 1000 60 3))))
+    (update-now-playing!)
+    (init-archive! 0 0)))
 
 (defn init-archive!
   "Starts a track from the archive"
   [min-wait max-wait]
-  (archive/init! min-wait max-wait
-                 notify-finished-archive!
-                 app-state
-                 archive/sounds))
+  (archive/init!
+   min-wait max-wait
+   (fn [{:keys [audio] :as sound}]
+     (swap! app-state update ::now-playing
+            #(-> %
+                 update-now-playing
+                 (conj {:sound (dissoc sound :schedule :audio)
+                        :audio audio
+                        :src (sound :mp3)
+                        :type :archive
+                        :id (-> audio .-_sounds first .-_id)}))))
+   notify-finished-archive!
+   app-state
+   archive/sounds))
 
+(defn stop-archive!
+  []
+  (archive/stop! (@app-state ::now-playing))
+  (update-now-playing!))
 (comment
+  (-> algoradio.state/app-state deref ::now-playing )
   (reset! app-state)
   (play-sound! "mountain"))
 (comment

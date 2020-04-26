@@ -44,7 +44,7 @@ infoAsBackground(true)
 
 
 //Para cambiar la posición del editor
-setInfoPosition(\"completa\") //opciones: \"completa\", \"izquierda\", \"derecha\" \"abajo\" \"arriba\"
+setInfoPosition(\"centro\") //opciones:\"centro\", \"izquierda\", \"derecha\" \"abajo\" \"arriba\"
 
 clearComments() // y sigue explorando sonidos...
 

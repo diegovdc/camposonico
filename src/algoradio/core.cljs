@@ -58,18 +58,32 @@
       [:a {:href "https://freesound.org" :target "_blank"} "freesound.org"]]]
     ]])
 
+(declare info-as-background!? set-source-info-pause! get-color describe-source!)
 (defn agregar-musica []
-  [:div {:class "search__checkbox-container"}
-   [:label
-    [:input {:class "search__checkbox"
-             :type "checkbox"
-             :checked (get @app-state ::archive/should-play? false)
-             :on-change (fn [_]
-                          (swap! app-state update
-                                 ::archive/should-play? not)
-                          (when (@app-state ::archive/should-play?)
-                            (player/init-archive! 0 0)))}]
-    [:span {:class "search__checkbox-label"} "Agregar música"]]])
+  (let [sound (spy (archive/get-first-playing-sound
+                    (get @app-state ::player/now-playing [])))]
+
+    [:div {:class "search__checkbox-container"}
+     [:label
+      [:input {:class "search__checkbox"
+               :type "checkbox"
+               :checked (get @app-state ::archive/should-play? false)
+               :on-change (fn [_]
+                            (swap! app-state update
+                                   ::archive/should-play? not)
+                            (if (@app-state ::archive/should-play?)
+                              (player/init-archive! 0 0)
+                              (player/stop-archive!)))}]
+      [:span {:class "search__checkbox-label"} "Agregar música"]]
+     (when sound
+       [:div {:key (sound :id)
+              :class "fields__field-color"
+              :style {:background-color (get-color (sound :id))}
+              :on-click #(do
+                           (spy "click" sound)
+                           (describe-source! sound)
+                           (info-as-background!? false)
+                           (set-source-info-pause! true))}])]))
 
 (defn get-int-value [event]
   (-> event  .-target .-value  js/parseInt))
@@ -106,6 +120,7 @@
                (assoc ::source-info sound)
                (assoc ::source-info-as-background? as-background?)))))
 
+
 (defn fields
   [app-state]
   (let [freesounds (get app-state :freesounds)
@@ -134,7 +149,9 @@
                    [:div {:key (sound :id)
                           :class "fields__field-color"
                           :style {:background-color (get-color id)}
-                          :on-click #(describe-source! sound)}])
+                          :on-click #(do (describe-source! sound)
+                                         (info-as-background!? false)
+                                         (set-source-info-pause! true))}])
                  (get now-playing* name))]])
         (keys freesounds)))]))
 
@@ -142,26 +159,33 @@
   (swap! app-state assoc ::source-info nil))
 
 (defn source-info []
-  (let [{:keys [sound id type src]} (get @app-state ::source-info)
+  (let [{:keys [sound id type src]} (spy "9999" (get @app-state ::source-info))
+        {:keys [description tags duration username author url]} sound
         as-background? (get @app-state ::source-info-as-background? false)
         position (get @app-state ::source-info-position "bottom")]
     (when (spy "sinfo" sound)
       [:div {:class (str "source-info "
-                         (when as-background? " as-background ")
-                         (if (#{"full" "completa"} position)
-                           "center"
-                           position))
-             :style (when (#{"full" "completa"} position)
-                      {:background-color (get-color id)})}
-       [:div {:class "source-info__container"
+                         (when as-background? " as-background "))
+             :style {:background-color (get-color id)}}
+       [:div {:class (str "source-info__container " position)
               :style {:background-color (get-color id)}}
-        [:span {:class "source-info__close"
-                :on-click close-source-info!} "X"]
-        [:p [:span [:b "descripción: "] (sound :description)]]
-        [:p [:span [:b "tags: "] (str/join ", " (sound :tags))]]
-        [:p [:span [:b "duración: "] (js/parseInt (sound :duration)) "s"]]
-        [:p [:span [:b "autor: "] (sound :username)]]
-        [:a {:href (sound :url) :class "link" :target "_blank"} [:span "[Link]"]]]])))
+        (when (not as-background?)
+          [:div
+           [:span {:class "source-info__close"
+                   :on-click close-source-info!} "X"]
+           [:span {:class "source-info__send-to-back"
+                   :on-click #(do (info-as-background!? true)
+                                  (set-source-info-pause! false))} "Mandar al fondo"]])
+        (when description
+          [:p [:span [:b "descripción: "] description]])
+        (when (not (empty? tags))
+          [:p [:span [:b "tags: "] (str/join ", " tags)]])
+        (when duration
+          [:p [:span [:b "duración: "] (js/parseInt duration) "s"]])
+        (when (or username author)
+          [:p [:span [:b "autor: "] (or username author)]])
+        (when url
+          [:a {:href url :class "link" :target "_blank"} [:span "["url"]"]])]])))
 
 (defn editor []
   [:div {:key (get @app-state ::editor/key)
@@ -174,10 +198,11 @@
              (editor/eval! (editor/get-cm! app-state))))}
    [:> react-codemirror
     {
-:ref  (fn [ref] (when-not (@app-state ::editor/instance)
+     :ref  (fn [ref] (when-not (@app-state ::editor/instance)
                       (swap! app-state assoc ::editor/instance ref)))
      :options {:theme "oceanic-next"
-               :fullScreen true}
+               :fullScreen true
+               :scrollbarStyle "null"}
      :autoSave false
      :value (get @app-state ::editor/text "")
      :on-change #(swap! app-state assoc ::editor/text %)}]])
@@ -207,7 +232,7 @@
 (defn set-info-position! [position]
   (let [available-positions #{"abajo" "izquierda" "derecha" "centro"
                               "arriba" "top" "bottom" "left"
-                              "right" "center" "full" "completa"}]
+                              "right" "center" "full" "complete"}]
     (when (available-positions position)
       (swap! app-state assoc ::source-info-position position))))
 
@@ -218,13 +243,19 @@
      (when id (js/clearInterval id)))
    (swap! app-state assoc ::source-info-rand-interval
           (js/setInterval
-           #(let [now-playing (-> (get @app-state ::player/now-playing)
-                                  )]
-              (when (seq now-playing)
-                (-> now-playing rand-nth  spy describe-source!))
-              nil )
+           #(let [now-playing (get @app-state ::player/now-playing)
+                  pause-change? (get @app-state ::source-info-paused? false)]
+              (when (and (not pause-change?) (seq now-playing))
+                (-> now-playing rand-nth  spy describe-source!)))
            timeout))))
 
+(defn set-source-info-pause!
+  "Pause random change"
+  [bool]
+  (swap! app-state assoc ::source-info-paused? bool))
+
+(comment
+  (set-source-info-pause! false))
 (defn remove-comment-lines! []
   (let [text (-> (get @app-state ::editor/text "")
                  (str/split "\n")
