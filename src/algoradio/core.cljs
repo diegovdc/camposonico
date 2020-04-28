@@ -12,7 +12,9 @@
    ["codemirror/mode/javascript/javascript"]
    ["codemirror/addon/display/fullscreen"]
    [clojure.string :as str]
-   [clojure.set :as set]))
+   [clojure.set :as set]
+   [algoradio.icons :as icons]
+   [algoradio.about :as about]))
 
 (defn get-audios!
   ([query]
@@ -207,6 +209,7 @@
      :value (get @app-state ::editor/text "")
      :on-change #(swap! app-state assoc ::editor/text %)}]])
 
+
 (defn campo-sonoro []
   (reagent/create-class
    {:component-did-mount (fn [] (js/console.log "mounted"))
@@ -222,7 +225,10 @@
         (editor)
         [:div {:class "search"} (search) (agregar-musica)]
         [:div {:class "fields"} (fields @app-state)]
-        (source-info)]])}))
+        (source-info)
+        [:button {:class "info-icon__container"
+                  :on-click about/toggle-show-about} icons/info]
+        (when (@app-state ::about/show-about?) (about/main archive/sounds))]])}))
 
 (defn info-as-background!?
   [bool]
@@ -276,6 +282,7 @@
   (let [id (@app-state ::source-info-rand-interval)]
     (when id (js/clearInterval id))))
 
+(set! (.. js/window -randNth) rand-nth)
 (set! (.. js/window -load) load!)
 (set! (.. js/window -showInfo) rand-info!)
 (set! (.. js/window -infoAsBackground) info-as-background!?)

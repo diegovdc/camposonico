@@ -3,7 +3,8 @@ $colors: (
 	white:	#FFFFFF,
         background: #1f1f35,
         light-grey: #999,
-        checked: #ffc107
+        checked: #ffc107,
+        purple: #ada3e5
 	);
 
 @function c($color:base) {
