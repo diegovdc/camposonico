@@ -46,10 +46,10 @@ infoAsBackground(true)
 //Para cambiar la posición del editor
 setInfoPosition(\"centro\") //opciones:\"centro\", \"izquierda\", \"derecha\" \"abajo\" \"arriba\"
 
+
+osc(1,1,1).out() // se puede usar el sintetizador de visuales hydra, para más información https://github.com/ojack/hydra
+
 clearComments() // y sigue explorando sonidos...
-
-
-
 
 
 

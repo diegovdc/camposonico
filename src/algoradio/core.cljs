@@ -12,7 +12,8 @@
    ["codemirror/mode/javascript/javascript"]
    ["codemirror/addon/display/fullscreen"]
    [clojure.string :as str]
-   [clojure.set :as set]
+   ["hydra-synth" :as Hydra]
+   ["tone" :as Tone]
    [algoradio.icons :as icons]
    [algoradio.about :as about]))
 
@@ -209,10 +210,22 @@
      :value (get @app-state ::editor/text "")
      :on-change #(swap! app-state assoc ::editor/text %)}]])
 
-
+(defonce h (atom nil))
+(defn create-hydra! [canvas-id]
+  (new Hydra
+       (clj->js
+        {:canvas (js/document.getElementById canvas-id)
+         :autoLoop true
+         :makeGlobal true
+         :numSources 4
+         :numOutputs 4
+         :extendTransforms []
+         :precision "mediump"
+         })))
 (defn campo-sonoro []
   (reagent/create-class
-   {:component-did-mount (fn [] (js/console.log "mounted"))
+   {:component-did-mount (fn [] (js/console.log "mounted")
+                           (reset! h (create-hydra! "hydra-canvas")))
     :reagent-render
     (fn []
       (js/console.log "render")
@@ -222,6 +235,7 @@
                        (close-source-info! nil)))}
        #_(intro)
        [:div {:class "container main"}
+        [:canvas {:id "hydra-canvas" :class "hydra-canvas"}]
         (editor)
         [:div {:class "search"} (search) (agregar-musica)]
         [:div {:class "fields"} (fields @app-state)]
@@ -251,6 +265,7 @@
           (js/setInterval
            #(let [now-playing (get @app-state ::player/now-playing)
                   pause-change? (get @app-state ::source-info-paused? false)]
+
               (when (and (not pause-change?) (seq now-playing))
                 (-> now-playing rand-nth  spy describe-source!)))
            timeout))))
@@ -278,10 +293,13 @@
 (comment
   (remove-comment-lines!))
 
+(spy h)
+
 (defn stop-rand-info! []
   (let [id (@app-state ::source-info-rand-interval)]
     (when id (js/clearInterval id))))
 
+(set! (.. js/window -Tone) Tone)
 (set! (.. js/window -randNth) rand-nth)
 (set! (.. js/window -load) load!)
 (set! (.. js/window -showInfo) rand-info!)
@@ -309,6 +327,9 @@
 (defn stop []
   ;; stop is called before any code is reloaded
   ;; this is controlled by :before-load in the config
+  (swap! app-state #(-> %
+                        (update ::editor/key inc)
+                        (dissoc ::editor/instance)))
   (js/console.log "stop"))
 
 (comment
