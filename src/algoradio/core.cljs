@@ -222,10 +222,13 @@
          :extendTransforms []
          :precision "mediump"
          })))
+
+(defn init-hydra! []
+  (reset! h (create-hydra! "hydra-canvas")))
+
 (defn campo-sonoro []
   (reagent/create-class
-   {:component-did-mount (fn [] (js/console.log "mounted")
-                           (reset! h (create-hydra! "hydra-canvas")))
+   {:component-did-mount (fn [] (js/console.log "mounted"))
     :reagent-render
     (fn []
       (js/console.log "render")
@@ -299,6 +302,7 @@
   (let [id (@app-state ::source-info-rand-interval)]
     (when id (js/clearInterval id))))
 
+(set! (.. js/window -initHydra) init-hydra!)
 (set! (.. js/window -Tone) Tone)
 (set! (.. js/window -randNth) rand-nth)
 (set! (.. js/window -load) load!)
@@ -318,6 +322,7 @@
 (comment
   (reset! app-state)
   (-> @app-state :freesounds cljs.user/spy))
+
 (defn ^:export init []
   ;; init is called ONCE when the page loads
   ;; this is called in the index.html and must be exported
