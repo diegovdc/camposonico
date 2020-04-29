@@ -1,5 +1,30 @@
 (ns algoradio.editor
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str]
+            ["react-codemirror" :as react-codemirror]
+            ["codemirror/mode/javascript/javascript"]
+            ["codemirror/addon/display/fullscreen"]))
+
+(declare eval! get-cm!)
+
+(defn main [app-state]
+  [:div {:key (get @app-state ::key)
+         :id "editor-container"
+         :class "editor"
+         :on-key-down
+         (fn [e]
+           (when (and (.-ctrlKey e)
+                      (= 13 #_enter (.-keyCode e)))
+             (eval! (get-cm! app-state))))}
+   [:> react-codemirror
+    {
+     :ref  (fn [ref] (when-not (@app-state ::instance)
+                      (swap! app-state assoc ::instance ref)))
+     :options {:theme "oceanic-next"
+               :fullScreen true
+               :scrollbarStyle "null"}
+     :autoSave false
+     :value (get @app-state ::text "")
+     :on-change #(swap! app-state assoc ::text %)}]])
 
 (defn get-cm! [app-state]
   (-> @app-state ::instance .getCodeMirror))
@@ -47,4 +72,15 @@
     (mark-text! block cm)
     (js/eval (->> block :code (str/join "\n")))
     (js/console.log (->> block :code (str/join "\n")))))
-#_(get-block cm)
+
+(defn remove-comment-lines! [app-state]
+  (let [text (-> (get @app-state ::text "")
+                 (str/split "\n")
+                 (->> (remove #(re-find #"^//" %))
+                      (drop-while empty?)
+                      (str/join "\n")))]
+    (swap! app-state #(-> %
+                          (update ::key inc)
+                          (assoc ::text text)
+                          (dissoc ::instance)))
+    nil))
