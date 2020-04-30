@@ -1,6 +1,5 @@
 (ns algoradio.editor-api
-  (:require ["tone" :as Tone]
-            [algoradio.hydra :as hydra]
+  (:require [algoradio.hydra :as hydra]
             [algoradio.source-info :as sources]
             [algoradio.editor :as editor]
             [algoradio.player :as player]
@@ -11,7 +10,6 @@
 
 (defn setup! [app-state]
   (set! (.. js/window -initHydra) hydra/init!)
-  (set! (.. js/window -Tone) Tone)
   (set! (.. js/window -randNth) rand-nth)
   (set! (.. js/window -load) (partial load-audios! app-state))
   (set! (.. js/window -showInfo) sources/rand-info!)

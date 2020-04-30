@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "mazorca-core": "^1.6.2",
-    "node-sass": "^4.13.1"
+    "node-sass": "^4.13.1",
+    "parcel": "^1.12.4"
   }
 }
