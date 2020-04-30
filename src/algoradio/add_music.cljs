@@ -22,7 +22,7 @@
      (when sound
        [:div {:key (sound :id)
               :class "fields__field-color"
-              :style {:background-color (colors/get-color (sound :id))}
+              :style {:background-color (colors/get-color (sound :id) 1)}
               :on-click #(do (sources/describe! sound)
                              (sources/as-background!? false)
                              (sources/set-pause! true))}])]))

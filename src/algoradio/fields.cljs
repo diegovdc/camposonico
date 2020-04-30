@@ -32,7 +32,7 @@
             (map (fn [{id :id :as sound}]
                    [:div {:key (sound :id)
                           :class "fields__field-color"
-                          :style {:background-color (colors/get-color id)}
+                          :style {:background-color (colors/get-color id 1)}
                           :on-click #(do (sources/describe! sound)
                                          (sources/as-background!? false)
                                          (sources/set-pause! true))}])

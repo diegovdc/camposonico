@@ -11,13 +11,16 @@
   (let [{:keys [sound id type src]} (get @app-state ::info)
         {:keys [description tags duration username author url]} sound
         as-background? (get @app-state ::as-background? false)
-        position (get @app-state ::position "bottom")]
+        position (get @app-state ::position "bottom")
+        bg-opacity (if as-background?
+                     (get @app-state ::background-opacity 0.5)
+                     1)]
     (when sound
       [:div {:class (str "source-info "
                          (when as-background? " as-background "))
-             :style {:background-color (get-color id)}}
+             :style {:background-color (get-color id bg-opacity)}}
        [:div {:class (str "source-info__container " position)
-              :style {:background-color (get-color id)}}
+              :style {:background-color (get-color id bg-opacity)}}
         (when (not as-background?)
           [:div
            [:span {:class "source-info__close"
@@ -37,9 +40,12 @@
           [:a {:href url :class "link" :target "_blank"} [:span "["url"]"]])]])))
 
 (defn as-background!?
-  [bool]
-  (when-not bool (swap! app-state assoc ::position "bottom"))
-  (swap! app-state assoc ::as-background? bool))
+  ([bool] (as-background!? bool 0.5))
+  ([bool opacity]
+   (when-not bool (swap! app-state assoc ::position "bottom"))
+   (swap! app-state assoc
+          ::as-background? bool
+          ::background-opacity opacity)))
 
 (defn set-position! [position]
   (let [available-positions #{"abajo" "izquierda" "derecha" "centro"
