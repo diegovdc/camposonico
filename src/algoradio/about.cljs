@@ -19,7 +19,7 @@
                      :class "about__works-work"}
                (print-title title year)
                [:p {:class "about__works-work-link"}
-                [:a {:href mp3} "mp3"]]
+                [:a {:href mp3 :target "_blank"} "mp3"]]
                [:p {:class "about__works-work-description"}
                 description]
                (when (not (empty? tags))
@@ -33,9 +33,12 @@
         (map :url)
         (remove nil?)
         set
-        (map (fn [url] (-> url (str/split #",")
-                          (->> (map (fn [url*]
-                                      [:a {:href url* :key url*} url*])))))))])
+        (map (fn [url]
+               (-> url (str/split #",")
+                   (->> (map (fn [url*]
+                               [:a {:href url*
+                                    :key url*
+                                    :target "_blank"} url*])))))))])
 
 
 (defn archive-data [archive]
@@ -67,10 +70,14 @@
    [:p {:class "about__p"} [:i "Camposónico (radio algorítmica) "] "es una aplicación para escuchar e intervenir paisajes sonoros y música experimental, haciendo posible una interacción con el sonido que va desde el simple autoplay hasta la experimentación creativa mediante el uso de código."]
    [:p {:class "about__p"} "Sus objetivos son los siguientes:"]
    [:ol {:class "about__ol"}
-    [:li "Facilitar la exploración del archivo de paisajes sonoros de " [:a {:href "https://freesound.org" :class "link"} "Freesound.org"] "."]
+    [:li "Facilitar la exploración del archivo de paisajes sonoros de "
+     [:a {:href "https://freesound.org"
+          :class "link"
+          :target "_blank"} "Freesound.org"] "."]
     [:li "Invitar a un juego de la escucha donde distintos espacios y tiempos puedan convivir y converger en un mismo acontecimiento."]
     [:li "Fomentar la creación y desarrollo de un "
-     [:a {:class "link" :href "#about__archive"} "archivo de música experimental"] " expresamente creada para ser escuchada junto con los paisajes sonoros."]
+     [:a {:class "link" :href "#about__archive" :target "_blank"}
+      "archivo de música experimental"] " expresamente creada para ser escuchada junto con los paisajes sonoros."]
     [:li "Invitar al escucha a jugar con ambos archivos y explorarlos creativamente mediante el código."]]
    [:h2 {:class "about__title"} "¿Cómo usar Camposónico?"]
    [:h3 {:class "about__subtitle"} "Método 1: Interfaz gráfica"]
@@ -86,7 +93,9 @@
 
    [:p {:class "about__p"}
     "Camposónico también ofrece una interfaz de código, en el lenguaje JavaScript, que permite una interacción más creativa, efectiva y activa con los materiales sonoros. Esta interfaz aun se encuentra en desarrollo, por lo que quien tenga interés puede colaborar o sugerir funcionalidades en"
-    [:a {:class "link" :href "https://github.com/diegovdc/algoradio/issues"}
+    [:a {:class "link"
+         :href "https://github.com/diegovdc/algoradio/issues"
+         :target "_blank"}
      " el repositorio que aloja el código de la aplicación."]]
    [:button {:class "about__button" :on-click #(toggle-show-functions)}
     (if-not (@app-state ::show-functions)
@@ -127,7 +136,9 @@ clearInterval(interval) // detener los cambios")
       (code-block
        "initHydra"
        [:span "Activa el sintetizador de visuales hydra-synth. "
-        [:a {:class "link" :href "https://github.com/ojack/hydra"}
+        [:a {:class "link"
+             :href "https://github.com/ojack/hydra"
+             :target "_blank"}
          "Más información"]]
        "initHydra()\nosc(1,1,1).out()")])
    [:div {:id "about__archive"}

@@ -37,7 +37,13 @@
         (when (or username author)
           [:p [:span [:b "autor: "] (or username author)]])
         (when url
-          [:a {:href url :class "link" :target "_blank"} [:span "["url"]"]])]])))
+          (-> url (str/split #",")
+              (->> (map (fn [url*]
+                          [:a {:class "link"
+                               :href url*
+                               :key url*
+                               :target "_blank"}
+                           url*])))))]])))
 
 (defn as-background!?
   ([bool] (as-background!? bool 0.5))

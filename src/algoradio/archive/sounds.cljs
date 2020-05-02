@@ -65,7 +65,7 @@
      :url "http://echoic.space,https://www.milotamez.com.mx/"
      :year "2020"
      :place "Ciudad de México, México"}
-    {:mp3 "https://ia802809.us.archive.org/25/items/espirales_1-2020-02-22_toma_1/espirales_1-2020-02-22_toma_2.mp3"
+    {:mp3 "https://ia801004.us.archive.org/29/items/birdings-draft/birds-canon.mp3"
      :title "Birdings-draft"
      :url "http://echoic.space"
      :description "Basada en una grabación de campo de Arnaud Coutancier (https://freesound.org/people/arnaud%20coutancier/sounds/467096/), procesada con Overtone para generar un canon temporal."

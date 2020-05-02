@@ -113,14 +113,14 @@
 (defn get-first-playing-sound
   [now-playing]
   (->> now-playing (filter #(= :archive (:type %))) first))
-(do
-  (defn stop! [now-playing]
-    (->> now-playing
-         get-first-playing-sound
-         :audio
-         .stop))
-  #_(stop! (-> @algoradio.state/app-state :algoradio.player/now-playing)))
+
+(defn stop! [now-playing]
+  (->> now-playing
+       get-first-playing-sound
+       :audio
+       .stop))
 (comment
+  (stop! (-> @algoradio.state/app-state :algoradio.player/now-playing))
   (init! 100
          500
          #(spy "archive sound ended")
