@@ -3,6 +3,7 @@
    [algoradio.about :as about]
    [algoradio.add-music :as add-music]
    [algoradio.archive :as archive]
+   [algoradio.archive.sounds :as archive*]
    [algoradio.editor :as editor]
    [algoradio.editor-api :as editor-api]
    [algoradio.fields :as fields]
@@ -40,7 +41,7 @@
         (sources/main app-state)
         [:button {:class "info-icon__container"
                   :on-click about/toggle-show-about} icons/info]
-        (when (@app-state ::about/show-about?) (about/main archive/sounds))]])}))
+        (when (@app-state ::about/show-about?) (about/main archive*/sounds))]])}))
 
 (defn start []
   (reagent/render-component [campo-sonoro]

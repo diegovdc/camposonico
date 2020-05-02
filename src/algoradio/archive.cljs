@@ -1,25 +1,7 @@
 (ns algoradio.archive
   (:require ["howler" :refer [Howl]]
-            [cljs.user :refer [spy spy->]]))
-
-(def sounds
-  #{{:mp3 "https://ia801407.us.archive.org/31/items/fuego-2020-02-22/fuego-2020-02-22.mp3"
-     :title "Fuego"
-     :author "Diego Villaseñor/Milo Tamez"
-     :tags ["fire" "resynthesis" "guitar" "drums" "temporal canon"]
-     :description "A description"
-     :url "http://echoic.space"
-     :year "2020"
-     :place "Ciudad de México, México"}
-    {:mp3 "https://ia802809.us.archive.org/25/items/espirales_1-2020-02-22_toma_1/espirales_1-2020-02-22_toma_2.mp3"
-     :title "Espirales"
-     :url "http://echoic.space"
-     :tags ["humidity" "guitar" "drums" "spirals"]
-     :author "Diego Villaseñor"}
-    {:author "Diego Villaseñor"
-     :title "Fuego 2"
-     :url "http://echoic.space2"
-     :mp3  "https://ia801407.us.archive.org/31/items/fuego-2020-02-22/fuego-2020-02-2223432.mp3"}})
+            [cljs.user :refer [spy spy->]]
+            [algoradio.archive.sounds :refer [sounds]]))
 
 (defn random-interval [min max]
   (+ min (rand-int (- max min))))

@@ -33,7 +33,9 @@
         (map :url)
         (remove nil?)
         set
-        (map (fn [url] [:a {:href url :key url} url])))])
+        (map (fn [url] (-> url (str/split #",")
+                          (->> (map (fn [url*]
+                                      [:a {:href url* :key url*} url*])))))))])
 
 
 (defn archive-data [archive]

@@ -3,7 +3,8 @@
             [cljs.user :refer [spy]]
             [algoradio.freesound :as freesound]
             ["howler" :refer [Howl]]
-            [algoradio.archive :as archive]))
+            [algoradio.archive :as archive]
+            [algoradio.archive.sounds :as archive*]))
 
 (declare play-sound!)
 (defn get-playing-audio-by-type [app-state type]
@@ -122,7 +123,7 @@
                         :id (-> audio .-_sounds first .-_id)}))))
    notify-finished-archive!
    app-state
-   archive/sounds))
+   archive*/sounds))
 
 (defn stop-archive!
   []
