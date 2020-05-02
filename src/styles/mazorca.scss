@@ -190,6 +190,7 @@ b {font-weight: bold;}
     display: flex;
     flex-direction: column;
     padding: 12px;
+    width: 100%;
     &.bottom, &.abajo {
       justify-content: flex-end;
     }
