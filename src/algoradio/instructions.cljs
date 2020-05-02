@@ -20,29 +20,8 @@
 // A) En la caja de búsqueda (arriba a la derecha)
 //    escribe el nombre del paisaje sonoro que quisieras escuchar.
 //    (Las búsquedas en inglés suelen arrojar más resultados)
-//
-// B) Cuando la búsqueda haya terminado, se iniciará la reproducción de
-//    una de las pistas encontradas y, aparecerá lo siguiente del lado derecho:
-//    El nombre del resultado junto con dos números
-//     1. El primero corresponde a los pistas que suenan actualmente
-//        Éstas pistas se eligen al azar.
-//        No hay límite a la cantidad de sonidos que puedes activar, y
-//        y si quieres silenciarlos todos, usa 0.
-//         (Tip: puedes usar las flechas del teclado)
-//     2. El segundo corresponde al número de pistas disponibles.
-//        Al principio se cargarán sólo 15.
-//        Si hay más pistas disponibles (dependiendo de la búsqueda):
-//         Entonces, al terminar cada una de estas pistas se cargaran otras 15
-//         y así sucesivamente.
-//
-// C) Debajo aparecerá un pequeño cuadro por cada capa activa
-//    Al dar click en este cuadro aparecerán lo datos que le corresponden.
-//    Para esconder la información se puede dar click en los botones:
-//    1. \"X\" - para cerrar
-//    2. \"Mandar al fondo\" - para mantener la información visible
-//         sin bloquear el resto de la interfaz
-//
-// D) Al dar click en \"Agregar música\":
+
+// B) Al dar click en \"Agregar música\":
 //    Se activará la reproducción del archivo de música y sonido experimental
 
 
@@ -52,6 +31,7 @@
 // ctrl+enter sobre la linea para ejecutarla
 load(\"ocean\")
 
+//espera unos segundos para que aparezca \"ocean\" del lado derecho
 play(\"ocean\") // dale ctrl+enter varias veces :)
 
 load(\"song bird\")
@@ -71,13 +51,9 @@ showInfo(3000)
 infoAsBackground(true)
 
 
-//Para cambiar la posición del editor
+//Para cambiar la posición de la información en el editor
 setInfoPosition(\"centro\") //opciones:\"centro\", \"izquierda\", \"derecha\" \"abajo\" \"arriba\"
 
-
-// se puede usar el sintetizador de visuales hydra, para más información https://github.com/ojack/hydra
-initHydra()
-osc(1,1,1).out()
 
 clearComments() // y sigue explorando sonidos...
 

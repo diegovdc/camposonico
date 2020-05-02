@@ -10,7 +10,7 @@
 (defn main [app-state]
   (let [{:keys [sound id type src]} (get @app-state ::info)
         {:keys [description tags duration username author url]} sound
-        as-background? (get @app-state ::as-background? false)
+        as-background? (get @app-state ::as-background? true)
         position (get @app-state ::position "bottom")
         bg-opacity (if as-background?
                      (get @app-state ::background-opacity 0.5)
@@ -69,10 +69,7 @@
            timeout))))
 
 (defn describe!
-  ([sound]
-   (describe! sound (get @app-state
-                                ::as-background?
-                                false)))
+  ([sound] (describe! sound (get @app-state ::as-background? true)))
   ([sound as-background?]
    (swap! app-state
           #(-> %

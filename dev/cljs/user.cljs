@@ -28,7 +28,7 @@
   "Example: (spy :some-symbol some-func return-value) => return-value ;; logs everything to the console"
   [& args]
   (apply
-   (make-spy #(doseq [x %] (js/console.log x)))
+   (make-spy #(doseq [x %] (js/console.debug x)))
    args))
 
 (defn spy->

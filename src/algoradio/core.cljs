@@ -21,7 +21,9 @@
 
 (defn campo-sonoro []
   (reagent/create-class
-   {:component-did-mount (fn [] (editor-api/setup! app-state))
+   {:component-did-mount (fn []
+                           (editor-api/setup! app-state)
+                           (sources/rand-info!))
     :reagent-render
     (fn []
       (js/console.debug "render")

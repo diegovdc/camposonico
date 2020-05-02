@@ -43,7 +43,7 @@
          audio (Howl. (clj->js {:src [src]
                                 :html5 true
                                 :volume 0}))
-
+         _ (js/console.log "will load sound playing" type src)
          _ (.on audio "load"
                 (fn []
                   (js/console.log "sound loaded")
@@ -62,8 +62,7 @@
                                        (* 1000 (- duration (if >5? 5 0))))
                         (js/setTimeout #(notify-finished! src type)
                                        (* 1000 (+ 0.5 duration))))))))
-         id (.play audio)
-         _ (js/console.log "sound playing" src)]
+         id (.play audio)]
      (.on audio "play"
           (fn [] (swap! app-state update ::now-playing
                        #(-> %

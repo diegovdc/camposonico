@@ -3,6 +3,9 @@
             [algoradio.state :refer [app-state]]
             [clojure.string :as str]))
 
+(defn toggle-show-functions []
+  (swap! app-state update ::show-functions not))
+
 (defn print-title [title year]
   [:h5 {:class "about__works-work-title"}
    (str title
@@ -35,7 +38,6 @@
 
 (defn archive-data [archive]
   [:div {:class "about__works"}
-   [:p [:b "Obras y artistas"]]
    [:div {:class "about__works-container"}
     (->> archive
          (group-by :author)
@@ -58,29 +60,47 @@
 
 (defn main [archive]
   [:div {:class "about"}
-   [:button {:class "about__close"
-             :on-click toggle-show-about} "X"]
+   [:button {:class "about__close" :on-click toggle-show-about} "X"]
    [:h2 {:class "about__title"} "¿Qué es Camposónico?"]
    [:p {:class "about__p"} [:i "Camposónico (radio algorítmica) "] "es una aplicación para escuchar e intervenir paisajes sonoros y música experimental, haciendo posible una interacción con el sonido que va desde el simple autoplay hasta la experimentación creativa mediante el uso de código."]
    [:p {:class "about__p"} "Sus objetivos son los siguientes:"]
    [:ol {:class "about__ol"}
     [:li "Facilitar la exploración del archivo de paisajes sonoros de " [:a {:href "https://freesound.org" :class "link"} "Freesound.org"] "."]
     [:li "Invitar a un juego de la escucha donde distintos espacios y tiempos puedan convivir y converger en un mismo acontecimiento."]
-    [:li "Fomentar la creación y desarrollo de un archivo de música experimental expresamente creada para ser escuchada junto con los paisajes sonoros."]
+    [:li "Fomentar la creación y desarrollo de un "
+     [:a {:class "link" :href "#about__archive"} "archivo de música experimental"] " expresamente creada para ser escuchada junto con los paisajes sonoros."]
     [:li "Invitar al escucha a jugar con ambos archivos y explorarlos creativamente mediante el código."]]
    [:h2 {:class "about__title"} "¿Cómo usar Camposónico?"]
-   [:p {:class "about__p"} "La manera más sencilla de usarlo es ingresando alguna término en la barra de búsqueda que se encuentra en la esquina superior derecha de la ventana. Es posible ingresar cualquier número de búsquedas, y controlar cuántas grabaciones se reproducirán al mismo tiempo en un momento dado. La elección de los audios particulares es aleatoria."]
-   [:p {:class "about__p"} "Camposónico también ofrece una interfaz de código, en el lenguaje JavaScript, que permite una interacción más creativa, efectiva y activa con los materiales sonoros. Esta interfaz aun se encuentra en desarrollo, por lo que los interesado puede colaborar o sugerir funcionalidades en" [:a {:href "https://github.com/diegovdc/algoradio/issues"} " el repositorio que aloja el código de la aplicación "]]
+   [:h3 {:class "about__subtitle"} "Método 1: Interfaz gráfica"]
+   [:p {:class "about__p"}
+    "La manera más sencilla de usarlo es ingresando alguna término en la barra de búsqueda que se encuentra en la esquina superior derecha de la ventana. Es posible ingresar cualquier número de búsquedas, y controlar cuántas grabaciones se reproducirán al mismo tiempo en un momento dado. La elección de los audios particulares es aleatoria."]
+   [:p {:class "about__p"}
+    "Cuando se cargan los resultados de una búsqueda, estos aparecerán debajo de la barra de búsqueda. Aparecerán también un \"input\" o \"control\" numérico y un número más su derecha, algo como \"1/15\". El input permite controlar la cantidad de capas de el tipo de paisaje seleccionado, cero calla todas las capas,y cualquier numero mayor a 0 determinará que se activen tantas capas como se esepcifica" [:b "*"]". El otro número indica la cantidad de capas distintas que están disponibles. Sí hay más capas disponibles éstas se irán descargando paulatinamente."]
+   [:p {:class "about__p"}
+    "Cada que una capa se activa aparecerá un cuadrito de color. Al dar click en este cuadrito se mostrará la información correspondiente a dicha capa (autor, descripción, link, etc.)."]
+   [:p {:class "about__p"}
+    [:b "*Nota: "] "Es posible que el número que controla la cantidad de capas no corresponda con el número de capas que suenan actualmente (y que se muestra en la interfaz con los cuadritos de colores). Esto se debe a ciertas limitaciones en el servicio de Freesound.org. Esto generalmente sucede cuando se activan o desactivan muchas capas rápidamente."]
+   [:h3 {:class "about__subtitle"} "Método 2: Interfaz de código"]
 
-   [:h3 {:class "about__subtitle"} "Funciones básicas"]
-   (code-block "load" "Carga un tipo de paisaje sonoro. La búsqueda en freesound.org se hace por \"tags\"." "load(\"veracruz\")")
-   (code-block "play" "Agrega una capa de este paisaje sonoro" "play(\"veracruz\")")
-   (code-block "stop" "Quita una capa de este paisaje sonoro" "stop(\"veracruz\")")
-   (code-block "showInfo" "Muestra la información de los sonidos y la música que suenan actualmente. El parámetro numérico determina la velocidad con la que se pasa de una track al siguiente (en milisegundos)" "showInfo(7000)")
-   (code-block "setInfoPosition" "Determina la posición en la pantalla donde aparecerá el texto" "setInfoPosition(\"center\") // otras opciones \"left\", \"right\" \"top\" \"bottom\"")
-   (code-block
-    "randNth" "Elige un elemento de un array al azar cada 5 segundos"
-    "paisajes = [\"ocean\", \"bright\", \"sand\", \"forest\", \"faraway\", \"nightingale\"]
+   [:p {:class "about__p"}
+    "Camposónico también ofrece una interfaz de código, en el lenguaje JavaScript, que permite una interacción más creativa, efectiva y activa con los materiales sonoros. Esta interfaz aun se encuentra en desarrollo, por lo que quien tenga interés puede colaborar o sugerir funcionalidades en"
+    [:a {:class "link" :href "https://github.com/diegovdc/algoradio/issues"}
+     " el repositorio que aloja el código de la aplicación."]]
+   [:button {:class "about__button" :on-click #(toggle-show-functions)}
+    (if-not (@app-state ::show-functions)
+      "Mostrar funciones"
+      "Ocultar funciones")]
+   (when (@app-state ::show-functions)
+     [:div
+      [:h3 {:class "about__subtitle"} "Funciones básicas"]
+      (code-block "load" "Carga un tipo de paisaje sonoro. La búsqueda en freesound.org se hace por \"tags\"." "load(\"veracruz\")")
+      (code-block "play" "Agrega una capa de este paisaje sonoro" "play(\"veracruz\")")
+      (code-block "stop" "Quita una capa de este paisaje sonoro" "stop(\"veracruz\")")
+      (code-block "showInfo" "Muestra la información de los sonidos y la música que suenan actualmente. El parámetro numérico determina la velocidad con la que se pasa de una track al siguiente (en milisegundos)" "showInfo(7000)")
+      (code-block "setInfoPosition" "Determina la posición en la pantalla donde aparecerá el texto" "setInfoPosition(\"center\") // otras opciones \"left\", \"right\" \"top\" \"bottom\"")
+      (code-block
+       "randNth" "Elige un elemento de un array al azar cada 5 segundos"
+       "paisajes = [\"ocean\", \"bright\", \"sand\", \"forest\", \"faraway\", \"nightingale\"]
 
 paisajes.forEach(p => load(p))
 
@@ -102,7 +122,21 @@ interval = setInterval(
 )
 
 clearInterval(interval) // detener los cambios")
+      (code-block
+       "initHydra"
+       [:span "Activa el sintetizador de visuales hydra-synth. "
+        [:a {:class "link" :href "https://github.com/ojack/hydra"}
+         "Más información"]]
+       "initHydra()\nosc(1,1,1).out()")])
+   [:div {:id "about__archive"}
+    [:h2 {:class "about__title"} "El archivo de música experimental"]
+    [:p {:class "about__p"}
+     "Camposónico cuenta con un archivo de música experimental concebida para ser escuchada con y sin los paisajes sonoros. Este archivo es abierto y se encuentra en constante crecimiento."]
+    [:p {:class "about__p"}
+     "Eventualmente se proveeran más funciones en al interfaz de código la cuáles permitirán realizar otros tipos de escucha de esta música."]
+    [:p {:class "about__p"}
+     "Para activar la reproducción del archivo basta con activar la casilla \"Agregar música\" que se encuentra debajo de la barra de búsqueda."]
+    [:p {:class "about__p"}
+     "A continuación se muestra la lista completa de piezas actualmente en el archivo."]
 
-   [:h2 {:class "about__title"} "El archivo de música y sonido"]
-   (archive-data archive)
-   ])
+    (archive-data archive)]])
