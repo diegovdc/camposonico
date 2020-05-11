@@ -2,7 +2,7 @@
 
 (def info
   [:svg {:xmlns "http://www.w3.org/2000/svg"
-         :xmlns:xlink "http://www.w3.org/1999/xlink"
+         :xmlnsXlink "http://www.w3.org/1999/xlink"
          :viewBox "0 0 1000 1000"}
    [:metadata "IcoFont Icons"]
    [:title "info-circle"]

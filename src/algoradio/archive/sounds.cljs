@@ -1,7 +1,23 @@
 (ns algoradio.archive.sounds)
 
 (def sounds
-  #{{:mp3 "https://ia801503.us.archive.org/2/items/cajas-acustica-y-electrica/Cajas%3B%20ac%C3%BAstica%20y%20el%C3%A9ctrica.mp3"
+  #{{:mp3 "https://ia801506.us.archive.org/31/items/sonotexto-neighborhood/sonotexto-neighborhood.mp3"
+     :title "sonotexto-neighborhood"
+     :author "Hernani Villaseñor"
+     :tags ["soundscape" "live coding" "urban" "children"]
+     :description "A soundscape of a mexican neighborhood is captured with SonoTexto class, then live coded with SuperCollider. This is part of the SonoTexto sound pieces series."
+     :url "http://www.hernanivillasenor.com/"
+     :year "2020"
+     :place "Ciudad de México, México"}
+    {:mp3 "https://ia600803.us.archive.org/34/items/atsintli_olas/Olas.mp3"
+     :title "Olas"
+     :author "Aaron Escobar"
+     :tags ["convolution" "synthesis" "broken" "glass" "experimental" "music" "noise" "atsintli" "aaron" "escobar"]
+     :description "Broken glass convoluted with itself."
+     :url "https://archive.org/details/atsintli_olas"
+     :year "2013"
+     :place nil}
+    {:mp3 "https://ia801503.us.archive.org/2/items/cajas-acustica-y-electrica/Cajas%3B%20ac%C3%BAstica%20y%20el%C3%A9ctrica.mp3"
      :title "Cajas: Acústica Y Eléctrica"
      :author "Nefi H. Dominguez Herrada"
      :tags ["Free improvisation" "Improvisación libre"]
