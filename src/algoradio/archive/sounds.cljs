@@ -1,7 +1,16 @@
 (ns algoradio.archive.sounds)
 
 (def sounds
-  #{{:mp3 "https://ia801506.us.archive.org/31/items/sonotexto-neighborhood/sonotexto-neighborhood.mp3"
+  #{{:mp3 "https://ia801500.us.archive.org/23/items/a-3_20200509/A3.mp3"
+     :title "Aaa 3"
+     :author "Molamol"
+     :tags ["Music" "Paisaje Sonoro" "Industrial" "Fábrica" "Máquinas" "Experimental"]
+     :description "Es una canción que se produjo en el 2019 junto con la creación del proyecto Molamol, un proyecto con el objetivo de traspasar lo analógico a lo digital de forma minimalista y navegar entre sensaciones incomodas.
+Fragmentos grabados de máquinas en funcionamiento de una fábrica textil en Santa Ana, Tlaxcala, Mexico mismos que fueron saturados y filtrados."
+     :url "https://archive.org/details/a-3_20200509"
+     :year "2018"
+     :place "Tlaxcala, México"}
+    {:mp3 "https://ia801506.us.archive.org/31/items/sonotexto-neighborhood/sonotexto-neighborhood.mp3"
      :title "sonotexto-neighborhood"
      :author "Hernani Villaseñor"
      :tags ["soundscape" "live coding" "urban" "children"]
