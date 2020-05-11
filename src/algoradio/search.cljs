@@ -10,7 +10,7 @@
      [:div {:class "search__input-container"}
       [:input {:class "search__input"
                :type "text"
-               :placeholder "e.g. river, birds, amazon, desert..."
+               :placeholder "e.g. river, birds, amazon..."
                :value (get @app-state ::search "")
                :on-change (fn [e]
                             (swap! app-state assoc ::search
