@@ -40,6 +40,7 @@
                         (str/join "+")))
         page (get-in @app-state [:freesounds-pages query-] 1)]
     (when (not= :done page)
+      (swap! app-state update ::loading-queries conj {query page})
       (-> (axios/get
            (str config/api "/data?query=" query* "&page=" page))
           (.then (fn [res]
@@ -60,4 +61,8 @@
                        (js/alert (str "No se encontraron resultados para: "
                                       query))))))
           (.then js/console.log )
-          (.catch js/console.log)))))
+          (.catch js/console.log)
+          (.finally #(swap! app-state
+                            update
+                            ::loading-queries
+                            (partial remove (fn [q] (= q {query page})))))))))

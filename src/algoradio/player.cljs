@@ -80,11 +80,14 @@
   (swap! app-state update-in [::fields-density type]
          #(if % (max 0 (op %)) 1)))
 
+(-> @app-state :freesounds (get "ocean"))
+
 (defn user-play-sound!
   ([type] (user-play-sound! nil type))
   ([index type]
-   (update-density! inc type)
-   (play-sound! index type)))
+   (when (-> @app-state :freesounds (get type))
+     (update-density! inc type)
+     (play-sound! index type))))
 
 (defn rand-stop! [type]
   (js/console.log "stoping sound" type)

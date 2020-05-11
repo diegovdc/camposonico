@@ -76,8 +76,9 @@ b {font-weight: bold;}
   top: 8px;
   right: 8px;
   max-width: 400px;
-  width: 100%;
+  width: calc(100% - 16px);
   z-index: 9;
+  &.is-mobile {position: relative; top: 0; width: 100%;}
   &__input {
     &-container {
       display: flex;
@@ -92,7 +93,6 @@ b {font-weight: bold;}
     }
   }
 
-
   &__button {
     position: absolute;
     right: 1px;
@@ -104,6 +104,13 @@ b {font-weight: bold;}
     background-color: transparent;
     color: white;
     cursor: pointer;
+  }
+
+  &__loading {
+    color: white;
+    font-size: 20px;
+    text-align: right;
+    height: 33px;
   }
 
   &__checkbox {
@@ -139,6 +146,7 @@ b {font-weight: bold;}
   z-index: 10;
   right: 8px;
   top: 110px;
+  &.is-mobile { position: relative; top: 0;}
   &__field {
     &-container {
       text-align: right;
@@ -171,6 +179,10 @@ b {font-weight: bold;}
     padding-right: 0px;
     width: 50px;
   }
+
+  &__mobile-buttons {
+    padding-left: 10px;
+}
 }
 
 .source-info {

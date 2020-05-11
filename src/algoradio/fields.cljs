@@ -1,7 +1,8 @@
 (ns algoradio.fields
   (:require [algoradio.source-info :as sources]
             [algoradio.player :as player]
-            [algoradio.colors :as colors]))
+            [algoradio.colors :as colors]
+            ["/js/index" :refer [isMobileOrTablet]]))
 
 (declare on-field-change!)
 
@@ -26,8 +27,10 @@
                                          now-playing name)}]
              [:span {:class "fields__separator"}"/"]
              (-> freesounds (get name 0) count)]
-            #_[:button {:on-click #(player/rand-stop! name)} "-"]
-            #_[:button {:on-click #(player/user-play-sound! name)} "+"]]
+            (when (isMobileOrTablet)
+              [:span {:class "fields__mobile-buttons"}
+               [:button {:on-click #(player/rand-stop! name)} "-"]
+               [:button {:on-click #(player/user-play-sound! name)} "+"]])]
            [:div {:class "fields__field-color-container"}
             (map (fn [{id :id :as sound}]
                    [:div {:key (sound :id)
