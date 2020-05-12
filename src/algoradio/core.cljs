@@ -34,7 +34,7 @@
        {:on-key-up (fn [e]
                      (when (= 27 (.-keyCode e))
                        (sources/close! nil)))}
-       (intro)
+       (when (isMobileOrTablet) (intro))
        [:div {:class "container main"}
         [:canvas {:id "hydra-canvas" :class "hydra-canvas"}]
         (when-not (isMobileOrTablet) (editor/main app-state))

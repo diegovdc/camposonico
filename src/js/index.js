@@ -1,8 +1,8 @@
-import Hydra from "hydra-synth"
-//import Tone from "tone"
+import * as Hydra from "hydra-synth"
+import * as Tone from "tone"
 
 window.Hydra = Hydra
-//window.Tone = Tone
+window.Tone = Tone
 
 export const isMobileOrTablet = function() {
   let check = false;
