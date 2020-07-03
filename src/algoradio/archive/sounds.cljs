@@ -1,7 +1,23 @@
 (ns algoradio.archive.sounds)
 
 (def sounds
-  #{{:mp3 "https://ia801500.us.archive.org/23/items/a-3_20200509/A3.mp3"
+  #{{:mp3 "https://ia601501.us.archive.org/22/items/frogs-ranas-2/Frogs_Ranas_2.mp3"
+     :title "Frogs (Ranas 2)"
+     :author "Valeri Marina"
+     :tags ["Frogs" "Night" "Train" "Canada" "COVID19" "Ranas" "Noche" "Tren" "Canada" "COVID19"]
+     :description ""
+     :url "https://archive.org/details/frogs-ranas-2"
+     :year "2020"
+     :place "Canada"}
+    {:mp3 "https://ia801409.us.archive.org/7/items/Ranas1/Frogs_Ranas_1.mp3"
+     :title "Ranas 1"
+     :author "Valeri Marina"
+     :tags ["Frogs" "Night" "Canada" "COVID19" "Ranas" "Noche" "Canada" "COVID19"]
+     :description ""
+     :url "https://archive.org/details/Ranas1"
+     :year "2020"
+     :place "Canada"}
+    {:mp3 "https://ia801500.us.archive.org/23/items/a-3_20200509/A3.mp3"
      :title "Aaa 3"
      :author "Molamol"
      :tags ["Music" "Paisaje Sonoro" "Industrial" "Fábrica" "Máquinas" "Experimental"]
