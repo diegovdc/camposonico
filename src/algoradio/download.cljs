@@ -35,7 +35,7 @@
                       (when (get @app-state ::show-uploader?) " show"))}
     [:div {:class "download__main-container"}
      [:span {:on-click toggle-uploader!
-             :class "download__uploader"} "X"]
+             :class "download__uploader-close"} "X"]
      [:p "Click to upload a selection file"]
      [:input {:type "file"
               :on-change (fn [event]
