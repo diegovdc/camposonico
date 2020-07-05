@@ -1,6 +1,8 @@
 (ns algoradio.common)
 
 (defonce color-offset (rand-int 100))
-(defn get-color [sound-id]
-  (nth colors (mod (+ color-offset sound-id)
-                   (dec (count colors))) "#000"))
+
+(defn distinct-by [f coll]
+  (->> coll
+       (group-by f)
+       (map (fn [[_ v]] (first v)))))

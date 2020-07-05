@@ -5,7 +5,8 @@
             [algoradio.player :as player]
             [clojure.string :as str]))
 
-(declare as-background!? set-pause! describe! close!)
+(declare as-background!? set-pause! describe! close!
+         in-selections-list? add-to-selections! remove-from-selections!)
 
 (defn main [app-state]
   (let [{:keys [sound id type src]} (get @app-state ::info)
@@ -39,12 +40,19 @@
         (when url
           (-> url (str/split #",")
               (->> (map (fn [url*]
-                          [:a {:class "link"
-                               :href url*
-                               :key url*
-                               :target "_blank"}
-                           url*])))))]])))
-
+                          [:p [:span
+                               [:a {:class "link"
+                                    :href url*
+                                    :key url*
+                                    :target "_blank"}
+                                url*]]])))))
+        (if-not (in-selections-list? app-state sound)
+          [:p [:span [:b {:class "source-info__add-to-list"
+                          :on-click #(add-to-selections! app-state sound)}
+                      "+ (add to selections list)"]]]
+          [:p [:span [:b {:class "source-info__add-to-list"
+                          :on-click #(remove-from-selections! app-state sound)}
+                      "- (remove from selections list)"]]])]])))
 (defn as-background!?
   ([bool] (as-background!? bool 0.5))
   ([bool opacity]
@@ -52,7 +60,6 @@
    (swap! app-state assoc
           ::as-background? bool
           ::background-opacity opacity)))
-
 (defn set-position! [position]
   (let [available-positions #{"abajo" "izquierda" "derecha" "centro"
                               "arriba" "top" "bottom" "left"
@@ -89,3 +96,18 @@
   "Pause random change"
   [bool]
   (swap! app-state assoc ::paused? bool))
+
+(defn in-selections-list? [app-state sound]
+  (->> @app-state ::selection-list
+       (map :url)
+       (#((set %) (sound :url)))
+       nil? not))
+
+(defn add-to-selections! [app-state sound]
+  (swap! app-state update ::selection-list conj sound))
+
+(defn remove-from-selections! [app-state sound]
+  (swap! app-state update ::selection-list
+         (fn [selections]
+           (remove #(= (% :url) (sound :url))
+                   selections))))

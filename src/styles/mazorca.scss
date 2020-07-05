@@ -229,6 +229,9 @@ b {font-weight: bold;}
       bottom: 0;
     }
   }
+  &__add-to-list {
+    cursor: pointer;
+  }
   &.top, &.arriba {
     left: 0;
     top: 0;
@@ -460,5 +463,43 @@ code {
     line-height: 1.1;
     margin-bottom: 12px;
     color: c(white)
+  }
+}
+
+
+.download {
+  &__uploader {
+    &.show {display: flex;}
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    z-index: 9999;
+    background-color:rgba(30, 30, 30, 0.9);
+    &-close {
+      position: fixed;
+      top: 0;
+      right:0;
+      cursor: pointer;
+      padding: 5px 8px;
+      color: c(white);
+      font-size: 20px;
+    }
+  }
+  &__main-container {
+    max-width: 400px;
+    p {
+      font-size: 20px;
+      color: c(white);
+      margin-bottom: 15px;
+    }
+    input {
+      border: none;
+}
   }
 }

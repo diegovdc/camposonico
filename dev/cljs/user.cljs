@@ -1,7 +1,5 @@
 (ns cljs.user)
 
-(defn hello [] "holax")
-
 (defn make-spy [printer]
   (fn [& args]
     (let [off (some #(= % :off) args)

@@ -4,7 +4,8 @@
             [algoradio.editor :as editor]
             [algoradio.player :as player]
             [algoradio.search :as search]
-            [algoradio.freesound :as freesound]))
+            [algoradio.freesound :as freesound]
+            [algoradio.download :as download]))
 
 (declare load-audios!)
 
@@ -18,7 +19,16 @@
   (set! (.. js/window -clearComments) #(editor/remove-comment-lines! app-state))
   (set! (.. js/window -stop) player/rand-stop!)
   (set! (.. js/window -play) player/user-play-sound!)
-  (set! (.. js/window -traerAudios) search/get-audios!))
+  (set! (.. js/window -traerAudios) search/get-audios!)
+  (set! (.. js/window -setBaseQuery) freesound/reset-base-query!)
+  (set! (.. js/window -uploadSelections) download/toggle-uploader!)
+  (set! (.. js/window -downloadSelections) (fn [name]
+                                             (download/download-json!
+                                              (get @app-state
+                                                   ::sources/selection-list)
+                                              name))))
+
+#_(get @algoradio.state/app-state ::sources/selection-list)
 
 (defn load-audios!
   ([app-state query]

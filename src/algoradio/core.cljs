@@ -14,7 +14,8 @@
    ["/js/index" :refer [isMobileOrTablet]]
    [algoradio.state :refer [app-state]]
    [cljs.user :refer [spy]]
-   [reagent.core :as reagent]))
+   [reagent.core :as reagent]
+   [algoradio.download :as download]))
 
 (defn intro []
   [:div {:class "intro"}
@@ -38,13 +39,16 @@
        [:div {:class "container main"}
         [:canvas {:id "hydra-canvas" :class "hydra-canvas"}]
         (when-not (isMobileOrTablet) (editor/main app-state))
-        [:div {:class (str "search " (when (isMobileOrTablet) "is-mobile"))} (search/main app-state) (add-music/main app-state)]
+        [:div {:class (str "search " (when (isMobileOrTablet) "is-mobile"))}
+         (search/main app-state)
+         (add-music/main app-state)]
         [:div {:class (str "fields " (when (isMobileOrTablet) "is-mobile"))}
          (fields/main @app-state)]
         (sources/main app-state)
         [:button {:class "info-icon__container"
                   :on-click about/toggle-show-about} icons/info]
         (when (@app-state ::about/show-about?) (about/main archive*/sounds))
+        (download/main app-state)
         #_(convocatoria/main :es)]])}))
 
 (defn start []
