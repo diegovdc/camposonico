@@ -62,7 +62,7 @@
                  :type "range"
                  :min 0
                  :max 1
-                 :default-value (spy (.volume audio))
+                 :default-value (.volume audio)
                  :step 0.01
                  :on-change (fn [ev]
                               (if (.playing audio)
