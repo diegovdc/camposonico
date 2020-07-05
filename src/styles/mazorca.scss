@@ -37,6 +37,16 @@ b {font-weight: bold;}
   }
 }
 
+.range-input {
+  position: absolute;
+  right: 0;
+  bottom: 40px;
+  width: 20px;
+  border:none;
+  -webkit-appearance: slider-vertical;
+  -moz-appearance: slider-vertical;
+}
+
 .main {
   padding: 16px 16px 0;
   position: relative;;
@@ -500,6 +510,6 @@ code {
     }
     input {
       border: none;
-}
+    }
   }
 }

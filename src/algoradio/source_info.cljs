@@ -1,6 +1,7 @@
 (ns algoradio.source-info
   (:require [algoradio.state :refer [app-state]]
             [algoradio.colors :refer [get-color]]
+            [algoradio.config :as config]
             [cljs.user :refer [spy]]
             [algoradio.player :as player]
             [clojure.string :as str]))
@@ -9,19 +10,20 @@
          in-selections-list? add-to-selections! remove-from-selections!)
 
 (defn main [app-state]
-  (let [{:keys [sound id type src]} (get @app-state ::info)
-        {:keys [description tags duration username author url]} sound
+  (let [{:keys [sound id audio]} (get @app-state ::info)
+        {:keys [name description tags duration username author url]} sound
         as-background? (get @app-state ::as-background? true)
         position (get @app-state ::position "bottom")
         bg-opacity (if as-background?
                      (get @app-state ::background-opacity 0.5)
-                     1)]
-    (when sound
+                     1)
+        color (get-color id bg-opacity)]
+    (when (spy sound)
       [:div {:class (str "source-info "
                          (when as-background? " as-background "))
-             :style {:background-color (get-color id bg-opacity)}}
+             :style {:background-color color}}
        [:div {:class (str "source-info__container " position)
-              :style {:background-color (get-color id bg-opacity)}}
+              :style {:background-color color}}
         (when (not as-background?)
           [:div
            [:span {:class "source-info__close"
@@ -29,6 +31,8 @@
            [:span {:class "source-info__send-to-back"
                    :on-click #(do (as-background!? true)
                                   (set-pause! false))} "Mandar al fondo"]])
+        (when name
+          [:p [:span [:b "nombre: "] name]])
         (when description
           [:p [:span [:b "descripción: "] description]])
         (when (not (empty? tags))
@@ -40,19 +44,31 @@
         (when url
           (-> url (str/split #",")
               (->> (map (fn [url*]
-                          [:p [:span
-                               [:a {:class "link"
-                                    :href url*
-                                    :key url*
-                                    :target "_blank"}
-                                url*]]])))))
+                          [:p {:key url*} [:span
+                                           [:a {:class "link"
+                                                :href url*
+                                                :key url*
+                                                :target "_blank"}
+                                            url*]]])))))
         (if-not (in-selections-list? app-state sound)
           [:p [:span [:b {:class "source-info__add-to-list"
                           :on-click #(add-to-selections! app-state sound)}
                       "+ (add to selections list)"]]]
           [:p [:span [:b {:class "source-info__add-to-list"
                           :on-click #(remove-from-selections! app-state sound)}
-                      "- (remove from selections list)"]]])]])))
+                      "- (remove from selections list)"]]])
+        [:input {:key id
+                 :class "range-input"
+                 :type "range"
+                 :min 0
+                 :max 1
+                 :default-value (spy (.volume audio))
+                 :step 0.01
+                 :on-change (fn [ev]
+                              (if (.playing audio)
+                                (.volume audio (-> ev .-target .-value))))}]]])))
+
+#_(-> @app-state ::info :audio .-_sounds js/console.log)
 (defn as-background!?
   ([bool] (as-background!? bool 0.5))
   ([bool opacity]

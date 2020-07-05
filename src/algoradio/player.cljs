@@ -1,6 +1,7 @@
 (ns algoradio.player
   (:require [algoradio.state :refer [app-state]]
             [cljs.user :refer [spy]]
+            [algoradio.config :as config]
             [algoradio.freesound :as freesound]
             ["howler" :refer [Howl]]
             [algoradio.archive :as archive]
@@ -59,7 +60,7 @@
                             >5? (> duration 5)]
                         (js/console.log "dur" duration)
                         ;; TODO improve callback scheduling based on audio duration
-                        (js/setTimeout #(when >5? (.fade audio 1 0 5000))
+                        (js/setTimeout #(when >5? (.fade audio config/default-volume 0 5000))
                                        (* 1000 (- duration (if >5? 5 0))))
                         (js/setTimeout #(notify-finished! src type)
                                        (* 1000 (+ 0.5 duration))))))))
