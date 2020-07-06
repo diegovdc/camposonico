@@ -21,8 +21,7 @@
                        .-result
                        js/JSON.parse
                        js->clj
-                       walk/keywordize-keys
-                       (update :name keyword))]
+                       walk/keywordize-keys)]
     (set-as-freesound-query! app-state selections)
     (toggle-uploader!)))
 
