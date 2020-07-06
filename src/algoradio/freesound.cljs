@@ -66,7 +66,7 @@
                                     (update-in
                                      [:freesounds query-]
                                      concat results))))
-                       (js/alert (str "No se encontraron resultados para: "
+                       (js/console.error (str "No se encontraron resultados para: "
                                       query))))))
           (.then js/console.log )
           (.catch js/console.log)
