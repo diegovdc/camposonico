@@ -67,10 +67,7 @@
                                        (* 1000 (+ 0.5 duration))))))))
          id (.play audio)]
      (when start (.seek audio start))
-     (when dur (js/setTimeout #(do
-                                 (.fade audio (.-_volume audio) 0 5000)
-                                 (js/setTimeout (fn [] (stop! type audio)) 5000))
-                              (* 1000 dur)))
+     (when dur (js/setTimeout #(stop! type audio) (* 1000 dur)))
      (.on audio "play"
           (fn [] (swap! app-state update ::now-playing
                        #(-> %
@@ -89,10 +86,12 @@
          #(if % (max 0 (op %)) 1)))
 
 (defn stop! [type audio]
-  (update-density! dec type)
   (when audio
-    (.stop audio)
-    (update-now-playing!)))
+    (js/console.log "fading out")
+    (.fade audio (spy (.-_volume audio)) 0 5000)
+    (update-density! dec type)
+    (js/setTimeout (fn [] (.stop audio) (update-now-playing!))
+                   5000)))
 
 #_(-> @app-state :freesounds (get "ocean"))
 
@@ -110,7 +109,7 @@
                          type)))
         {:keys [id audio]} (when-not
                                (empty? audios)
-                               (rand-nth audios))]
+                             (rand-nth audios))]
     (stop! type audio)))
 
 (declare init-archive!)
