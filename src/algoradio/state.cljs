@@ -12,3 +12,6 @@
                  ::archive/already-played #{}
                  ::editor/text intro
                  ::editor/key 1 }))
+
+(defn get-sounds []
+  (get @app-state :freesounds))

@@ -30,7 +30,6 @@
                            (sources/rand-info!))
     :reagent-render
     (fn []
-      (js/console.debug "render")
       [:div
        {:on-key-up (fn [e]
                      (when (= 27 (.-keyCode e))
@@ -55,8 +54,7 @@
   (reagent/render-component [campo-sonoro]
                             (. js/document (getElementById "app"))))
 (comment
-  (reset! app-state)
-  (-> @app-state :freesounds cljs.user/spy))
+  (reset! app-state))
 
 (defn ^:export init []
   ;; init is called ONCE when the page loads

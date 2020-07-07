@@ -18,7 +18,7 @@
                      (get @app-state ::background-opacity 0.5)
                      1)
         color (get-color id bg-opacity)]
-    (when (spy sound)
+    (when sound
       [:div {:class (str "source-info "
                          (when as-background? " as-background "))
              :style {:background-color color}}

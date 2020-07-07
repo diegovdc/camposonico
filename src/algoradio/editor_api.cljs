@@ -5,7 +5,9 @@
             [algoradio.player :as player]
             [algoradio.search :as search]
             [algoradio.freesound :as freesound]
-            [algoradio.download :as download]))
+            [algoradio.download :as download]
+            [algoradio.state :refer [get-sounds]]
+            [clojure.walk :as walk]))
 
 (declare load-audios!)
 
@@ -18,15 +20,19 @@
   (set! (.. js/window -setInfoPosition) sources/set-position!)
   (set! (.. js/window -clearComments) #(editor/remove-comment-lines! app-state))
   (set! (.. js/window -stop) player/rand-stop!)
-  (set! (.. js/window -play) player/user-play-sound!)
+  (set! (.. js/window -play) (fn [type opts]
+                               (player/user-play-sound!
+                                type (-> opts
+                                         js->clj
+                                         walk/keywordize-keys))))
   (set! (.. js/window -traerAudios) search/get-audios!)
   (set! (.. js/window -setBaseQuery) freesound/reset-base-query!)
   (set! (.. js/window -uploadSelections) download/toggle-uploader!)
-  (set! (.. js/window -downloadSelections) (fn [name]
-                                             (download/download-json!
-                                              (get @app-state
-                                                   ::sources/selection-list)
-                                              name))))
+  (set! (.. js/window -downloadSelections)
+        (fn [name]
+          (download/download-json!
+           (get @app-state ::sources/selection-list) name)))
+  (set! (.. js/window -getSounds) (fn [] (clj->js (get-sounds)))))
 
 #_(get @algoradio.state/app-state ::sources/selection-list)
 
@@ -34,3 +40,5 @@
   ([app-state query]
    (-> (freesound/get-audios! app-state query)
        (.then #(swap! app-state assoc ::search "")))))
+
+(comment (setup! @algoradio.state/app-state))
