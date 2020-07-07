@@ -30,7 +30,7 @@
 
 (defn notify-finished! [src type]
   #_(js/console.log "ended")
-  (if (play? @app-state type)
+  (if (and @config/auto-play? (play? @app-state type))
     (play-sound! type))
   (update-now-playing!)
   (freesound/get-audios! app-state type))
@@ -38,7 +38,7 @@
 (declare stop!)
 (defn play-sound!
   ([type] (play-sound! type nil))
-  ([type {:keys [index vol start dur] :as opts :or {vol config/default-volume}}]
+  ([type {:keys [index vol start dur] :or {vol config/default-volume}}]
    (let [idx-fn (if index
                   #(nth % index (count %))
                   #(rand-nth %))
@@ -79,7 +79,8 @@
                                    :audio audio
                                    :src src
                                    :sound sound
-                                   :type type}))))))))
+                                   :type type})))
+            (swap! app-state update ::history conj sound))))))
 
 (defn update-density! [op type]
   "Op should be `inc` or `dec`"
@@ -141,6 +142,10 @@
   []
   (archive/stop! (@app-state ::now-playing))
   (update-now-playing!))
+
+(defn get-history []
+  (get @app-state ::history))
+
 (comment
   (-> algoradio.state/app-state deref ::now-playing )
   (reset! app-state)

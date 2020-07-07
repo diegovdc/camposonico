@@ -57,16 +57,14 @@
           [:p [:span [:b {:class "source-info__add-to-list"
                           :on-click #(remove-from-selections! app-state sound)}
                       "- (remove from selections list)"]]])
-        [:input {:key id
-                 :class "range-input"
-                 :type "range"
-                 :min 0
-                 :max 1
-                 :default-value (.volume audio)
-                 :step 0.01
-                 :on-change (fn [ev]
-                              (if (.playing audio)
-                                (.volume audio (-> ev .-target .-value))))}]]])))
+        (when-not as-background?
+          [:input {:key id
+                   :class "range-input" :type "range"
+                   :min 0 :max 1 :step 0.01
+                   :default-value (.volume audio)
+                   :on-change (fn [ev]
+                                (if (.playing audio)
+                                  (.volume audio (-> ev .-target .-value))))}])]])))
 
 #_(-> @app-state ::info :audio .-_sounds js/console.log)
 (defn as-background!?
