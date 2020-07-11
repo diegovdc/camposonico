@@ -15,7 +15,8 @@
    [algoradio.state :refer [app-state]]
    [cljs.user :refer [spy]]
    [reagent.core :as reagent]
-   [algoradio.download :as download]))
+   [algoradio.download :as download]
+   [clojure.walk :as walk]))
 
 (defn intro []
   [:div {:class "intro"}
@@ -56,7 +57,13 @@
 (comment
   (reset! app-state))
 
-(defn ^:export init []
+(defn ^:export init [opts]
+  (if-let [intro-text (get (js->clj opts) "introText")]
+    (swap! app-state assoc ::editor/text intro-text))
+  (if-let [lists (-> opts js->clj (get "lists")
+                     js->clj
+                     walk/keywordize-keys)]
+    (download/set-as-freesound-queries! app-state lists))
   ;; init is called ONCE when the page loads
   ;; this is called in the index.html and must be exported
   ;; so it is available even in :advanced release builds

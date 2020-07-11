@@ -9,8 +9,8 @@
 (defn set-as-freesound-query! [app-state {:keys [name data]}]
   (swap! app-state update-in [:freesounds name] concat data))
 
-(defn set-as-freesound-queries! [data-edn app-state]
-  (doseq [d data-edn] (set-as-freesound-query! d app-state)))
+(defn set-as-freesound-queries! [app-state data]
+  (doseq [list data] (set-as-freesound-query! app-state list)))
 
 (defn toggle-uploader! []
   (::show-uploader? (swap! app-state update ::show-uploader? not)))
