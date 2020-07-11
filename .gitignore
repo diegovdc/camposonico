@@ -2,6 +2,8 @@ node_modules/
 .shadow-cljs/
 public/*
 !public/index.html
+!public/archives
+!public/archives/dos-sures.html
 !public/images
 **/#*
 **/.#*
