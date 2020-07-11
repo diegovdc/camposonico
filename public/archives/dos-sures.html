@@ -1,341 +1,263 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Camposónico: UHM - Dos Sures</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="/css/mazorca.css" rel="stylesheet" type="text/css" />
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.53.2/codemirror.min.css"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.53.2/theme/oceanic-next.min.css"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.50.2/addon/display/fullscreen.min.css"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <link
-      rel="apple-touch-icon-precomposed"
-      sizes="57x57"
-      href="/images/favicon/apple-touch-icon-57x57.png"
-    />
-    <link
-      rel="apple-touch-icon-precomposed"
-      sizes="114x114"
-      href="/images/favicon/apple-touch-icon-114x114.png"
-    />
-    <link
-      rel="apple-touch-icon-precomposed"
-      sizes="72x72"
-      href="/images/favicon/apple-touch-icon-72x72.png"
-    />
-    <link
-      rel="apple-touch-icon-precomposed"
-      sizes="144x144"
-      href="/images/favicon/apple-touch-icon-144x144.png"
-    />
-    <link
-      rel="apple-touch-icon-precomposed"
-      sizes="60x60"
-      href="/images/favicon/apple-touch-icon-60x60.png"
-    />
-    <link
-      rel="apple-touch-icon-precomposed"
-      sizes="120x120"
-      href="/images/favicon/apple-touch-icon-120x120.png"
-    />
-    <link
-      rel="apple-touch-icon-precomposed"
-      sizes="76x76"
-      href="/images/favicon/apple-touch-icon-76x76.png"
-    />
-    <link
-      rel="apple-touch-icon-precomposed"
-      sizes="152x152"
-      href="/images/favicon/apple-touch-icon-152x152.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      href="/images/favicon/favicon-196x196.png"
-      sizes="196x196"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      href="/images/favicon/favicon-96x96.png"
-      sizes="96x96"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      href="/images/favicon/favicon-32x32.png"
-      sizes="32x32"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      href="/images/favicon/favicon-16x16.png"
-      sizes="16x16"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      href="/images/favicon/favicon-128.png"
-      sizes="128x128"
-    />
-    <meta name="application-name" content="Camposónico" />
-    <meta name="msapplication-TileColor" content="#FFFFFF" />
-    <meta
-      name="msapplication-TileImage"
-      content="/images/favicon/mstile-144x144.png"
-    />
-    <meta
-      name="msapplication-square70x70logo"
-      content="/images/favicon/mstile-70x70.png"
-    />
-    <meta
-      name="msapplication-square150x150logo"
-      content="/images/favicon/mstile-150x150.png"
-    />
-    <meta
-      name="msapplication-wide310x150logo"
-      content="/images/favicon/mstile-310x150.png"
-    />
-    <meta
-      name="msapplication-square310x310logo"
-      content="/images/favicon/mstile-310x310.png"
-    />
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@diegovideco" />
-    <meta name="twitter:creator" content="@diegovideco" />
-    <meta name="twitter:title" content="Camposónico" />
-    <meta
-      name="twitter:description"
-      content="Archive from the UHM documentary"
-    />
-    <meta
-      name="twitter:image"
-      content="https://www.camposonico.net/images/dos-sures.jpg"
-    />
-    <meta
-      property="og:url"
-      content="https://www.camposonico.net/archives/dos-sures"
-    />
-    <meta property="og:type" content="article" />
-    <meta property="og:title" content="Camposónico" />
-    <meta
-      property="og:description"
-      content="Archive from the UHM documentary"
-    />
-    <meta
-      property="og:image"
-      content="https://www.camposonico.net/images/dos-sures.jpg"
-    />
-    <meta property="og:image:height" content="1275" />
-    <meta property="og:image:width" content="1650" />
-  </head>
-  <body>
-    <div id="app"></div>
-    <script src="/js/compiled/main.js" type="text/javascript"></script>
-    <script src="/js/external-libs/index.js" type="text/javascript"></script>
-    <script>
-      var introText =
-        '\n\n\n//Archive from the UHM documentary\nplay("for, with and about Palestine")\n\nplay("Palestine fields")';
-      var forWithAndAboutPalestine = {
-        name: "for, with and about Palestine",
-        data: [
-          {
-            name: "mandela",
-            description:
-              "The voice of Nelson Mandela at the birth of free South Africa",
-            username: "ERH",
-            url: "https://freesound.org/people/ERH/sounds/42118/",
-            mp3: "https://freesound.org/data/previews/42/42118_215874-hq.mp3",
-          },
-          {
-            name: "poeta-cerro-pasco",
-            username: "antigonia",
-            description:
-              "Cerro de Pasco: the poet of Cerro de Pasco sings to the plundering of the mining companies",
-            url: "https://freesound.org/people/antigonia/sounds/175865/",
-            mp3:
-              "https://freesound.org/data/previews/175/175865_2400359-hq.mp3",
-          },
-          {
-            name: "poetry-for-palestine",
-            username: "Ireland-Palestine Solidarity Campaign",
-            description:
-              "As part of PalFest Ireland 2016 festival, Irish poets read in solidarity with Palestine, and Palestinians living in Ireland read their favourite poems. The event took place on Friday 15th July 2016.",
-            url: "https://archive.org/details/20160615Poetryforpalestine",
-            mp3:
-              "https://ia601203.us.archive.org/26/items/20160615Poetryforpalestine/2016-07-15-poetryforpalestine.mp3",
-          },
-          {
-            name: "mandela-interview-palestina",
-            username: "Radio Islam",
-            description: "Mandela Interviewed About Palestine",
-            url:
-              "https://archive.org/details/MandelaInterviewedAboutPalestineWed03.09.2014",
-            mp3:
-              "https://ia600908.us.archive.org/28/items/MandelaInterviewedAboutPalestineWed03.09.2014/Mandela_Interviewed_about_Palestine-wed-03.09.2014.mp3",
-          },
-          {
-            name: "Psycho-political Resistance In Israel-Palestine Sami Awaida",
-            username: "Backdoor Broadcasting Company",
-            description:
-              "This conference, the first of its kind in the UK, addresses the remarkable projects of certain groups working in Gaza, Israel and the West Bank involved in joint resistance to ongoing military conflict and occupation. Working for mental health and human rights on the front lines involving military aggression, internal group violence, systemic interference with basic human rights, brutalization on many fronts and deep pessimism on all sides.",
-            url:
-              "https://archive.org/details/Psycho-politicalResistanceInIsrael-palestineSamiAwaida",
-            mp3:
-              "https://ia600205.us.archive.org/8/items/Psycho-politicalResistanceInIsrael-palestineSamiAwaida/2009_10_15_PsychoPoliticalResistanceInIsraelPalestine_SamiAwaida.mp3",
-          },
-          {
-            name:
-              "Programa 6 - Ojos de oriental - Palestina, Irak y Arabia Saudi a traves de sus poetas",
-            username: "David Gomez Rollan",
-            times: "1511:30, 1623:60",
-            description:
-              "En este programa la guerra, la ocupación y la discriminación de la mujer se convierten en poesía de la mano de los poetas árabes contemporáneos. Conocemos la poesía árabe más reinvindicativa.",
-            url:
-              "https://archive.org/details/Programa6-OjosDeOriental-PalestinaIrakYArabiaSaudiATravesDeSus",
-            mp3:
-              "https://ia801604.us.archive.org/6/items/Programa6-OjosDeOriental-PalestinaIrakYArabiaSaudiATravesDeSus/ojosoriental15noviembre.mp3",
-          },
-          {
-            name: "rafeef-ziadah",
-            username: "CKUT",
-            times: "2134:10:180, 2844:156",
-            url:
-              "https://archive.org/details/TheRebelBeatPodcast046RafeefZiadah",
-            mp3:
-              "https://ia600208.us.archive.org/5/items/TheRebelBeatPodcast046RafeefZiadah/The%20Rebel%20Beat%20podcast%20046_Rafeef%20Ziadah.mp3",
-          },
-          {
-            name: "AngryindianRadyo-12.17.2010",
-            username: "Aboriginal Press News Service Public Radio (APNSPR)",
-            description:
-              "Strong Language Advisory: Angryindian Radyo presents thoughts by UN observer Richard Falk; a plea for Aboriginal human rights in Papua from Benny Wenda; Indigenist rebel music from AKRockefella; a British MP speaks out for justice in Occupied Palestine and very important news about our brother Leonard Peltier from ANG member Tiokasin Ghosthorse of First Voices Indigenous Radio.",
-            url:
-              "https://archive.org/details/AboriginalPressNewsServicePublicRadio_APNSPR_AngryindianRadyo-12.17.2010",
-            mp3:
-              "https://ia902706.us.archive.org/30/items/AboriginalPressNewsServicePublicRadio_APNSPR_AngryindianRadyo-12.17.2010/RadyoAngryindian12.17.2010.mp3",
-          },
-          {
-            name: "mahmoud-darwish-aaberun",
-            username: " Mahmoud Darwish, Trio Joubran",
-            url:
-              "https://archive.org/details/Mahmoud_Darwish/01+-+Mahmoud+Darwish+-+Aaberun.mp3",
-            mp3:
-              "https://ia801201.us.archive.org/13/items/Mahmoud_Darwish/01%20-%20Mahmoud%20Darwish%20-%20Aaberun.mp3",
-          },
-          {
-            name: "In no yezo/Mi sangre",
-            username: "poesía Maurilio Sanchez, música Nefi Herrada",
-            description:
-              'Nahuatl poem:  "My blood is watered my blood is changed my blood is over My blood, where are you going?" So he said a grandfather. I looked up I looked down. I was small. And I went to his side. I cleaned his tear and so I asked: Why are you crying? What are you looking for? What do you want? What blood runs out? "Never forget our language. Do not pluck your flesh. Learn the good and leave the bad ... Do not forget the blood of Emiliano. Do not forget the blood of Francisco. And your land works of our grandparents his trade. Put to the right the homeland do not go the other way there is a sacrifice."',
-            url: "https://itonalnahuatl.com/poemas/in-no-yeszo",
-            mp3:
-              "https://diegovdc.github.io/itonal-nahuatl/audios/in-no-yeszo-musica.mp3",
-          },
-          {
-            name: "Voices of Palestine Rap Poetry by Remi Kanazi",
-            description:
-              'Remi Kanazi imbues the spoken word with collective HURT of Palestinians.If you hear him, you will agree Kanazi deserves description as "…a voice which refuses to be silenced…" ',
-            times: "38:115",
-            url:
-              "https://archive.org/details/scm-389303-voicesofpalestinerappoetrybyr",
-            mp3:
-              "https://ia800305.us.archive.org/17/items/scm-389303-voicesofpalestinerappoetrybyr/voices_of_palestine.mp3",
-          },
-          {
-            name: "hubert-matiuwaa-la-voz-mephaa-el-gallo",
-            username: "Latin American Literature Today",
-            times: "86:147",
-            url: "https://archive.org/details/hubert-matiuwaa-la-voz-mephaa",
-            mp3:
-              "https://ia801509.us.archive.org/30/items/hubert-matiuwaa-la-voz-mephaa/hubert-matiuwaa-la-voz-mephaa.mp3",
-          },
-        ],
-      };
-      var palestinaFields = {
-        name: "Palestine fields",
-        data: [
-          {
-            name: "heartbeat",
-            username: "Innominatus",
-            url: "https://freesound.org/people/Innominatus/sounds/231250/",
-            mp3:
-              "https://freesound.org/data/previews/231/231250_4166664-lq.mp3",
-          },
-          {
-            name: "ramallah-soundscape",
-            username: "busterksound@gmail.com",
-            description: "Ramallah, Palestine - friday afternoon outside 2",
-            url: "https://archive.org/details/aporee_27960_32222",
-            mp3:
-              "https://ia800307.us.archive.org/16/items/aporee_27960_32222/20150521recording2.mp3",
-          },
-          {
-            name: "al-bireh-soundscape-1",
-            username: "patrick mcginley",
-            description:
-              "late night cityscape from the small garden of a large house overlooking al-bireh, just to the northeast of ramallah. condensation from a neighbor's ventilation drips and occasionally whirs into action. towards the beginning bats can be heard.",
-            url: "https://archive.org/details/aporee_22367_25956",
-            mp3:
-              "https://ia800305.us.archive.org/19/items/aporee_22367_25956/patrickmcginleyalbirehdripping.mp3",
-          },
-          {
-            name: "al-bireh-soundscape-2",
-            username: "patrick mcginley",
-            description:
-              "calls to prayer are of course a common sound in ramallah, but the early morning call is different, when the rest of the city is relatively quiet and many calls from the surrounding areas can be heard simultaneously echoing off the hills and concrete. this is the first of two consecutive mornings when in the context of a workshop we rose early to record the call from various points in the city.",
-            url: "https://archive.org/details/aporee_22367_47842",
-            mp3:
-              "https://ia800702.us.archive.org/17/items/aporee_22367_47842/patrickmcginley20140527dawncall1.mp3",
-          },
-          {
-            name: "al-bireh-soundscape-3",
-            username: "patrick mcginley",
-            description:
-              "palestine, al-bireh, orient & dance theater guest apartment garden - early morning call to prayer 2",
-            url: "https://archive.org/details/aporee_22367_47843",
-            mp3:
-              "https://ia800708.us.archive.org/14/items/aporee_22367_47843/patrickmcginley20140528dawncall2.mp3",
-          },
-          {
-            name: "Qalandiya Checkpoint, watchtower",
-            username: "mina amplified",
-            description:
-              "At the end of a demonstration at Qalandiya checkpoint, some Palestinian kids started throwing stones and rocks against a watchtower of the Israeli army",
-            url: "https://archive.org/details/aporee_12971_15195",
-            mp3:
-              "https://ia801900.us.archive.org/31/items/aporee_12971_15195/stonesshabaabscreaming.mp3",
-          },
-          {
-            name: "Israel, Jerusalem, eastern Pisgat Ze'ev neighbourhood",
-            username: "Lenna Shterenberg",
-            description:
-              "Those sounds is from observation view in the eastern Pisgat Ze'ev Jewish neighbourhood to Shuafat refugee camp. While a muezzins calls for a prayer, you can hear also a sound of shootings.",
-            url:
-              "https://archive.org/details/aporee_34109_39212, https://aporee.org/maps/?loc=27960",
-            mp3:
-              "https://ia801906.us.archive.org/22/items/aporee_34109_39212/muezzinandshooting.mp3",
-          },
-        ],
-      };
+<head>
+  <title>Camposónico: UHM - Dos Sures</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="/css/mazorca.css" rel="stylesheet" type="text/css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.53.2/codemirror.min.css" rel="stylesheet"
+    type="text/css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.53.2/theme/oceanic-next.min.css" rel="stylesheet"
+    type="text/css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.50.2/addon/display/fullscreen.min.css"
+    rel="stylesheet" type="text/css" />
+  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/images/favicon/apple-touch-icon-57x57.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/favicon/apple-touch-icon-114x114.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/favicon/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/favicon/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="60x60" href="/images/favicon/apple-touch-icon-60x60.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/images/favicon/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/images/favicon/apple-touch-icon-76x76.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/images/favicon/apple-touch-icon-152x152.png" />
+  <link rel="icon" type="image/png" href="/images/favicon/favicon-196x196.png" sizes="196x196" />
+  <link rel="icon" type="image/png" href="/images/favicon/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/png" href="/images/favicon/favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="/images/favicon/favicon-16x16.png" sizes="16x16" />
+  <link rel="icon" type="image/png" href="/images/favicon/favicon-128.png" sizes="128x128" />
+  <meta name="application-name" content="Dos Sures" />
+  <meta name="msapplication-TileColor" content="#FFFFFF" />
+  <meta name="msapplication-TileImage" content="/images/favicon/mstile-144x144.png" />
+  <meta name="msapplication-square70x70logo" content="/images/favicon/mstile-70x70.png" />
+  <meta name="msapplication-square150x150logo" content="/images/favicon/mstile-150x150.png" />
+  <meta name="msapplication-wide310x150logo" content="/images/favicon/mstile-310x150.png" />
+  <meta name="msapplication-square310x310logo" content="/images/favicon/mstile-310x310.png" />
 
-      algoradio.core.init({
-        introText: introText,
-        lists: [forWithAndAboutPalestine, palestinaFields],
-      });
-    </script>
-  </body>
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@diegovideco" />
+  <meta name="twitter:creator" content="@diegovideco" />
+  <meta name="twitter:title" content="Dos Sures" />
+  <meta name="twitter:description" content="Archive from the UHM documentary" />
+  <meta name="twitter:image" content="https://www.camposonico.net/images/dos-sures.jpg" />
+  <meta property="og:url" content="https://www.camposonico.net/archives/dos-sures" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Dos Sures" />
+  <meta property="og:description" content="Archive from the UHM documentary" />
+  <meta property="og:image" content="https://www.camposonico.net/images/dos-sures.jpg" />
+  <meta property="og:image:height" content="1275" />
+  <meta property="og:image:width" content="1650" />
+</head>
+
+<body>
+  <div id="app"></div>
+  <script src="/js/compiled/main.js" type="text/javascript"></script>
+  <script src="/js/external-libs/index.js" type="text/javascript"></script>
+  <script>
+    var introText =
+      '\n\n\n//Archive from the UHM documentary\nplay("for, with and about Palestine")\n\nplay("Palestine fields")';
+    var forWithAndAboutPalestine = {
+      name: "for, with and about Palestine",
+      data: [
+        {
+          name: "mandela",
+          description:
+            "The voice of Nelson Mandela at the birth of free South Africa",
+          username: "ERH",
+          url: "https://freesound.org/people/ERH/sounds/42118/",
+          mp3: "https://freesound.org/data/previews/42/42118_215874-hq.mp3",
+        },
+        {
+          name: "poeta-cerro-pasco",
+          username: "antigonia",
+          description:
+            "Cerro de Pasco: the poet of Cerro de Pasco sings to the plundering of the mining companies",
+          url: "https://freesound.org/people/antigonia/sounds/175865/",
+          mp3:
+            "https://freesound.org/data/previews/175/175865_2400359-hq.mp3",
+        },
+        {
+          name: "poetry-for-palestine",
+          username: "Ireland-Palestine Solidarity Campaign",
+          description:
+            "As part of PalFest Ireland 2016 festival, Irish poets read in solidarity with Palestine, and Palestinians living in Ireland read their favourite poems. The event took place on Friday 15th July 2016.",
+          url: "https://archive.org/details/20160615Poetryforpalestine",
+          mp3:
+            "https://ia601203.us.archive.org/26/items/20160615Poetryforpalestine/2016-07-15-poetryforpalestine.mp3",
+        },
+        {
+          name: "mandela-interview-palestina",
+          username: "Radio Islam",
+          description: "Mandela Interviewed About Palestine",
+          url:
+            "https://archive.org/details/MandelaInterviewedAboutPalestineWed03.09.2014",
+          mp3:
+            "https://ia600908.us.archive.org/28/items/MandelaInterviewedAboutPalestineWed03.09.2014/Mandela_Interviewed_about_Palestine-wed-03.09.2014.mp3",
+        },
+        {
+          name: "Psycho-political Resistance In Israel-Palestine Sami Awaida",
+          username: "Backdoor Broadcasting Company",
+          description:
+            "This conference, the first of its kind in the UK, addresses the remarkable projects of certain groups working in Gaza, Israel and the West Bank involved in joint resistance to ongoing military conflict and occupation. Working for mental health and human rights on the front lines involving military aggression, internal group violence, systemic interference with basic human rights, brutalization on many fronts and deep pessimism on all sides.",
+          url:
+            "https://archive.org/details/Psycho-politicalResistanceInIsrael-palestineSamiAwaida",
+          mp3:
+            "https://ia600205.us.archive.org/8/items/Psycho-politicalResistanceInIsrael-palestineSamiAwaida/2009_10_15_PsychoPoliticalResistanceInIsraelPalestine_SamiAwaida.mp3",
+        },
+        {
+          name:
+            "Programa 6 - Ojos de oriental - Palestina, Irak y Arabia Saudi a traves de sus poetas",
+          username: "David Gomez Rollan",
+          times: "1511:30, 1623:60",
+          description:
+            "En este programa la guerra, la ocupación y la discriminación de la mujer se convierten en poesía de la mano de los poetas árabes contemporáneos. Conocemos la poesía árabe más reinvindicativa.",
+          url:
+            "https://archive.org/details/Programa6-OjosDeOriental-PalestinaIrakYArabiaSaudiATravesDeSus",
+          mp3:
+            "https://ia801604.us.archive.org/6/items/Programa6-OjosDeOriental-PalestinaIrakYArabiaSaudiATravesDeSus/ojosoriental15noviembre.mp3",
+        },
+        {
+          name: "rafeef-ziadah",
+          username: "CKUT",
+          times: "2134:10:180, 2844:156",
+          url:
+            "https://archive.org/details/TheRebelBeatPodcast046RafeefZiadah",
+          mp3:
+            "https://ia600208.us.archive.org/5/items/TheRebelBeatPodcast046RafeefZiadah/The%20Rebel%20Beat%20podcast%20046_Rafeef%20Ziadah.mp3",
+        },
+        {
+          name: "AngryindianRadyo-12.17.2010",
+          username: "Aboriginal Press News Service Public Radio (APNSPR)",
+          description:
+            "Strong Language Advisory: Angryindian Radyo presents thoughts by UN observer Richard Falk; a plea for Aboriginal human rights in Papua from Benny Wenda; Indigenist rebel music from AKRockefella; a British MP speaks out for justice in Occupied Palestine and very important news about our brother Leonard Peltier from ANG member Tiokasin Ghosthorse of First Voices Indigenous Radio.",
+          url:
+            "https://archive.org/details/AboriginalPressNewsServicePublicRadio_APNSPR_AngryindianRadyo-12.17.2010",
+          mp3:
+            "https://ia902706.us.archive.org/30/items/AboriginalPressNewsServicePublicRadio_APNSPR_AngryindianRadyo-12.17.2010/RadyoAngryindian12.17.2010.mp3",
+        },
+        {
+          name: "mahmoud-darwish-aaberun",
+          username: " Mahmoud Darwish, Trio Joubran",
+          url:
+            "https://archive.org/details/Mahmoud_Darwish/01+-+Mahmoud+Darwish+-+Aaberun.mp3",
+          mp3:
+            "https://ia801201.us.archive.org/13/items/Mahmoud_Darwish/01%20-%20Mahmoud%20Darwish%20-%20Aaberun.mp3",
+        },
+        {
+          name: "In no yezo/Mi sangre",
+          username: "poesía Maurilio Sanchez, música Nefi Herrada",
+          description:
+            'Nahuatl poem:  "My blood is watered my blood is changed my blood is over My blood, where are you going?" So he said a grandfather. I looked up I looked down. I was small. And I went to his side. I cleaned his tear and so I asked: Why are you crying? What are you looking for? What do you want? What blood runs out? "Never forget our language. Do not pluck your flesh. Learn the good and leave the bad ... Do not forget the blood of Emiliano. Do not forget the blood of Francisco. And your land works of our grandparents his trade. Put to the right the homeland do not go the other way there is a sacrifice."',
+          url: "https://itonalnahuatl.com/poemas/in-no-yeszo",
+          mp3:
+            "https://diegovdc.github.io/itonal-nahuatl/audios/in-no-yeszo-musica.mp3",
+        },
+        {
+          name: "Voices of Palestine Rap Poetry by Remi Kanazi",
+          description:
+            'Remi Kanazi imbues the spoken word with collective HURT of Palestinians.If you hear him, you will agree Kanazi deserves description as "…a voice which refuses to be silenced…" ',
+          times: "38:115",
+          url:
+            "https://archive.org/details/scm-389303-voicesofpalestinerappoetrybyr",
+          mp3:
+            "https://ia800305.us.archive.org/17/items/scm-389303-voicesofpalestinerappoetrybyr/voices_of_palestine.mp3",
+        },
+        {
+          name: "hubert-matiuwaa-la-voz-mephaa-el-gallo",
+          username: "Latin American Literature Today",
+          times: "86:147",
+          url: "https://archive.org/details/hubert-matiuwaa-la-voz-mephaa",
+          mp3:
+            "https://ia801509.us.archive.org/30/items/hubert-matiuwaa-la-voz-mephaa/hubert-matiuwaa-la-voz-mephaa.mp3",
+        },
+      ],
+    };
+    var palestinaFields = {
+      name: "Palestine fields",
+      data: [
+        {
+          name: "heartbeat",
+          username: "Innominatus",
+          url: "https://freesound.org/people/Innominatus/sounds/231250/",
+          mp3:
+            "https://freesound.org/data/previews/231/231250_4166664-lq.mp3",
+        },
+        {
+          name: "ramallah-soundscape",
+          username: "busterksound@gmail.com",
+          description: "Ramallah, Palestine - friday afternoon outside 2",
+          url: "https://archive.org/details/aporee_27960_32222",
+          mp3:
+            "https://ia800307.us.archive.org/16/items/aporee_27960_32222/20150521recording2.mp3",
+        },
+        {
+          name: "al-bireh-soundscape-1",
+          username: "patrick mcginley",
+          description:
+            "late night cityscape from the small garden of a large house overlooking al-bireh, just to the northeast of ramallah. condensation from a neighbor's ventilation drips and occasionally whirs into action. towards the beginning bats can be heard.",
+          url: "https://archive.org/details/aporee_22367_25956",
+          mp3:
+            "https://ia800305.us.archive.org/19/items/aporee_22367_25956/patrickmcginleyalbirehdripping.mp3",
+        },
+        {
+          name: "al-bireh-soundscape-2",
+          username: "patrick mcginley",
+          description:
+            "calls to prayer are of course a common sound in ramallah, but the early morning call is different, when the rest of the city is relatively quiet and many calls from the surrounding areas can be heard simultaneously echoing off the hills and concrete. this is the first of two consecutive mornings when in the context of a workshop we rose early to record the call from various points in the city.",
+          url: "https://archive.org/details/aporee_22367_47842",
+          mp3:
+            "https://ia800702.us.archive.org/17/items/aporee_22367_47842/patrickmcginley20140527dawncall1.mp3",
+        },
+        {
+          name: "al-bireh-soundscape-3",
+          username: "patrick mcginley",
+          description:
+            "palestine, al-bireh, orient & dance theater guest apartment garden - early morning call to prayer 2",
+          url: "https://archive.org/details/aporee_22367_47843",
+          mp3:
+            "https://ia800708.us.archive.org/14/items/aporee_22367_47843/patrickmcginley20140528dawncall2.mp3",
+        },
+        {
+          name: "Qalandiya Checkpoint, watchtower",
+          username: "mina amplified",
+          description:
+            "At the end of a demonstration at Qalandiya checkpoint, some Palestinian kids started throwing stones and rocks against a watchtower of the Israeli army",
+          url: "https://archive.org/details/aporee_12971_15195",
+          mp3:
+            "https://ia801900.us.archive.org/31/items/aporee_12971_15195/stonesshabaabscreaming.mp3",
+        },
+        {
+          name: "Israel, Jerusalem, eastern Pisgat Ze'ev neighbourhood",
+          username: "Lenna Shterenberg",
+          description:
+            "Those sounds is from observation view in the eastern Pisgat Ze'ev Jewish neighbourhood to Shuafat refugee camp. While a muezzins calls for a prayer, you can hear also a sound of shootings.",
+          url:
+            "https://archive.org/details/aporee_34109_39212, https://aporee.org/maps/?loc=27960",
+          mp3:
+            "https://ia801906.us.archive.org/22/items/aporee_34109_39212/muezzinandshooting.mp3",
+        },
+        {
+          url: "https://archive.org/details/UltimoDiscursoSalvadorAllende",
+          description:
+            "El último discurso de Salvador Allende. Last speech of Salvador Allende, democratically elected president of Chile.",
+          mp3:
+            "https://ia800209.us.archive.org/13/items/UltimoDiscursoSalvadorAllende/sa-11sep_64kb.mp3",
+        },
+        {
+          url:
+            "https://archive.org/details/PrimeraDeclaracionDeLaSelvaLacandona",
+          description:
+            "Primera declaración de la Selva Lacandona, alzamiento Zapatista de 1994. First Declaration of the Lacandon Jungle from the Zapatista uprising, 1994.",
+          mp3:
+            "https://ia802608.us.archive.org/20/items/PrimeraDeclaracionDeLaSelvaLacandona/DeclaracionSelvaLacandona.mp3",
+        },
+      ],
+    };
+
+    algoradio.core.init({
+      introText: introText,
+      lists: [forWithAndAboutPalestine, palestinaFields],
+    });
+  </script>
+</body>
+
 </html>
