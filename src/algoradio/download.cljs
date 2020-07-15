@@ -1,16 +1,10 @@
 (ns algoradio.download
   (:require [clojure.walk :as walk]
             [algoradio.state :refer [app-state]]
-            [algoradio.common :refer [distinct-by]]
+            [algoradio.common :refer [distinct-by set-as-freesound-queries! set-as-freesound-query!]]
             [cljs.user :refer [spy]]))
 
 (def download-link-id "download-link")
-
-(defn set-as-freesound-query! [app-state {:keys [name data]}]
-  (swap! app-state update-in [:freesounds name] concat data))
-
-(defn set-as-freesound-queries! [app-state data]
-  (doseq [list data] (set-as-freesound-query! app-state list)))
 
 (defn toggle-uploader! []
   (::show-uploader? (swap! app-state update ::show-uploader? not)))

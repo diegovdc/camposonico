@@ -1,6 +1,7 @@
 (ns algoradio.core
   (:require
    [algoradio.about :as about]
+   [algoradio.common :as common]
    [algoradio.add-music :as add-music]
    [algoradio.archive :as archive]
    [algoradio.archive.sounds :as archive*]
@@ -63,7 +64,7 @@
   (if-let [lists (-> opts js->clj (get "lists")
                      js->clj
                      walk/keywordize-keys)]
-    (download/set-as-freesound-queries! app-state lists))
+    (common/set-as-freesound-queries! app-state lists))
   ;; init is called ONCE when the page loads
   ;; this is called in the index.html and must be exported
   ;; so it is available even in :advanced release builds

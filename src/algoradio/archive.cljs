@@ -1,7 +1,10 @@
 (ns algoradio.archive
   (:require ["howler" :refer [Howl]]
             [cljs.user :refer [spy spy->]]
+            [algoradio.common :as common]
             [algoradio.archive.sounds :refer [sounds]]))
+
+(defn get-archive-sounds [] sounds)
 
 (defn random-interval [min max]
   (+ min (rand-int (- max min))))
@@ -110,6 +113,7 @@
                                            app-state
                                            sounds)
                                    5000)))))))
+
 (defn get-first-playing-sound
   [now-playing]
   (->> now-playing (filter #(= :archive (:type %))) first))
@@ -119,6 +123,15 @@
        get-first-playing-sound
        :audio
        .stop))
+
+(def load-as-freesounds!
+  (memoize ;; load once
+   (fn [app-state]
+     (common/set-as-freesound-query! app-state
+                                     {:name "camposonico archive"
+                                      :data sounds})
+     true)))
+
 (comment
   (stop! (-> @algoradio.state/app-state :algoradio.player/now-playing))
   (init! 100
