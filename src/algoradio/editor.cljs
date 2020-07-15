@@ -4,7 +4,7 @@
             ["codemirror/mode/javascript/javascript"]
             ["codemirror/addon/display/fullscreen"]))
 
-(declare eval! get-cm!)
+(declare get-cm! eval-block! eval-line-or-selection!)
 
 (defn main [app-state]
   [:div {:key (get @app-state ::key)
@@ -12,9 +12,17 @@
          :class "editor"
          :on-key-down
          (fn [e]
-           (when (and (.-ctrlKey e)
-                      (= 13 #_enter (.-keyCode e)))
-             (eval! (get-cm! app-state))))}
+           (let [ctrl? (.-ctrlKey e)
+                 enter? (= 13 #_enter (.-keyCode e))
+                 shift? (.-shiftKey e)]
+             (cond
+               (and ctrl? enter?) (do (.preventDefault e)
+                                      (eval-block! (get-cm! app-state)))
+
+               (and shift? enter?) (do (.preventDefault e)
+                                       (eval-line-or-selection!
+                                        (get-cm! app-state))))))}
+
    [:> react-codemirror
     {
      :ref  (fn [ref] (when-not (@app-state ::instance)
@@ -60,6 +68,7 @@
     {:start start
      :end end
      :code (subvec text start (inc end)) }))
+
 (defn mark-text! [{:keys [start end]} cm]
   (let [mark (.markText cm
                         (clj->js {:line start :ch 0})
@@ -67,7 +76,30 @@
                         (clj->js {:className "editor__flashed-text"}))]
     (js/setTimeout #(.clear mark) 1000)
     mark))
-(defn eval! [cm]
+
+(defn get-line-for-eval [cm line-num]
+  (let [line (.getLine cm line-num)]
+    {:start line-num
+     :end line-num
+     :code line}))
+
+(defn get-selection-for-eval [cm from to]
+  {:start from
+   :end to
+   :code (.getSelection cm)})
+
+(defn eval-line-or-selection! [cm]
+  (let [from (.-line (.getCursor cm "from"))
+        to (.-line (.getCursor cm "to"))
+        selection? (not= from to)
+        {code :code :as mark} (if selection?
+                                (get-selection-for-eval cm from to)
+                                (get-line-for-eval cm from))]
+    (mark-text! mark cm)
+    (js/eval code)
+    (js/console.log code)))
+
+(defn eval-block! [cm]
   (let [block (get-block cm)]
     (mark-text! block cm)
     (js/eval (->> block :code (str/join "\n")))
@@ -84,3 +116,10 @@
                           (assoc ::text text)
                           (dissoc ::instance)))
     nil))
+
+(defn clear-all! [app-state]
+  (swap! app-state #(-> %
+                        (update ::key inc)
+                        (assoc ::text "")
+                        (dissoc ::instance)))
+  nil)
