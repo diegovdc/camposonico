@@ -26,11 +26,9 @@
               :style {:background-color color}}
         (when (not as-background?)
           [:div
-           [:span {:class "source-info__close"
-                   :on-click close!} "X"]
            [:span {:class "source-info__send-to-back"
                    :on-click #(do (as-background!? true)
-                                  (set-pause! false))} "Mandar al fondo"]])
+                                  (set-pause! false))} "_"]])
         (when name
           [:p [:span [:b "nombre: "] name]])
         (when description
@@ -74,6 +72,7 @@
    (swap! app-state assoc
           ::as-background? bool
           ::background-opacity opacity)))
+
 (defn set-position! [position]
   (let [available-positions #{"abajo" "izquierda" "derecha" "centro"
                               "arriba" "top" "bottom" "left"

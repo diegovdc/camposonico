@@ -37,8 +37,11 @@
                           :class "fields__field-color"
                           :style {:background-color (colors/get-color id 1)}
                           :on-click #(do (sources/describe! sound)
-                                         (sources/as-background!? false)
-                                         (sources/set-pause! true))}])
+                                         (if (app-state ::sources/as-background?)
+                                           (do (sources/as-background!? false)
+                                               (sources/set-pause! true))
+                                           (do (sources/as-background!? true)
+                                               (sources/set-pause! false))))}])
                  (get now-playing* name))]])
         (keys freesounds)))]))
 
