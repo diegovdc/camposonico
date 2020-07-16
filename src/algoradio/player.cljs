@@ -87,8 +87,8 @@
 
 (defn stop! [type audio]
   (when audio
-    (js/console.log "fading out")
-    (.fade audio (spy (.-_volume audio)) 0 5000)
+    (js/console.log "Fading out" type)
+    (.fade audio (.-_volume audio) 0 5000)
     (update-density! dec type)
     (js/setTimeout (fn [] (.stop audio) (update-now-playing!))
                    5000)))
@@ -103,13 +103,8 @@
      (play-sound! type opts))))
 
 (defn rand-stop! [type]
-  (js/console.log "Stoping sound" type)
-  (let [audios (spy (-> (get-playing-audio-by-type
-                         @app-state
-                         type)))
-        {:keys [id audio]} (when-not
-                               (empty? audios)
-                             (rand-nth audios))]
+  (let [audios (get-playing-audio-by-type @app-state type)
+        {:keys [audio]} (when-not (empty? audios) (rand-nth audios))]
     (stop! type audio)))
 
 (declare init-archive!)
