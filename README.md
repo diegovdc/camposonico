@@ -112,8 +112,8 @@ The file must be in `json` format, and should have the following spec, where `na
     "description": "String",
     "duration": "Number, duration in seconds (optional)",
     "url": "String: location where was the file found, this will be displayed",
-    "mp3": "URL of the mp3 file, this will not be displayed"
-    "other": "Any other field is possible, but nothing will be done with it, however you will be able to see this if you log the sounds to the console with getSounds()... it is useful for notes."
+    "mp3": "URL of the mp3 file, this will not be displayed",
+    "other fields": "Any other field is possible, but nothing will be done with it, however you will be able to see this if you log the sounds to the console with getSounds()... it is useful for notes."
     }]
 }
 ```
