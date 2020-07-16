@@ -6,6 +6,21 @@
 
 (declare on-field-change!)
 
+(defn make-source-info-toggler []
+  (let [prev-id (atom nil)] ;;
+    (fn [app-state id sound]
+      (let [to-background? (and (= @prev-id id)
+                                (not (app-state ::sources/as-background?)))]
+        (if to-background?
+          (do (sources/as-background!? true)
+              (sources/set-pause! false))
+          (do (sources/as-background!? false)
+              (sources/set-pause! true))))
+      (sources/describe! sound)
+      (reset! prev-id id))))
+
+(def source-info-toggler (make-source-info-toggler))
+
 (defn main
   [app-state]
   (let [freesounds (get app-state :freesounds)
@@ -33,15 +48,10 @@
                [:button {:on-click #(player/user-play-sound! name)} "+"]])]
            [:div {:class "fields__field-color-container"}
             (map (fn [{id :id :as sound}]
-                   [:div {:key (sound :id)
+                   [:div {:key id
                           :class "fields__field-color"
                           :style {:background-color (colors/get-color id 1)}
-                          :on-click #(do (sources/describe! sound)
-                                         (if (app-state ::sources/as-background?)
-                                           (do (sources/as-background!? false)
-                                               (sources/set-pause! true))
-                                           (do (sources/as-background!? true)
-                                               (sources/set-pause! false))))}])
+                          :on-click #(source-info-toggler app-state id sound)}])
                  (get now-playing* name))]])
         (keys freesounds)))]))
 
