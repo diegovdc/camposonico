@@ -28,7 +28,7 @@
                                (player/user-play-sound!
                                 type (-> opts js->clj walk/keywordize-keys))))
   (set! (.. js/window -traerAudios) search/get-audios!)
-  (set! (.. js/window -setBaseQuery) freesound/reset-base-query!)
+  (set! (.. js/window -setBaseQuery) (partial freesound/reset-base-query! app-state))
   (set! (.. js/window -uploadSelections) download/toggle-uploader!)
   (set! (.. js/window -autoPlay) (fn [bool] (reset! config/auto-play? (boolean bool))))
   (set! (.. js/window -downloadSelections)
