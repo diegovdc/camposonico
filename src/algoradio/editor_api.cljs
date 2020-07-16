@@ -37,6 +37,9 @@
            (get @app-state ::sources/selection-list) name)))
   (set! (.. js/window -getSounds) (fn [] (clj->js (state/get-sounds))))
   (set! (.. js/window -getCSArchiveSounds) (fn [] (clj->js (archive/get-archive-sounds))))
+  ;; TODO Add timestamps
+  ;; TODO Add volume
+  ;; FIXME reverse history
   (set! (.. js/window -getHistory) (fn [] (clj->js (player/get-history)))))
 
 #_(get @algoradio.state/app-state ::sources/selection-list)
