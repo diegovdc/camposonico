@@ -67,7 +67,9 @@
   [:div {:class "about"}
    [:button {:class "about__close" :on-click toggle-show-about} "X"]
    [:h2 {:class "about__title"} "¿Qué es Camposónico?"]
-   [:p {:class "about__p"} [:i "Camposónico (radio algorítmica) "] "es una aplicación para escuchar e intervenir paisajes sonoros y música experimental, haciendo posible una interacción con el sonido que va desde el simple autoplay hasta la experimentación creativa mediante el uso de código."]
+   [:p {:class "about__p"}
+    [:a {:class "link" :href "https://github.com/diegovdc/algoradio/" :target "_blank"}
+     [:i "Camposónico (radio algorítmica)"] "es una aplicación"] " para escuchar e intervenir paisajes sonoros y música experimental, haciendo posible una interacción con el sonido que va desde el simple autoplay hasta la experimentación creativa mediante el uso de código."]
    [:p {:class "about__p"} "Sus objetivos son los siguientes:"]
    [:ol {:class "about__ol"}
     [:li "Facilitar la exploración del archivo de paisajes sonoros de "
