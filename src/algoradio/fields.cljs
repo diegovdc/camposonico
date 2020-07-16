@@ -63,7 +63,7 @@
   (let [diff (- new-value old-value)
         add? (> diff 0)]
     (doseq [i (range 0 (js/Math.abs diff))]
-      (js/console.log i add?)
+      (js/console.debug "index:" i "add?:" add?)
       (if add?
         (player/user-play-sound! name)
         (player/rand-stop! name)))))

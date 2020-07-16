@@ -46,20 +46,20 @@
          audio (Howl. (clj->js {:src [src]
                                 :html5 true
                                 :volume 0}))
-         _ (js/console.log "will load sound playing" type src)
+         _ (js/console.log "Will load sound playing" type src)
          _ (.on audio "load"
                 (fn []
-                  (js/console.log "New sound loaded" audio)
+                  (js/console.log "Sound loaded")
+                  (js/console.debug "Sound loaded" audio)
                   (if-not (play? @app-state type)
                     (do
-                      #_(js/console.log "shouldn't play audio")
+                      (js/console.debug "shouldn't play audio")
                       (js/setTimeout #(.stop audio) 100))
                     (do
-                      #_(js/console.log "starting playback")
+                      (js/console.debug "starting playback")
                       (.fade audio 0 vol 5000)
                       (let [duration (.duration audio)
                             >5? (> duration 5)]
-                        #_(js/console.log "dur" duration)
                         ;; TODO improve callback scheduling based on audio duration
                         (js/setTimeout #(when >5? (.fade audio vol 0 5000))
                                        (* 1000 (- duration (if >5? 5 0))))
