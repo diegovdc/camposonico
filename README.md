@@ -91,7 +91,7 @@ positions = ["center", "down", "up", "left", "right"]
 interval = setInterval(
     () => {
         play(randNth(landscapes))
-        stop(randNth (landscapes))
+        stop(randNth(landscapes))
         setInfoPosition(randNth (positions))
     },
     20000
