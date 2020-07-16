@@ -7,21 +7,22 @@
             [clojure.string :as str]))
 
 (declare as-background!? set-pause! describe! close!
-         in-selections-list? add-to-selections! remove-from-selections!)
+         in-selections-list? add-to-selections! remove-from-selections!
+         stopping-list)
 
 (defn main [app-state]
-  (let [{:keys [sound id audio]} (get @app-state ::info)
+  (let [{:keys [sound id audio type]} (get @app-state ::info)
         {:keys [name description tags duration username author url]} sound
         as-background? (get @app-state ::as-background? true)
         position (get @app-state ::position "bottom")
-        bg-opacity (if as-background?
-                     (get @app-state ::background-opacity 0.5)
-                     1)
+        bg-opacity (if-not as-background? 1
+                           (get @app-state ::background-opacity 0.5))
         color (get-color id bg-opacity)]
-    (when sound
+    (when (and sound (.playing audio))
       [:div {:class (str "source-info "
                          (when as-background? " as-background "))
-             :style {:background-color color}}
+             :style {:background-color color}
+             :on-double-click #(as-background!? true)}
        [:div {:class (str "source-info__container " position)
               :style {:background-color color}}
         (when (not as-background?)
@@ -48,13 +49,27 @@
                                                 :key url*
                                                 :target "_blank"}
                                             url*]]])))))
-        (if-not (in-selections-list? app-state sound)
-          [:p [:span [:b {:class "source-info__add-to-list"
-                          :on-click #(add-to-selections! app-state sound)}
-                      "+ (add to selections list)"]]]
-          [:p [:span [:b {:class "source-info__add-to-list"
-                          :on-click #(remove-from-selections! app-state sound)}
-                      "- (remove from selections list)"]]])
+        (when-not as-background?
+          [:div {:class "df ac"
+                 ;; :style {:min-height "22px"}
+                 }
+           (if-not (in-selections-list? app-state sound)
+             [:p [:span [:b {:class "source-info__add-to-list"
+                             :on-click #(add-to-selections! app-state sound)}
+                         "+ (add to selections list)"]]]
+             [:p [:span [:b {:class "source-info__add-to-list"
+                             :on-click #(remove-from-selections! app-state sound)}
+                         "- (remove from selections list)"]]])
+           [:p {:class "ml-10"}
+            (if-not (@stopping-list id)
+              [:b {:class "curp"
+                   :style {:fontSize "17px"}
+                   :on-click #(do (player/stop! type audio)
+                                  (as-background!? true)
+                                  (set-pause! false)
+                                  (swap! stopping-list conj id))}
+               "■"])]])
+        (when (@stopping-list id) [:p [:span "Stopping..."]])
         (when-not as-background?
           [:input {:key id
                    :class "range-input" :type "range"
@@ -65,6 +80,7 @@
                                   (.volume audio (-> ev .-target .-value))))}])]])))
 
 #_(-> @app-state ::info :audio .-_sounds js/console.log)
+
 (defn as-background!?
   ([bool] (as-background!? bool 0.5))
   ([bool opacity]
@@ -124,3 +140,5 @@
          (fn [selections]
            (remove #(= (% :url) (sound :url))
                    selections))))
+
+(def stopping-list (atom #{}))
