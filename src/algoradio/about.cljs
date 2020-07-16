@@ -68,7 +68,7 @@
    [:button {:class "about__close" :on-click toggle-show-about} "X"]
    [:h2 {:class "about__title"} "¿Qué es Camposónico?"]
    [:p {:class "about__p"}
-    [:a {:class "link" :href "https://github.com/diegovdc/algoradio/" :target "_blank"}
+    [:a {:class "link" :href "https://github.com/diegovdc/camposonico/" :target "_blank"}
      [:i "Camposónico (radio algorítmica)"] "es una aplicación"] " para escuchar e intervenir paisajes sonoros y música experimental, haciendo posible una interacción con el sonido que va desde el simple autoplay hasta la experimentación creativa mediante el uso de código."]
    [:p {:class "about__p"} "Sus objetivos son los siguientes:"]
    [:ol {:class "about__ol"}
@@ -96,7 +96,7 @@
    [:p {:class "about__p"}
     "Camposónico también ofrece una interfaz de código, en el lenguaje JavaScript, que permite una interacción más creativa, efectiva y activa con los materiales sonoros. Esta interfaz aun se encuentra en desarrollo, por lo que quien tenga interés puede colaborar o sugerir funcionalidades en"
     [:a {:class "link"
-         :href "https://github.com/diegovdc/algoradio/issues"
+         :href "https://github.com/diegovdc/camposonico/issues"
          :target "_blank"}
      " el repositorio que aloja el código de la aplicación."]]
    [:button {:class "about__button" :on-click #(toggle-show-functions)}
