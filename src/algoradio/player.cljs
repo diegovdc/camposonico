@@ -90,8 +90,7 @@
     (js/console.log "Fading out" type)
     (.fade audio (.-_volume audio) 0 5000)
     (update-density! dec type)
-    (js/setTimeout (fn [] (.stop audio) (update-now-playing!))
-                   5000)))
+    (js/setTimeout (fn [] (.stop audio) (update-now-playing!)) 5000)))
 
 #_(-> @app-state :freesounds (get "ocean"))
 

@@ -67,8 +67,7 @@
                                      [:freesounds query-]
                                      concat results))))
                        (js/console.error (str "No se encontraron resultados para: "
-                                      query))))))
-          (.then js/console.log )
+                                              query))))))
           (.catch js/console.log)
           (.finally #(swap! app-state
                             update
