@@ -2,6 +2,7 @@
   (:require [algoradio.hydra :as hydra]
             [algoradio.source-info :as sources]
             [algoradio.editor :as editor]
+            [algoradio.history :as history]
             [algoradio.player :as player]
             [algoradio.search :as search]
             [algoradio.freesound :as freesound]
@@ -37,10 +38,7 @@
            (get @app-state ::sources/selection-list) name)))
   (set! (.. js/window -getSounds) (fn [] (clj->js (state/get-sounds))))
   (set! (.. js/window -getCSArchiveSounds) (fn [] (clj->js (archive/get-archive-sounds))))
-  ;; TODO Add timestamps
-  ;; TODO Add volume
-  ;; FIXME reverse history
-  (set! (.. js/window -getHistory) (fn [] (clj->js (player/get-history)))))
+  (set! (.. js/window -getHistory) (fn [] (clj->js (history/get-history! app-state)))))
 
 #_(get @algoradio.state/app-state ::sources/selection-list)
 

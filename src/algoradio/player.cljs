@@ -3,9 +3,12 @@
             [cljs.user :refer [spy]]
             [algoradio.config :as config]
             [algoradio.freesound :as freesound]
+            [algoradio.history :as history]
             ["howler" :refer [Howl]]
             [algoradio.archive :as archive]
-            [algoradio.archive.sounds :as archive*]))
+            [algoradio.archive.sounds :as archive*]
+            [clojure.walk :as walk]
+            [clojure.set :as set]))
 
 (declare play-sound!)
 (defn get-playing-audio-by-type [app-state type]
@@ -36,48 +39,60 @@
   (freesound/get-audios! app-state type))
 
 (declare stop!)
+
+(defn play! [{:keys [src type] :as sound}
+             {:keys [vol start dur]
+              :or {vol config/default-volume}
+              :as opts}]
+  (let [audio (Howl. (clj->js {:src [src]
+                               :html5 true
+                               :volume 0}))
+        _ (js/console.log "Will load sound playing" type src)
+        _ (.on audio "load"
+               (fn []
+                 (js/console.log "Sound loaded")
+                 (js/console.debug "Sound loaded" audio)
+                 (if-not (play? @app-state type)
+                   (do
+                     (js/console.debug "shouldn't play audio")
+                     (js/setTimeout #(.stop audio) 100))
+                   (do
+                     (js/console.debug "starting playback")
+                     (.fade audio 0 vol 5000)
+                     (let [duration (.duration audio)
+                           >5? (> duration 5)]
+                       ;; TODO improve callback scheduling based on audio duration
+                       (js/setTimeout #(when >5? (.fade audio vol 0 5000))
+                                      (* 1000 (- duration (if >5? 5 0))))
+                       (js/setTimeout #(notify-finished! src type)
+                                      (* 1000 (+ 0.5 duration))))))))
+        id (.play audio)]
+    (when start (.seek audio start))
+    (when dur (js/setTimeout #(stop! type audio id) (* 1000 dur)))
+    (.on audio "play"
+         (fn []
+           (swap! app-state update ::now-playing
+                  #(-> %
+                       update-now-playing
+                       (conj {:id id
+                              :audio audio
+                              :src src
+                              :sound sound
+                              :type type
+                              :opts opts})))
+           (history/add-play! app-state
+                              (assoc sound :opts opts)
+                              id)))
+    {:id id :audio audio}))
+
 (defn play-sound!
   ([type] (play-sound! type nil))
-  ([type {:keys [index vol start dur] :or {vol config/default-volume}}]
+  ([type {:keys [index] :as opts}]
    (let [idx-fn (if index
                   #(nth % index (count %))
                   #(rand-nth %))
-         {src :mp3 :as sound} (-> @app-state :freesounds (get type) idx-fn)
-         audio (Howl. (clj->js {:src [src]
-                                :html5 true
-                                :volume 0}))
-         _ (js/console.log "Will load sound playing" type src)
-         _ (.on audio "load"
-                (fn []
-                  (js/console.log "Sound loaded")
-                  (js/console.debug "Sound loaded" audio)
-                  (if-not (play? @app-state type)
-                    (do
-                      (js/console.debug "shouldn't play audio")
-                      (js/setTimeout #(.stop audio) 100))
-                    (do
-                      (js/console.debug "starting playback")
-                      (.fade audio 0 vol 5000)
-                      (let [duration (.duration audio)
-                            >5? (> duration 5)]
-                        ;; TODO improve callback scheduling based on audio duration
-                        (js/setTimeout #(when >5? (.fade audio vol 0 5000))
-                                       (* 1000 (- duration (if >5? 5 0))))
-                        (js/setTimeout #(notify-finished! src type)
-                                       (* 1000 (+ 0.5 duration))))))))
-         id (.play audio)]
-     (when start (.seek audio start))
-     (when dur (js/setTimeout #(stop! type audio) (* 1000 dur)))
-     (.on audio "play"
-          (fn [] (swap! app-state update ::now-playing
-                       #(-> %
-                            update-now-playing
-                            (conj {:id id
-                                   :audio audio
-                                   :src src
-                                   :sound sound
-                                   :type type})))
-            (swap! app-state update ::history conj sound))))))
+         sound (-> @app-state :freesounds (get type) idx-fn (set/rename-keys {:mp3 :src}))]
+     (play! (assoc sound :type type) opts))))
 
 (defn update-density! [op type]
   "Op should be `inc` or `dec`"
@@ -85,12 +100,13 @@
   (swap! app-state update-in [::fields-density type]
          #(if % (max 0 (op %)) 1)))
 
-(defn stop! [type audio]
+(defn stop! [type audio id]
   (when audio
-    (js/console.log "Fading out" type)
+    (js/console.log "Fading out" type id)
     (.fade audio (.-_volume audio) 0 5000)
     (update-density! dec type)
-    (js/setTimeout (fn [] (.stop audio) (update-now-playing!)) 5000)))
+    (js/setTimeout (fn [] (.stop audio) (update-now-playing!)) 5000)
+    (history/add-stop! app-state id type)))
 
 #_(-> @app-state :freesounds (get "ocean"))
 
@@ -103,8 +119,13 @@
 
 (defn rand-stop! [type]
   (let [audios (get-playing-audio-by-type @app-state type)
-        {:keys [audio]} (when-not (empty? audios) (rand-nth audios))]
-    (stop! type audio)))
+        {:keys [audio id]} (when-not (empty? audios) (rand-nth audios))]
+    (stop! type audio id)))
+
+(defn set-volume! [id audio vol]
+  (.volume audio vol)
+  (swap! app-state update ::volumes assoc id vol)
+  (history/add-volume-change! app-state id vol))
 
 (declare init-archive!)
 (defn notify-finished-archive! []
@@ -119,6 +140,9 @@
   (archive/init!
    min-wait max-wait
    (fn [{:keys [audio] :as sound}]
+     ;; TODO fix this so that `:id` is a key on a `hash-map`...
+     ;; TODO fix `set-volume!` so that the audio state is handled in a single place
+     ;; TODO `::volumes` is used in source_info so fix that too
      (swap! app-state update ::now-playing
             #(-> %
                  update-now-playing
@@ -135,9 +159,6 @@
   []
   (archive/stop! (@app-state ::now-playing))
   (update-now-playing!))
-
-(defn get-history []
-  (get @app-state ::history))
 
 (comment
   (-> algoradio.state/app-state deref ::now-playing )

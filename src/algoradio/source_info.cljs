@@ -2,7 +2,8 @@
   (:require [algoradio.state :refer [app-state]]
             [algoradio.colors :refer [get-color]]
             [algoradio.config :as config]
-            [cljs.user :refer [spy]]
+            [algoradio.history :as history]
+[cljs.user :refer [spy]]
             [algoradio.player :as player]
             [clojure.string :as str]))
 
@@ -17,7 +18,9 @@
         position (get @app-state ::position "bottom")
         bg-opacity (if-not as-background? 1
                            (get @app-state ::background-opacity 0.5))
-        color (get-color id bg-opacity)]
+        color (get-color id bg-opacity)
+        volume (get-in @app-state [::player/volumes id])]
+    (js/console.debug "Viewing audio with id:" id)
     (when (and sound (.playing audio))
       [:div {:class (str "source-info "
                          (when as-background? " as-background "))
@@ -64,7 +67,7 @@
             (if-not (@stopping-list id)
               [:b {:class "curp"
                    :style {:fontSize "17px"}
-                   :on-click #(do (player/stop! type audio)
+                   :on-click #(do (player/stop! type audio id)
                                   (as-background!? true)
                                   (set-pause! false)
                                   (swap! stopping-list conj id))}
@@ -74,10 +77,12 @@
           [:input {:key id
                    :class "range-input" :type "range"
                    :min 0 :max 1 :step 0.01
-                   :default-value (.volume audio)
-                   :on-change (fn [ev]
-                                (if (.playing audio)
-                                  (.volume audio (-> ev .-target .-value))))}])]])))
+                   :value volume
+                   :on-change
+                   (fn [ev]
+                     (if (.playing audio)
+                       (let [vol (-> ev .-target .-value)]
+                         (player/set-volume! id audio vol))))}])]])))
 
 #_(-> @app-state ::info :audio .-_sounds js/console.log)
 
