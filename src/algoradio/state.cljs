@@ -10,8 +10,8 @@
                  :freesounds {}
                  :freesounds-pages {}
                  ::archive/already-played #{}
-                 ::editor/text "" #_intro
-                 ::editor/key 1 }))
+                 ::editor/text intro
+                 ::editor/key 1}))
 
 (defn get-sounds []
   (get @app-state :freesounds))
