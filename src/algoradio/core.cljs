@@ -16,7 +16,7 @@
    [algoradio.state :refer [app-state]]
    [cljs.user :refer [spy]]
    [reagent.core :as reagent]
-   [algoradio.download :as download]
+   [algoradio.fs :as fs]
    [clojure.walk :as walk]))
 
 (defn intro []
@@ -49,7 +49,7 @@
         [:button {:class "info-icon__container"
                   :on-click about/toggle-show-about} icons/info]
         (when (@app-state ::about/show-about?) (about/main archive*/sounds))
-        (download/main app-state)
+        (fs/main app-state)
         #_(convocatoria/main :es)]])}))
 
 (defn start []

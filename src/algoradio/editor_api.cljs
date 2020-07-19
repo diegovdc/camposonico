@@ -6,7 +6,7 @@
             [algoradio.player :as player]
             [algoradio.search :as search]
             [algoradio.freesound :as freesound]
-            [algoradio.download :as download]
+            [algoradio.fs :as fs]
             [algoradio.config :as config]
             [algoradio.state :as state]
             [algoradio.archive :as archive]
@@ -30,12 +30,18 @@
                                 type (-> opts js->clj walk/keywordize-keys))))
   (set! (.. js/window -traerAudios) search/get-audios!)
   (set! (.. js/window -setBaseQuery) (partial freesound/reset-base-query! app-state))
-  (set! (.. js/window -uploadSelections) download/toggle-uploader!)
+  (set! (.. js/window -uploadSelections) #(fs/toggle-uploader! :selections))
+  (set! (.. js/window -replayFile) #(fs/toggle-uploader! :history))
   (set! (.. js/window -autoPlay) (fn [bool] (reset! config/auto-play? (boolean bool))))
   (set! (.. js/window -downloadSelections)
         (fn [name]
-          (download/download-json!
-           (get @app-state ::sources/selection-list) name)))
+          (fs/download-selections!
+           name (get @app-state ::sources/selection-list))))
+  (set! (.. js/window -downloadHistory)
+        (fn [name*]
+          (fs/download-history!
+           (or name* (str "camposonico-history-" (.toISOString (js/Date.))))
+           (history/get-history! app-state))))
   (set! (.. js/window -getSounds) (fn [] (clj->js (state/get-sounds))))
   (set! (.. js/window -getCSArchiveSounds) (fn [] (clj->js (archive/get-archive-sounds))))
   (set! (.. js/window -getHistory) (fn [] (clj->js (history/get-history! app-state)))))

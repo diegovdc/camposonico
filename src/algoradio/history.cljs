@@ -21,6 +21,13 @@
           :volume_level volume-level
           :timestamp (js/Date.now)}))
 
+(defn add-editor-change! [app-state editor-id change]
+  (swap! app-state update ::history conj
+         {:event_type :editor_change
+          :editor_id editor-id
+          :change change
+          :timestamp (js/Date.now)}))
+
 (defn prepare-history
   "Order history by timestamp, ascending,
   and add `:interval` between each event"

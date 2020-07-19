@@ -1,5 +1,6 @@
 (ns algoradio.editor
   (:require [clojure.string :as str]
+            [algoradio.history :as history]
             ["react-codemirror" :as react-codemirror]
             ["codemirror/mode/javascript/javascript"]
             ["codemirror/addon/display/fullscreen"]))
@@ -24,15 +25,19 @@
                                         (get-cm! app-state))))))}
 
    [:> react-codemirror
-    {
-     :ref  (fn [ref] (when-not (@app-state ::instance)
+    {:ref  (fn [ref] (when-not (@app-state ::instance)
                       (swap! app-state assoc ::instance ref)))
      :options {:theme "oceanic-next"
                :fullScreen true
                :scrollbarStyle "null"}
      :autoSave false
      :value (get @app-state ::text "")
-     :on-change #(swap! app-state assoc ::text %)}]])
+     :on-change (fn [text change]
+                  (js/console.log "text" text "change" change)
+                  (swap! app-state assoc ::text text)
+                  (history/add-editor-change! app-state
+                                              (get @app-state ::key)
+                                              change))}]])
 
 (defn get-cm! [app-state]
   (-> @app-state ::instance .getCodeMirror))

@@ -10,7 +10,7 @@
                  :freesounds {}
                  :freesounds-pages {}
                  ::archive/already-played #{}
-                 ::editor/text intro
+                 ::editor/text "" #_intro
                  ::editor/key 1 }))
 
 (defn get-sounds []

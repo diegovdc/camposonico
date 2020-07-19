@@ -3,7 +3,7 @@
             [algoradio.colors :refer [get-color]]
             [algoradio.config :as config]
             [algoradio.history :as history]
-[cljs.user :refer [spy]]
+            [cljs.user :refer [spy]]
             [algoradio.player :as player]
             [clojure.string :as str]))
 
@@ -20,8 +20,8 @@
                            (get @app-state ::background-opacity 0.5))
         color (get-color id bg-opacity)
         volume (get-in @app-state [::player/volumes id])]
-    (js/console.debug "Viewing audio with id:" id)
     (when (and sound (.playing audio))
+      (js/console.debug "Viewing audio with id:" id)
       [:div {:class (str "source-info "
                          (when as-background? " as-background "))
              :style {:background-color color}
