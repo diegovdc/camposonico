@@ -28,6 +28,13 @@
           :change change
           :timestamp (js/Date.now)}))
 
+(defn add-editor-eval! [app-state editor-id mark]
+  (swap! app-state update ::history conj
+         {:event_type :editor_eval
+          :editor_id editor-id
+          :mark mark
+          :timestamp (js/Date.now)}))
+
 (defn prepare-history
   "Order history by timestamp, ascending,
   and add `:interval` between each event"

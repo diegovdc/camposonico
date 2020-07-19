@@ -13,16 +13,21 @@
          :class "editor"
          :on-key-down
          (fn [e]
-           (let [ctrl? (.-ctrlKey e)
+           (let [editor-id (get @app-state :algoradio.editor/key)
+                 ctrl? (.-ctrlKey e)
                  enter? (= 13 #_enter (.-keyCode e))
                  shift? (.-shiftKey e)]
              (cond
                (and ctrl? enter?) (do (.preventDefault e)
-                                      (eval-block! (get-cm! app-state)))
+                                      (eval-block! (get-cm! app-state)
+                                                   app-state
+                                                   editor-id))
 
                (and shift? enter?) (do (.preventDefault e)
                                        (eval-line-or-selection!
-                                        (get-cm! app-state))))))}
+                                        (get-cm! app-state)
+                                        app-state
+                                        editor-id)))))}
 
    [:> react-codemirror
     {:ref  (fn [ref] (when-not (@app-state ::instance)
@@ -38,7 +43,6 @@
                   (history/add-editor-change! app-state
                                               (get @app-state ::key)
                                               change))}]])
-
 (defn get-cm! [app-state]
   (-> @app-state ::instance .getCodeMirror))
 
@@ -72,7 +76,7 @@
         end (find-first-new-line text :down line)]
     {:start start
      :end end
-     :code (subvec text start (inc end)) }))
+     :code (str/join "\n" (subvec text start (inc end)))}))
 
 (defn mark-text! [{:keys [start end]} cm]
   (let [mark (.markText cm
@@ -93,7 +97,7 @@
    :end to
    :code (.getSelection cm)})
 
-(defn eval-line-or-selection! [cm]
+(defn eval-line-or-selection! [cm app-state editor-id]
   (let [from (.-line (.getCursor cm "from"))
         to (.-line (.getCursor cm "to"))
         selection? (not= from to)
@@ -102,13 +106,15 @@
                                 (get-line-for-eval cm from))]
     (mark-text! mark cm)
     (js/eval code)
-    (js/console.log code)))
+    (js/console.log code)
+    (history/add-editor-eval! app-state editor-id mark)))
 
-(defn eval-block! [cm]
+(defn eval-block! [cm app-state editor-id]
   (let [block (get-block cm)]
     (mark-text! block cm)
-    (js/eval (->> block :code (str/join "\n")))
-    (js/console.log (->> block :code (str/join "\n")))))
+    (js/eval (->> block :code))
+    (js/console.log (->> block :code))
+    (history/add-editor-eval! app-state editor-id block)))
 
 (defn remove-comment-lines! [app-state]
   (let [text (-> (get @app-state ::text "")

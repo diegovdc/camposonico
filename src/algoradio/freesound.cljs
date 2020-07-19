@@ -2,6 +2,7 @@
   (:require ["axios" :as axios]
             [algoradio.axios]
             [algoradio.config :as config]
+            [algoradio.history :as history]
             [clojure.string :as str]))
 
 (defn get-query-params [url]
@@ -46,11 +47,11 @@
   (let [query- (if (empty? query) "all" query)
         query* (querify query)
         base-query (querify (get @app-state ::base-query ""))
-        page (get-in @app-state [:freesounds-pages query-] 1)]
+        page (get-in @app-state [:freesounds-pages query-] 1)
+        url (str config/api "/data?query=" base-query "+" query* "&page=" page)]
     (when (not= :done page)
       (swap! app-state update ::loading-queries conj {query page})
-      (-> (axios/get
-           (str config/api "/data?query=" base-query "+" query* "&page=" page))
+      (-> (axios/get url)
           (.then (fn [res]
                    (let [{:keys [results next-page]}
                          (-> res
@@ -66,9 +67,9 @@
                                     (update-in
                                      [:freesounds query-]
                                      concat results))))
-                       (js/console.error (str "No se encontraron resultados para: "
-                                              query))))))
-          (.catch js/console.log)
+                       (js/console.error
+                        (str "No se encontraron resultados para: " query))))))
+          (.catch js/console.error)
           (.finally #(swap! app-state
                             update
                             ::loading-queries

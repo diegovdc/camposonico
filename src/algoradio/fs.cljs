@@ -4,8 +4,8 @@
             [algoradio.common :refer [distinct-by
                                       set-as-freesound-queries!
                                       set-as-freesound-query!]]
-            [algoradio.replayer :as replayer]
-            [cljs.user :refer [spy]]))
+            [algoradio.replayer.core :as replayer]
+            ["axios" :as axios]))
 
 (def download-link-id "download-link")
 
@@ -27,7 +27,8 @@
     (let [file (-> event .-target .-files (aget 0))
           reader (js/FileReader.)]
       (set! (.. reader -onload)
-            (partial parse-loaded-file! on-parse))
+            (partial parse-loaded-file!
+                     (fn [data] on-parse)))
       (js/console.debug "FileReader" reader)
       (.readAsText reader file))))
 
@@ -70,11 +71,14 @@
      name*
      (js/JSON.stringify (clj->js data)))))
 
+(defn replay-from-url! [url]
+  (-> (axios/get url)
+      (.then #(-> %
+                  js->clj
+                  walk/keywordize-keys
+                  :data
+                  ((on-parse-fns :history))))
+      (.catch (js/console.error))))
 
 
 (comment (download-json! {1 2} :holi-boli))
-
-
-(let [obj (clj->js {})]
-  (set! (.. obj -onload) identity)
-  (js/console.log obj))

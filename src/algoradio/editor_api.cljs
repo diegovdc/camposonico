@@ -22,16 +22,16 @@
   (set! (.. js/window -showInfo) sources/rand-info!)
   (set! (.. js/window -infoAsBackground) sources/as-background!?)
   (set! (.. js/window -setInfoPosition) sources/set-position!)
-  (set! (.. js/window -clear) #(editor/clear-all! app-state))
+  (set! (.. js/window -clearAll) #(editor/clear-all! app-state))
   (set! (.. js/window -clearComments) #(editor/remove-comment-lines! app-state))
   (set! (.. js/window -stop) player/rand-stop!)
   (set! (.. js/window -play) (fn [type opts]
                                (player/user-play-sound!
                                 type (-> opts js->clj walk/keywordize-keys))))
-  (set! (.. js/window -traerAudios) search/get-audios!)
   (set! (.. js/window -setBaseQuery) (partial freesound/reset-base-query! app-state))
   (set! (.. js/window -uploadSelections) #(fs/toggle-uploader! :selections))
-  (set! (.. js/window -replayFile) #(fs/toggle-uploader! :history))
+  (set! (.. js/window -replayFromFile) #(fs/toggle-uploader! :history))
+  (set! (.. js/window -replayFromUrl) (fn [url] (fs/replay-from-url! url)))
   (set! (.. js/window -autoPlay) (fn [bool] (reset! config/auto-play? (boolean bool))))
   (set! (.. js/window -downloadSelections)
         (fn [name]
