@@ -82,7 +82,7 @@
       (.catch (js/console.error))))
 
 (defn replay-from-query-string! [query-string]
-  (if-let [url (:replay (parse-query-string query-string))]
+  (if-let [url (js/decodeURIComponent (:replay (parse-query-string query-string)))]
     (replay-from-url! url)))
 
 (comment (download-json! {1 2} :holi-boli))
