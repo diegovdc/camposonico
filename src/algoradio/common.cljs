@@ -1,6 +1,7 @@
 (ns algoradio.common
   (:require [clojure.walk :as walk]
-            [cljs.user :refer [spy]]))
+            [cljs.user :refer [spy]]
+            [clojure.string :as str]))
 
 (defonce color-offset (rand-int 100))
 
@@ -14,3 +15,12 @@
 
 (defn set-as-freesound-queries! [app-state data]
   (doseq [list data] (set-as-freesound-query! app-state list)))
+
+(defn parse-query-string [query-string]
+  (some-> query-string
+          (str/replace-first "?" "")
+          (str/split "&")
+          (->> (remove empty?)
+               (map #(str/split % "="))
+               (into {}))
+          walk/keywordize-keys))

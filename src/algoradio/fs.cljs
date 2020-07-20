@@ -2,6 +2,7 @@
   (:require [clojure.walk :as walk]
             [algoradio.state :refer [app-state]]
             [algoradio.common :refer [distinct-by
+                                      parse-query-string
                                       set-as-freesound-queries!
                                       set-as-freesound-query!]]
             [algoradio.replayer.core :as replayer]
@@ -80,5 +81,8 @@
                   ((on-parse-fns :history))))
       (.catch (js/console.error))))
 
+(defn replay-from-query-string! [query-string]
+  (if-let [url (:replay (parse-query-string query-string))]
+    (replay-from-url! url)))
 
 (comment (download-json! {1 2} :holi-boli))

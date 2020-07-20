@@ -38,7 +38,7 @@
      :autoSave false
      :value (get @app-state ::text "")
      :on-change (fn [text change]
-                  (js/console.log "text" text "change" change)
+                  #_(js/console.log "text" text "change" change)
                   (swap! app-state assoc ::text text)
                   (history/add-editor-change! app-state
                                               (get @app-state ::key)
