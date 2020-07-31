@@ -48,7 +48,7 @@
         query* (querify query)
         base-query (querify (get @app-state ::base-query ""))
         page (get-in @app-state [:freesounds-pages query-] 1)
-        url (str config/api "/data?query=" base-query "+" query* "&page=" page)]
+        url (str config/api "/freesound/?query=" base-query "+" query* "&page=" page)]
     (when (not= :done page)
       (swap! app-state update ::loading-queries conj {query page})
       (-> (axios/get url)
