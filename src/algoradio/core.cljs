@@ -5,6 +5,7 @@
    [algoradio.add-music :as add-music]
    [algoradio.archive :as archive]
    [algoradio.alert :as alert]
+   [algoradio.instructions :as instructions]
    [algoradio.archive.sounds :as archive*]
    #_[algoradio.convocatoria :as convocatoria]
    [algoradio.editor :as editor]
@@ -26,7 +27,7 @@
    [:h1 "Camposónico"]
    [:p {:class "intro__p"}
     "En la barra de búsqueda escribe el nombre de algún tipo de paisaje o \"tag\" relacionado (las búsquedas en inglés suelen arrojar más resultados)."]])
-
+#_(println js/camposonicoVersion)
 (defn campo-sonoro []
   (reagent/create-class
    {:component-did-mount
@@ -65,7 +66,9 @@
   (reset! app-state))
 
 (defn ^:export init [opts]
-  (if-let [intro-text (get (js->clj opts) "introText")]
+  (let [opts* (js->clj opts)
+        version (get opts* "version" "1.0.0")
+        intro-text (get opts* "introText" (instructions/intro version))]
     (swap! app-state assoc ::editor/text intro-text))
   (if-let [lists (-> opts js->clj (get "lists")
                      js->clj

@@ -1,12 +1,13 @@
 (ns algoradio.instructions)
 
-(def intro
-  "//  /`  ,_      _ ,._. _
+(defn intro [version]
+  (str "//  /`  ,_      _ ,._. _
 //  \\,(|||||)()_\\()|||(_()
 //         |
 //  |)   |.     /||      ,|-,_ . _
 //  |\\(|(||()  /-||(|()|`||_||||(_(|
 //               _|
+// versión: " version "
 
 // ¿Qué es Camposónico?
 // Es una \"Radio algorítmica\" con dos objetivos:
@@ -69,4 +70,4 @@ clearComments() // y sigue explorando sonidos...
 
 
 
-")
+"))
