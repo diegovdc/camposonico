@@ -14,7 +14,6 @@
         (get "version")))
   (get-version!))
 
-
 (defn build-index! [version]
   (->> (get-manifest!)
        (filter #(= (:name %) :main))
