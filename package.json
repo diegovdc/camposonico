@@ -1,7 +1,7 @@
 {
-    "version": "1.1.2",
+    "version": "1.1.1",
     "scripts": {
-        "publish": "npm version ${npm_config_versiontype}",
+        "publish": "npm version ${npm_config_versiontype} && git push origin master",
         "deps": "yarn install",
         "build-html": "shadow-cljs clj-run build.html.core",
         "watch": "shadow-cljs watch app;",
