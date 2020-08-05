@@ -1,10 +1,10 @@
 {
   "scripts": {
     "deps": "yarn install",
-    "sha": "shadow-cljs",
+    "build-html": "shadow-cljs clj-run build.html.core",
     "watch": "shadow-cljs watch app;",
     "dev:styles": "node-sass src/styles/mazorca.scss public/css/mazorca.css --watch",
-    "release": "shadow-cljs release app && parcel build src/js/index.js --out-dir public/js/external-libs && node-sass src/styles/mazorca.scss public/css/mazorca.css",
+    "release": "shadow-cljs release app && parcel build src/js/index.js --out-dir public/js/external-libs && node-sass src/styles/mazorca.scss public/css/mazorca.css && npm run build-html",
     "server": "shadow-cljs server;",
     "clean": "rm -rf target; rm -rf public/js/compiled"
   },

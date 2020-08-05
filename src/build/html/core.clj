@@ -17,4 +17,5 @@
        (spit "public/index.html")))
 
 (defn -main []
-  (build-index!))
+  (build-index!)
+  (println "Html files have been built"))
