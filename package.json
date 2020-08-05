@@ -1,4 +1,4 @@
-{
+{"version": "1.0.0",
   "scripts": {
     "deps": "yarn install",
     "build-html": "shadow-cljs clj-run build.html.core",
