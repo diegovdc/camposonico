@@ -3,6 +3,7 @@
  ["src", "dev"]
 
  :dependencies [[binaryage/devtools "0.9.7"]
+                [hiccup "1.0.5"]
                 [reagent "0.8.0-alpha2"]
                 [cider/cider-nrepl "0.22.3"]
                 [binaryage/oops "0.7.0"]
@@ -15,7 +16,7 @@
  {:app {:target :browser
         :output-dir "public/js/compiled"
         :asset-path "/js/compiled"
-
+        :module-hash-names true
         :modules
         {:main
          {:entries [algoradio.core]}}
@@ -28,5 +29,4 @@
          ;; serve the public directory over http at port 8700
          :http-root    "public"
          :http-port    8700
-         :preloads     [devtools.preload]}
-        }}}
+         :preloads     [devtools.preload]}}}}

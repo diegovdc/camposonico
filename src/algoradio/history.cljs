@@ -1,4 +1,7 @@
-(ns algoradio.history)
+(ns algoradio.history
+  (:require [algoradio.api :as api]
+            [algoradio.alert :as alert]
+            [algoradio.inputs :as inputs]))
 
 (defn add-play! [app-state sound audio-id]
   (swap! app-state update ::history conj
@@ -52,3 +55,41 @@
 
 (defn get-history! [app-state]
   (#'prepare-history (get @app-state ::history)))
+
+;;;;;;;;;;;;;;;
+;; save history
+;;;;;;;;;;;;;;;
+(def history-metadata (atom {}))
+
+(defn on-history-input-change [ev id]
+  (swap! history-metadata assoc id (-> ev .-target .-value)))
+
+(defn show-save-template! [app-state]
+  (swap! app-state assoc ::save? true))
+
+(defn hide-save-template! [app-state]
+  (swap! app-state assoc ::save? false))
+
+(defn save-history! [app-state metadata]
+  (-> (api/post-history (assoc metadata :history (get-history! app-state)))
+      (.then (fn [_]
+               (alert/create-alert! app-state :success "Your performance has been saved")
+               (reset! history-metadata {})
+               (hide-save-template! app-state)))
+      (.catch #(alert/create-alert! app-state :error (api/get-error %)))))
+
+(defn on-history-submit [app-state event]
+  (.preventDefault event)
+  (save-history! app-state @history-metadata))
+
+(defn save-template [app-state]
+  (when (@app-state ::save?)
+    [:div {:class "history-save"}
+     [:div {:class "history-save__container"}
+      [:h2 {:class "history-save__title"} "Save your performance"]
+      [:p {:class "mb-10"} "This operation will save your performance to Camposónico's database. All fields are optional."]
+      [:form {:name "history" :class "history-save__form"}
+       (inputs/input :text :title "Title" on-history-input-change)
+       (inputs/input :text :author "Author" on-history-input-change)
+       (inputs/input :text :tags "Tags (comma separated)" on-history-input-change)
+       (inputs/submit "Save" (partial on-history-submit app-state))]]]))

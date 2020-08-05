@@ -15,6 +15,36 @@
 @import "mazorca/_theme-helpers";
 @import "mazorca/_modules";
 
+@mixin close {
+  &__close {
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: c(checked);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  &__close-x {
+    position: relative;
+    bottom: 2px;
+  }
+}
+
+@mixin input {
+  padding: 5px;
+  color: white;
+  font-size: 18px;
+  border-radius: 3px;
+  &:focus {
+    border-color: c(checked);
+  }
+}
+
 body {
   background-color: c(background);
 }
@@ -44,6 +74,10 @@ b {font-weight: bold;}
 .ac {align-items: center;}
 
 .ml-10 {margin-left: 8px;}
+
+.mb-10 {
+  margin-bottom: 10px;
+}
 
 .range-input {
   position: absolute;
@@ -107,13 +141,7 @@ b {font-weight: bold;}
       display: flex;
       position: relative;
     }
-    padding: 5px;
-    color: white;
-    font-size: 18px;
-    border-radius: 3px;
-    &:focus {
-      border-color: c(checked);
-    }
+    @include input;
   }
 
   &__button {
@@ -271,15 +299,7 @@ b {font-weight: bold;}
       padding: 5px 5px 5px 0;
     }
   }
-  &__close {
-    padding: 3px 8px;
-    font-size: 12px;
-    cursor: pointer;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: c(checked);
-  }
+  @include close;
   &__send-to-back {
     position: absolute;
     top: 0;
@@ -519,5 +539,67 @@ code {
     input {
       border: none;
     }
+  }
+}
+
+.alert {
+  position: fixed;
+  top: 0;
+  left:0;
+  width: 100%;
+  z-index: 999999;
+  @include close;
+  &__close {left:initial; right: 0;}
+  &__container {
+    padding: 16px;
+    font-size: 16px;
+    color: c(white);
+  }
+  &__error {
+    background: red;
+  }
+  &__success {
+    background: green;
+  }
+}
+
+
+.form-label {
+  display: block;
+  margin-bottom: 20px;
+  & p {
+    margin-bottom: 5px;
+  }
+}
+
+.form-input {
+  @include input;
+}
+
+.history-save {
+  position: fixed;
+  top: 0;
+  left:0;
+  background: rgba(33,33,33 , 0.95);
+  height: 100vh;
+  width: 100vw;
+  z-index: 10;
+  color: white;
+  font-size: 16px;
+  &__container {
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  &__title {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  &__form {
+    width: 100%;
+    margin: 0 auto;
   }
 }

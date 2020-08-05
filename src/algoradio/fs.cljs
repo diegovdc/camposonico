@@ -1,6 +1,8 @@
 (ns algoradio.fs
   (:require [clojure.walk :as walk]
             [algoradio.state :refer [app-state]]
+            [algoradio.api :as api]
+            [algoradio.alert :as alert]
             [algoradio.common :refer [distinct-by
                                       parse-query-string
                                       set-as-freesound-queries!
@@ -15,11 +17,11 @@
 
 (defn parse-loaded-file! [on-parse event]
   (let [parsed-file (-> event
-                       .-target
-                       .-result
-                       js/JSON.parse
-                       js->clj
-                       walk/keywordize-keys)]
+                        .-target
+                        .-result
+                        js/JSON.parse
+                        js->clj
+                        walk/keywordize-keys)]
     (on-parse parsed-file)
     (toggle-uploader! nil)))
 
@@ -81,8 +83,25 @@
                   ((on-parse-fns :history))))
       (.catch (js/console.error))))
 
+(defn replay-from-database!
+  "`id` can be an a string in the format `id-author-title`,
+   only the `id` at the front matters"
+  [id]
+  (-> (api/get-history id)
+      (.then #(-> % api/get-data
+                  js->clj
+                  (get "history")
+                  js/JSON.parse
+                  js->clj
+                  walk/keywordize-keys
+                  ((on-parse-fns :history))))
+      (.catch #(alert/create-alert! app-state :error "Could not find set for replay."))))
+
 (defn replay-from-query-string! [query-string]
-  (if-let [url (js/decodeURIComponent (:replay (parse-query-string query-string)))]
-    (replay-from-url! url)))
+  (let [{url :replay id :set} (parse-query-string query-string)]
+    (cond url (replay-from-url! (js/decodeURIComponent url))
+          id (replay-from-database! id))))
+
+(comment (replay-from-database! 1))
 
 (comment (download-json! {1 2} :holi-boli))

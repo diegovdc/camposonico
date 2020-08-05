@@ -49,7 +49,9 @@
   (def hist (algoradio.history/get-history! algoradio.state/app-state))
   (js/console.log hist)
   (a/go-loop [h hist]
+    (println "in")
     (when (seq h)
+      (println "seq")
       (let [ev (first h)]
         (a/<! (a/timeout (ev :interval)))
         (replay-event! algoradio.state/app-state ev)
@@ -77,7 +79,7 @@
                       (condp = char
                         "(" (update acc :opening inc)
                         ")" (update acc :closing inc)
-                         acc)]
+                        acc)]
                   (if (and (= opening closing)
                            (> opening 0))
                     (reduced (+ start-index i))

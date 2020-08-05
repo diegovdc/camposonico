@@ -4,6 +4,7 @@
    [algoradio.common :as common]
    [algoradio.add-music :as add-music]
    [algoradio.archive :as archive]
+   [algoradio.alert :as alert]
    [algoradio.archive.sounds :as archive*]
    #_[algoradio.convocatoria :as convocatoria]
    [algoradio.editor :as editor]
@@ -17,7 +18,8 @@
    [cljs.user :refer [spy]]
    [reagent.core :as reagent]
    [algoradio.fs :as fs]
-   [clojure.walk :as walk]))
+   [clojure.walk :as walk]
+   [algoradio.history :as history]))
 
 (defn intro []
   [:div {:class "intro"}
@@ -52,6 +54,8 @@
                   :on-click about/toggle-show-about} icons/info]
         (when (@app-state ::about/show-about?) (about/main archive*/sounds))
         (fs/main app-state)
+        (alert/main app-state)
+        (history/save-template app-state)
         #_(convocatoria/main :es)]])}))
 
 (defn start []
