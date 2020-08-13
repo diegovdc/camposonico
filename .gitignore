@@ -2,8 +2,12 @@ node_modules/
 .shadow-cljs/
 public/*
 !public/archives
+!public/.well-known
+!public/.well-known/brave-rewards-verification.txt
 !public/archives/dos-sures.html
 !public/images
 **/#*
 **/.#*
 .cache/
+.calva/
+.rebel_readline_history

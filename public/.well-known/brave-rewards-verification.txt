@@ -1,0 +1,4 @@
+This is a Brave Rewards publisher verification file.
+
+Domain: camposonico.net
+Token: a4e44a9af7c7919ab2f9a0e94c05e9c555ed32fd3344a98e315d552da09610c4

@@ -10,7 +10,7 @@
 
 //===Mazorca===//
 @import "mazorca/_elements";
-@import "mazorca/_grid";//
+@import "mazorca/_grid"; //
 @import "mazorca/_components";
 @import "mazorca/_theme-helpers";
 @import "mazorca/_modules";
@@ -57,7 +57,9 @@ h1 {
   text-align: center;
 }
 
-b {font-weight: bold;}
+b {
+  font-weight: bold;
+}
 
 .link {
   color: c(checked);
@@ -67,13 +69,21 @@ b {font-weight: bold;}
   }
 }
 
-.curp {cursor: pointer;}
+.curp {
+  cursor: pointer;
+}
 
-.df {display: flex;}
+.df {
+  display: flex;
+}
 
-.ac {align-items: center;}
+.ac {
+  align-items: center;
+}
 
-.ml-10 {margin-left: 8px;}
+.ml-10 {
+  margin-left: 8px;
+}
 
 .mb-10 {
   margin-bottom: 10px;
@@ -84,14 +94,14 @@ b {font-weight: bold;}
   right: 0;
   bottom: 40px;
   width: 20px;
-  border:none;
+  border: none;
   -webkit-appearance: slider-vertical;
   -moz-appearance: slider-vertical;
 }
 
 .main {
   padding: 16px 16px 0;
-  position: relative;;
+  position: relative;
 }
 
 .intro {
@@ -104,7 +114,7 @@ b {font-weight: bold;}
 }
 
 .ReactCodeMirror .CodeMirror.cm-s-oceanic-next {
-  background-color: rgba(0,0,0,0);
+  background-color: rgba(0, 0, 0, 0);
   min-heigh: 100%;
 }
 
@@ -178,7 +188,6 @@ b {font-weight: bold;}
       position: relative;
       top: 5px;
     }
-
   }
 
   &__source {
@@ -186,7 +195,7 @@ b {font-weight: bold;}
     text-align: right;
     color: c(white);
     font-size: 10px;
-    a{
+    a {
       color: c(checked);
     }
   }
@@ -197,7 +206,10 @@ b {font-weight: bold;}
   z-index: 10;
   right: 8px;
   top: 110px;
-  &.is-mobile { position: relative; top: 0;}
+  &.is-mobile {
+    position: relative;
+    top: 0;
+  }
   &__field {
     &-container {
       text-align: right;
@@ -205,7 +217,9 @@ b {font-weight: bold;}
       flex-direction: column;
       justify-content: right;
     }
-    &-name {padding-right: 8px;}
+    &-name {
+      padding-right: 8px;
+    }
     &-color {
       &-container {
         display: flex;
@@ -217,7 +231,7 @@ b {font-weight: bold;}
       opacity: 0.7;
       cursor: pointer;
     }
-    margin-bottom: 4px;;
+    margin-bottom: 4px;
     font-size: 14px;
     color: c(white);
   }
@@ -247,25 +261,29 @@ b {font-weight: bold;}
   display: flex;
   left: 0;
   bottom: 0;
-  top:0;
-  right:0;
+  top: 0;
+  right: 0;
   &__container {
     display: flex;
     flex-direction: column;
     padding: 12px;
     width: 100%;
-    &.bottom, &.abajo {
+    &.bottom,
+    &.abajo {
       justify-content: flex-end;
     }
-    &.center, &.centro {
+    &.center,
+    &.centro {
       justify-content: center;
     }
-    &.left, &.izquierda {
+    &.left,
+    &.izquierda {
       justify-content: center;
       align-items: flex-start;
       max-width: 400px;
     }
-    &.right, &.derecha {
+    &.right,
+    &.derecha {
       justify-content: center;
       align-items: flex-start;
       max-width: 600px;
@@ -278,20 +296,24 @@ b {font-weight: bold;}
   &__add-to-list {
     cursor: pointer;
   }
-  &.top, &.arriba {
+  &.top,
+  &.arriba {
     left: 0;
     top: 0;
     width: 100%;
   }
-  &.right, &.derecha {
-    justify-content:flex-end;
+  &.right,
+  &.derecha {
+    justify-content: flex-end;
   }
 
   &.as-background {
     opacity: 0.5;
     z-index: 1;
   }
-  span {background-color: rgba(33,33,33, 0.5)}
+  span {
+    background-color: rgba(33, 33, 33, 0.5);
+  }
   .link {
     font-size: 14px;
     position: relative;
@@ -312,7 +334,6 @@ b {font-weight: bold;}
     }
   }
 }
-
 
 .info-icon {
   &__container {
@@ -336,7 +357,6 @@ b {font-weight: bold;}
     }
   }
 }
-
 
 .about {
   position: absolute;
@@ -393,9 +413,9 @@ b {font-weight: bold;}
   &__close {
     position: fixed;
     top: 0;
-    right:16px;
+    right: 16px;
     cursor: pointer;
-    border:none;
+    border: none;
     padding: 5px 8px;
   }
   &__works {
@@ -404,13 +424,12 @@ b {font-weight: bold;}
       background-color: transparent;
       border: 2px solid c(purple);
       border-radius: 3px;
-      padding: 6px 5px  4px;
+      padding: 6px 5px 4px;
       cursor: pointer;
       &:hover {
         transition: all 1s;
         background-color: transparentize(c(purple), 0.8);
       }
-
     }
     &-container {
       padding-top: 16px;
@@ -423,7 +442,9 @@ b {font-weight: bold;}
         margin-right: 3px;
       }
 
-      &:hover {color: lighten(c(checked), 10%)}
+      &:hover {
+        color: lighten(c(checked), 10%);
+      }
     }
     &-work {
       padding-left: 20px;
@@ -445,7 +466,9 @@ b {font-weight: bold;}
       &-link {
         color: c(checked);
         font-size: 12px;
-        &:hover {color: lighten(c(checked), 10%)}
+        &:hover {
+          color: lighten(c(checked), 10%);
+        }
       }
     }
   }
@@ -465,7 +488,6 @@ b {font-weight: bold;}
   }
 }
 
-
 code {
   background-color: #333;
   display: block;
@@ -473,7 +495,6 @@ code {
   font-size: 16px;
   font-family: monospace;
 }
-
 
 .hydra-canvas {
   position: fixed;
@@ -484,7 +505,6 @@ code {
   height: 100vh;
   width: 100vw;
 }
-
 
 .convo {
   &__container {
@@ -500,14 +520,15 @@ code {
     font-size: 20px;
     line-height: 1.1;
     margin-bottom: 12px;
-    color: c(white)
+    color: c(white);
   }
 }
 
-
 .fs {
   &__uploader {
-    &.show {display: flex;}
+    &.show {
+      display: flex;
+    }
     display: none;
     flex-direction: column;
     justify-content: center;
@@ -518,11 +539,11 @@ code {
     height: 100vh;
     width: 100vw;
     z-index: 9999;
-    background-color:rgba(30, 30, 30, 0.9);
+    background-color: rgba(30, 30, 30, 0.9);
     &-close {
       position: fixed;
       top: 0;
-      right:0;
+      right: 0;
       cursor: pointer;
       padding: 5px 8px;
       color: c(white);
@@ -545,11 +566,14 @@ code {
 .alert {
   position: fixed;
   top: 0;
-  left:0;
+  left: 0;
   width: 100%;
   z-index: 999999;
   @include close;
-  &__close {left:initial; right: 0;}
+  &__close {
+    left: initial;
+    right: 0;
+  }
   &__container {
     padding: 16px;
     font-size: 16px;
@@ -562,7 +586,6 @@ code {
     background: green;
   }
 }
-
 
 .form-label {
   display: block;
@@ -579,8 +602,8 @@ code {
 .history-save {
   position: fixed;
   top: 0;
-  left:0;
-  background: rgba(33,33,33 , 0.95);
+  left: 0;
+  background: rgba(33, 33, 33, 0.95);
   height: 100vh;
   width: 100vw;
   z-index: 10;
