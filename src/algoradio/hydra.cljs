@@ -1,9 +1,10 @@
-(ns algoradio.hydra)
+(ns algoradio.hydra
+  (:require ["hydra-synth" :as Hydra]))
 
 (defonce h (atom nil))
 
 (defn create! [canvas-id]
-  (new js/Hydra
+  (new Hydra
        (clj->js
         {:canvas (js/document.getElementById canvas-id)
          :autoLoop true
@@ -16,3 +17,13 @@
 
 (defn init! []
   (reset! h (create! "hydra-canvas")))
+
+(comment
+  (init!)
+
+  (-> (js/shape 3)
+      (.scrollX )
+      (.out))
+
+  (js/console.log (js/document.getElementById "hydra-canvas"))
+  )

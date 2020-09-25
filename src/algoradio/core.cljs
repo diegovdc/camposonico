@@ -1,26 +1,25 @@
 (ns algoradio.core
-  (:require
-   [algoradio.about :as about]
-   [algoradio.common :as common]
-   [algoradio.add-music :as add-music]
-   [algoradio.archive :as archive]
-   [algoradio.alert :as alert]
-   [algoradio.instructions :as instructions]
-   [algoradio.archive.sounds :as archive*]
-   #_[algoradio.convocatoria :as convocatoria]
-   [algoradio.editor :as editor]
-   [algoradio.editor-api :as editor-api]
-   [algoradio.fields :as fields]
-   [algoradio.icons :as icons]
-   [algoradio.search :as search]
-   [algoradio.source-info :as sources]
-   ["/js/index" :refer [isMobileOrTablet]]
-   [algoradio.state :refer [app-state]]
-   [cljs.user :refer [spy]]
-   [reagent.core :as reagent]
-   [algoradio.fs :as fs]
-   [clojure.walk :as walk]
-   [algoradio.history :as history]))
+  (:require ["/js/index" :refer [isMobileOrTablet]]
+            [algoradio.about :as about]
+            [algoradio.add-music :as add-music]
+            [algoradio.alert :as alert]
+            [algoradio.archive :as archive]
+            [algoradio.archive.sounds :as archive*]
+            [algoradio.chat :as chat]
+            [algoradio.common :as common]
+            [algoradio.editor :as editor]
+            [algoradio.editor-api :as editor-api]
+            [algoradio.fields :as fields]
+            [algoradio.fs :as fs]
+            [algoradio.history :as history]
+            [algoradio.icons :as icons]
+            [algoradio.instructions :as instructions]
+            [algoradio.search :as search]
+            [algoradio.source-info :as sources]
+            [algoradio.state :refer [app-state]]
+            [cljs.user :refer [spy]]
+            [clojure.walk :as walk]
+            [reagent.core :as reagent]))
 
 (defn intro []
   [:div {:class "intro"}
@@ -57,6 +56,7 @@
         (fs/main app-state)
         (alert/main app-state)
         (history/save-template app-state)
+        [chat/main]
         #_(convocatoria/main :es)]])}))
 
 (defn start []

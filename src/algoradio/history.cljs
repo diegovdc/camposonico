@@ -93,3 +93,6 @@
        (inputs/input :text :author "Author" on-history-input-change)
        (inputs/input :text :tags "Tags (comma separated)" on-history-input-change)
        (inputs/submit "Save" (partial on-history-submit app-state))]]]))
+
+
+(comment (show-save-template! algoradio.state/app-state))
