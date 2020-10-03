@@ -645,7 +645,8 @@ code {
     background-color: rgba(33, 33, 33, 0.7);
     border-radius: 5px;
     width: 300px;
-    height: 25px;
+    height: 21px;
+    overflow: hidden;
     color: white;
     font-size: 16px;
   }
@@ -658,6 +659,13 @@ code {
   &__username {
     font-weight: bold;
   }
+
+  &__form {
+    display: flex;
+    &-container {
+    }
+  }
+
   &__message-text {
     display: inline-block;
     background-color: rgba(33, 33, 33, 0.7);
@@ -669,9 +677,28 @@ code {
   }
 
   &__submit-button {
-    opacity: 0.5;
-    height: 20px;
-    padding: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: c(background);
+    border: 2px solid c(white);
+    border-radius: 3px;
+    padding: 5px;
+    color: c(white);
+    cursor: pointer;
+    font-size: 14px;
+    &:hover {
+      transition: all 2s;
+      color: c(checked);
+      border-color: c(checked);
+    }
+
+    /* opacity: 0.5; */
+    /* height: 20px; */
+    padding: 2px 3px;
+    /* text-align: right; */
+    min-width: 50px;
+    /* background-color: c(white); */
   }
 
   &__submit-button.not-empty {
@@ -680,11 +707,11 @@ code {
 
   &__submit-button span {
     position: relative;
-    top: -4px;
+    //top: -4px;
   }
 
   &__messages-container {
-    max-height: calc(100vh - 50px);
+    max-height: calc(100vh - 140px);
     overflow-y: auto;
   }
 
@@ -699,9 +726,22 @@ code {
   }
   &__icons {
     display: flex;
+    font-size: 16px;
     justify-content: flex-end;
-    padding-bottom: 3px;
+    padding: 0 3px 3px;
     color: white;
+    & i {
+      background-color: rgba(166, 166, 166, 0.4);
+      &.show {
+        color: c(checked);
+      }
+      &:hover {
+        cursor: pointer;
+        transition: all 2s;
+        color: c(checked);
+        border-color: c(checked);
+      }
+    }
   }
   &__history {
     cursor: pointer;
