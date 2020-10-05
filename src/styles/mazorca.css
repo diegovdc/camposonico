@@ -1,0 +1,1247 @@
+@charset "UTF-8";
+/*===Mazorca Core===*/
+/* Eric Meyer's Reset CSS v2.0 - http://cssreset.com */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  margin: 0;
+  padding: 0;
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/**
+* Basic Styles
+* ---------------
+* Edítalos o sobreescríbelos
+*
+*/
+/**
+ * Super basic stylings
+ *
+ */
+* {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+html, body {
+  min-height: 100%;
+}
+
+body {
+  position: relative;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+  font-family: BlissPro;
+}
+
+strong {
+  font-weight: bold;
+}
+
+img {
+  -ms-interpolation-mode: bicubic;
+}
+
+.column img, .columns img {
+  max-width: 100%;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  width: 100%;
+}
+
+p em {
+  font-style: italic;
+}
+
+section, article, aside, header, footer, nav, figure, figcaption {
+  display: block;
+}
+
+time, mark {
+  display: inline-block;
+}
+
+/**
+ * All helpers use the !important keyword, if ever necessary their
+ * output might be overriden with the !important keyword in a
+ * property located lower in the cascade.
+ *
+ */
+/**
+ *	Helpers Index:
+ *		Position
+ *		Display
+ *		Gutters
+ *		Paddings and Margins
+ *		JS Classes
+ *
+ */
+/*************************** Position ***************************/
+.absolute {
+  position: absolute !important;
+}
+
+.relative {
+  position: relative !important;
+}
+
+.fixed {
+  position: fixed !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  left: 0;
+}
+
+.leer-mas__container {
+  position: relative;
+  overflow: hidden;
+}
+
+.flip {
+  -moz-transform: rotate(180deg) translateX(-50%) !important;
+  -o-transform: rotate(180deg) translateX(-50%) !important;
+  -webkit-transform: rotate(180deg) translateX(-50%) !important;
+  transform: rotate(180deg) translateX(-50%) !important;
+}
+
+.centerXY {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.flex {
+  display: flex !important;
+}
+
+.left {
+  float: left !important;
+}
+
+.right {
+  float: right !important;
+}
+
+.top56 {
+  top: 56px;
+}
+
+.ontop {
+  z-index: 99 !important;
+}
+
+.z-0 {
+  z-index: 0 !important;
+}
+
+.w100 {
+  width: 100% !important;
+}
+
+.h100 {
+  height: 100% !important;
+}
+
+.op1 {
+  opacity: 1 !important;
+}
+
+.tdn {
+  text-decoration: none !important;
+}
+
+.text-overflow-ellipsis {
+  text-overflow: ellipsis !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+}
+
+/*************************** Layout ***************************/
+.clearfix:before, .clearfix:after {
+  content: " ";
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+}
+.clearfix {
+  *zoom: 1;
+}
+
+/*************************** Display ***************************/
+.d-bl {
+  display: block !important;
+}
+
+.inline {
+  display: inline !important;
+}
+
+.inline-block {
+  display: inline-block !important;
+}
+
+/*************************** Gutters ***************************/
+/*************************** Paddings and Margins ***************************/
+.p0 {
+  padding: 0 !important;
+}
+
+.pb0 {
+  padding-bottom: 0 !important;
+}
+
+.pr0 {
+  padding-right: 0 !important;
+}
+
+.pl0 {
+  padding-left: 0 !important;
+}
+
+.m0 {
+  margin: 0 !important;
+}
+
+.mb0 {
+  margin-bottom: 0 !important;
+}
+
+.mb40 {
+  margin-bottom: 40px !important;
+}
+
+/*************************** Arrows ***************************/
+.icon-arrow-up:after {
+  content: "";
+}
+
+.icon-arrow-down:after {
+  content: "";
+}
+
+/*************************** Drags, Selects ***************************/
+.undraggable-unselectable-cascading *,
+.undraggable-unselectable {
+  user-drag: none !important;
+  -webkit-user-drag: none !important;
+  user-select: none !important;
+  -moz-user-select: none !important;
+  -webkit-user-select: none !important;
+  -ms-user-select: none !important;
+}
+
+.unselectable {
+  user-select: none !important;
+  -moz-user-select: none !important;
+  -webkit-user-select: none !important;
+  -ms-user-select: none !important;
+}
+
+/*************************** Text ***************************/
+.ttu {
+  text-transform: uppercase !important;
+}
+
+.ttn {
+  text-transform: none !important;
+}
+
+/*************************** Animations ***************************/
+.transition-fast {
+  transition: all 0.3s;
+}
+
+.transition-slow {
+  transition: all 1s;
+}
+
+.hover-scale-up:hover {
+  transform: scale(1.2) !important;
+}
+
+/*************************** JS Classes ***************************/
+[v-cloak] {
+  opacity: 0;
+}
+
+.noScroll_JS, .no-scroll {
+  overflow: hidden !important;
+}
+
+/*************************** Bootstrap ***************************/
+.hidden {
+  display: none !important;
+}
+
+/* Eric Meyer's Reset CSS v2.0 - http://cssreset.com */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  margin: 0;
+  padding: 0;
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+html {
+  font-size: 10px;
+}
+
+h1::selection, h2::selection, h3::selection, h4::selection, h5::selection, h6::selection, p::selection, a::selection {
+  background: #312822;
+}
+h1::-moz-selection, h2::-moz-selection, h3::-moz-selection, h4::-moz-selection, h5::-moz-selection, h6::-moz-selection, p::-moz-selection, a::-moz-selection {
+  background: #312822;
+}
+
+/**
+ * Declare fonts using the Mixin
+ */
+/*
+*   The Variables
+*   Feel free to play with them!
+*/
+/*Set to "true" for -webkit-,-moz-appereance:none
+   useful for editing radio buttons amog other things*/
+/*similar as above but for selects*/
+/*
+*   If you need to style basic layout and stuff go to your
+*   "modules/_contactForm.scss" or similar file
+*/
+/*Input Elements' Params*/
+input, textarea {
+  background-color: rgba(0, 0, 0, 0);
+  color: #FFFFFF;
+  border: 1px solid #FFFFFF;
+  border-radius: 2px;
+  padding: 0 0.5em;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+}
+
+input, textarea {
+  width: 100%;
+}
+
+textarea {
+  resize: vertical;
+}
+
+input[type=submit],
+input[type=button] {
+  background-color: #1f1f35;
+  display: block;
+}
+
+input[type=date],
+input[type=time],
+input[type=button] {
+  width: auto;
+}
+
+input::-webkit-datetime-edit {
+  color: black;
+}
+
+input::-webkit-inner-spin-button,
+input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 1;
+}
+
+input[type=checkbox],
+input[type=radio] {
+  cursor: pointer;
+  padding: 0;
+  height: 12px;
+  width: 12px;
+  vertical-align: text-top;
+}
+input[type=checkbox]:checked,
+input[type=radio]:checked {
+  background-color: #ffc107;
+}
+
+input[type=radio] {
+  border-radius: 100%;
+}
+
+select {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+input:focus, select:focus, textarea:focus, button:focus {
+  outline: none;
+}
+
+::-webkit-input-placeholder {
+  color: #999;
+}
+
+:-moz-placeholder {
+  color: #999;
+}
+
+::-moz-placeholder {
+  color: #999;
+}
+
+:-ms-input-placeholder {
+  color: #999;
+}
+
+.divisor {
+  width: 100%;
+  border-bottom: 1px solid #312822;
+}
+
+/*_________________________ Grid _________________________ */
+.grid__row {
+  position: relative;
+  width: 100%;
+  min-height: 1px;
+}
+.grid__container {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 20px;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1200px;
+  width: 100%;
+}
+.grid__col-1-1, .grid__col-1-2, .grid__col-1-3 {
+  position: relative;
+}
+.grid__col-1-1 {
+  width: 100%;
+}
+.grid__col-1-2 {
+  width: 50%;
+}
+.grid__col-1-2:nth-of-type(odd) {
+  padding-right: 10px;
+}
+.grid__col-1-2:nth-of-type(even) {
+  padding-left: 10px;
+}
+.grid__col-1-3 {
+  width: 33.3333333333%;
+}
+.grid__col-1-3:nth-of-type(3n-2) {
+  padding-right: 13.3333333333px;
+}
+.grid__col-1-3:nth-of-type(3n-1) {
+  padding-right: 6.6666666667px;
+  padding-left: 6.6666666667px;
+}
+.grid__col-1-3:nth-of-type(3n) {
+  padding-left: 13.3333333333px;
+}
+.grid__col-1-4 {
+  width: 25%;
+}
+.grid__col-1-4:nth-of-type(4n-3) {
+  padding-right: 13.3333333333px;
+}
+.grid__col-1-4:nth-of-type(4n-2) {
+  padding-right: 6.6666666667px;
+  padding-left: 6.6666666667px;
+}
+.grid__col-1-4:nth-of-type(4n-1) {
+  padding-right: 6.6666666667px;
+  padding-left: 6.6666666667px;
+}
+.grid__col-1-4:nth-of-type(4n) {
+  padding-left: 13.3333333333px;
+}
+.grid__box {
+  position: relative;
+  width: 100%;
+}
+
+body {
+  background-color: #1f1f35;
+}
+
+h1 {
+  color: #FFFFFF;
+  font-size: 40px;
+  font-weight: bold;
+  padding: 20px 16px;
+  text-align: center;
+}
+
+b {
+  font-weight: bold;
+}
+
+.link {
+  color: #ffc107;
+  cursor: pointer;
+}
+.link:hover {
+  color: #ffd454;
+}
+
+.curp {
+  cursor: pointer;
+}
+
+.df {
+  display: flex;
+}
+
+.ac {
+  align-items: center;
+}
+
+.ml-10 {
+  margin-left: 8px;
+}
+
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+.range-input {
+  position: absolute;
+  right: 0;
+  bottom: 40px;
+  width: 20px;
+  border: none;
+  -webkit-appearance: slider-vertical;
+  -moz-appearance: slider-vertical;
+}
+
+.main {
+  padding: 16px 16px 0;
+  position: relative;
+}
+
+.intro__p {
+  color: #FFFFFF;
+  font-size: 20px;
+  padding: 0 16px;
+  text-align: center;
+}
+
+.ReactCodeMirror .CodeMirror.cm-s-oceanic-next {
+  background-color: rgba(0, 0, 0, 0);
+  min-heigh: 100%;
+}
+
+.editor {
+  max-width: 100%;
+  width: 100%;
+  min-height: 100%;
+  height: 100%;
+  font-size: 18px;
+}
+.editor__flashed-text {
+  background-color: #ffc107;
+}
+
+.search {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  max-width: 400px;
+  width: calc(100% - 16px);
+  z-index: 9;
+}
+.search.is-mobile {
+  position: relative;
+  top: 0;
+  width: 100%;
+  max-width: 100%;
+}
+.search__input {
+  padding: 5px;
+  color: white;
+  font-size: 18px;
+  border-radius: 3px;
+}
+.search__input-container {
+  display: flex;
+  position: relative;
+}
+.search__input:focus {
+  border-color: #ffc107;
+}
+.search__button {
+  position: absolute;
+  right: 1px;
+  top: 1px;
+  padding: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  background-color: transparent;
+  color: white;
+  cursor: pointer;
+}
+.search__loading {
+  color: white;
+  font-size: 20px;
+  text-align: right;
+  height: 33px;
+}
+.search__checkbox-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-bottom: 24px;
+}
+.search__checkbox-label {
+  font-size: 14px;
+  padding-left: 3px;
+  color: #FFFFFF;
+  position: relative;
+  top: 5px;
+}
+.search__source {
+  padding: 5px 0 10px;
+  text-align: right;
+  color: #FFFFFF;
+  font-size: 10px;
+}
+.search__source a {
+  color: #ffc107;
+}
+
+.fields {
+  position: absolute;
+  z-index: 10;
+  right: 8px;
+  top: 110px;
+}
+.fields.is-mobile {
+  position: relative;
+  top: 0;
+}
+.fields__field {
+  margin-bottom: 4px;
+  font-size: 14px;
+  color: #FFFFFF;
+}
+.fields__field-container {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  justify-content: right;
+}
+.fields__field-name {
+  padding-right: 8px;
+}
+.fields__field-color {
+  height: 16px;
+  width: 16px;
+  opacity: 0.7;
+  cursor: pointer;
+}
+.fields__field-color-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 5px;
+}
+.fields__separator {
+  padding: 0 3px;
+}
+.fields__input {
+  color: #1f1f35;
+  background-color: #FFFFFF;
+  padding-right: 0px;
+  width: 50px;
+}
+.fields__mobile-buttons {
+  padding-left: 10px;
+}
+
+.source-info {
+  position: fixed;
+  width: 100%;
+  font-size: 14px;
+  z-index: 9;
+  line-height: 21px;
+  color: white;
+  opacity: 0.8;
+  display: flex;
+  left: 0;
+  bottom: 0;
+  top: 0;
+  right: 0;
+}
+.source-info__container {
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  width: 100%;
+}
+.source-info__container.bottom, .source-info__container.abajo {
+  justify-content: flex-end;
+}
+.source-info__container.center, .source-info__container.centro {
+  justify-content: center;
+}
+.source-info__container.left, .source-info__container.izquierda {
+  justify-content: center;
+  align-items: flex-start;
+  max-width: 400px;
+}
+.source-info__container.right, .source-info__container.derecha {
+  justify-content: center;
+  align-items: flex-start;
+  max-width: 600px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+.source-info__add-to-list {
+  cursor: pointer;
+}
+.source-info.top, .source-info.arriba {
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+.source-info.right, .source-info.derecha {
+  justify-content: flex-end;
+}
+.source-info.as-background {
+  opacity: 0.5;
+  z-index: 1;
+}
+.source-info span {
+  background-color: rgba(33, 33, 33, 0.5);
+}
+.source-info .link {
+  font-size: 14px;
+  position: relative;
+}
+.source-info .link span {
+  padding: 5px 5px 5px 0;
+}
+.source-info__close {
+  width: 20px;
+  height: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #ffc107;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.source-info__close-x {
+  position: relative;
+  bottom: 2px;
+}
+.source-info__send-to-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 14px;
+  padding: 3px 4px;
+  cursor: pointer;
+}
+.source-info__send-to-back:hover {
+  background-color: #ffc107;
+}
+
+.info-icon__container {
+  position: fixed;
+  bottom: 4px;
+  right: 4px;
+  z-index: 10;
+  width: 30px;
+  height: 30px;
+  background-color: white;
+  border-radius: 100%;
+  border: none;
+  padding: 0px;
+  opacity: 0.7;
+  cursor: pointer;
+}
+.info-icon__container:hover {
+  transition: all 1s;
+  background-color: #ffc107;
+  opacity: 1;
+}
+
+.about {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: auto;
+  background-color: rgba(255, 255, 255, 0.9);
+  background-color: #1f1f35;
+  color: #FFFFFF;
+  z-index: 11;
+  padding: 40px 16px;
+  line-height: 1.2;
+}
+.about__title {
+  font-size: 40px;
+  margin-bottom: 20px;
+  padding-top: 20px;
+}
+.about__subtitle {
+  font-size: 30px;
+  margin-bottom: 16px;
+}
+.about__p {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+.about__p br {
+  margin-bottom: 12px;
+}
+.about__button {
+  background-color: #1f1f35;
+  border: 2px solid #FFFFFF;
+  border-radius: 3px;
+  padding: 5px;
+  margin-bottom: 20px;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-size: 14px;
+}
+.about__button:hover {
+  transition: all 2s;
+  color: #ffc107;
+  border-color: #ffc107;
+}
+.about__ol {
+  font-size: 16px;
+  padding-left: 40px;
+}
+.about__ol li {
+  margin-bottom: 4px;
+  list-style: decimal;
+}
+.about__close {
+  position: fixed;
+  top: 0;
+  right: 16px;
+  cursor: pointer;
+  border: none;
+  padding: 5px 8px;
+}
+.about__works {
+  margin-bottom: 16px;
+}
+.about__works-show {
+  background-color: transparent;
+  border: 2px solid #ada3e5;
+  border-radius: 3px;
+  padding: 6px 5px 4px;
+  cursor: pointer;
+}
+.about__works-show:hover {
+  transition: all 1s;
+  background-color: rgba(173, 163, 229, 0.2);
+}
+.about__works-container {
+  padding-top: 16px;
+}
+.about__works-author-links {
+  font-size: 12px;
+  color: #ffc107;
+}
+.about__works-author-links a {
+  padding: 5px;
+  margin-right: 3px;
+}
+.about__works-author-links:hover {
+  color: #ffce3a;
+}
+.about__works-work {
+  padding-left: 20px;
+  margin-bottom: 16px;
+  font-size: 16px;
+  line-height: 1.2;
+}
+.about__works-work-author {
+  font-size: 24px;
+}
+.about__works-work-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+.about__works-work-description {
+  font-size: 16px;
+}
+.about__works-work-link {
+  color: #ffc107;
+  font-size: 12px;
+}
+.about__works-work-link:hover {
+  color: #ffce3a;
+}
+.about__code-block {
+  padding-top: 16px;
+  margin-bottom: 20px;
+}
+.about__code-block-fn-name {
+  font-family: monospace;
+  background-color: #333;
+  padding: 5px;
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+code {
+  background-color: #333;
+  display: block;
+  padding: 16px;
+  font-size: 16px;
+  font-family: monospace;
+}
+
+.hydra-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 100vh;
+  width: 100vw;
+}
+
+.convo__container {
+  position: relative;
+  top: 25px;
+  z-index: 9999;
+  background-color: rgba(31, 31, 53, 0.7);
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+.convo__p {
+  font-size: 20px;
+  line-height: 1.1;
+  margin-bottom: 12px;
+  color: #FFFFFF;
+}
+
+.fs__uploader {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: 9999;
+  background-color: rgba(30, 30, 30, 0.9);
+}
+.fs__uploader.show {
+  display: flex;
+}
+.fs__uploader-close {
+  position: fixed;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  padding: 5px 8px;
+  color: #FFFFFF;
+  font-size: 20px;
+}
+.fs__main-container {
+  max-width: 400px;
+}
+.fs__main-container p {
+  font-size: 20px;
+  color: #FFFFFF;
+  margin-bottom: 15px;
+}
+.fs__main-container input {
+  border: none;
+}
+
+.alert {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999999;
+}
+.alert__close {
+  width: 20px;
+  height: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #ffc107;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.alert__close-x {
+  position: relative;
+  bottom: 2px;
+}
+.alert__close {
+  left: initial;
+  right: 0;
+}
+.alert__container {
+  padding: 16px;
+  font-size: 16px;
+  color: #FFFFFF;
+}
+.alert__error {
+  background: red;
+}
+.alert__success {
+  background: green;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 20px;
+}
+.form-label p {
+  margin-bottom: 5px;
+}
+
+.form-input {
+  padding: 5px;
+  color: white;
+  font-size: 18px;
+  border-radius: 3px;
+}
+.form-input:focus {
+  border-color: #ffc107;
+}
+
+.history-save {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(33, 33, 33, 0.95);
+  height: 100vh;
+  width: 100vw;
+  z-index: 10;
+  color: white;
+  font-size: 16px;
+}
+.history-save__container {
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+  margin: 0 auto;
+}
+.history-save__title {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.history-save__form {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.chat__container {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  padding-right: 10px;
+  display: flex;
+  flex-direction: column;
+  z-index: 99;
+  max-width: 300px;
+  overflow-wrap: anywhere;
+}
+.chat__textarea {
+  /* autogrow con scrollHeight  en JS*/
+  background-color: rgba(33, 33, 33, 0.7);
+  border-radius: 5px;
+  width: 300px;
+  height: 21px;
+  overflow: hidden;
+  color: white;
+  font-size: 16px;
+}
+.chat__message-container {
+  color: white;
+  text-align: right;
+}
+.chat__username {
+  font-weight: bold;
+}
+.chat__form {
+  display: flex;
+}
+.chat__message-text {
+  display: inline-block;
+  background-color: rgba(33, 33, 33, 0.7);
+  margin-top: 0;
+  margin-bottom: 3px;
+  padding: 4px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+.chat__submit-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #1f1f35;
+  border: 2px solid #FFFFFF;
+  border-radius: 3px;
+  padding: 5px;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-size: 14px;
+  /* opacity: 0.5; */
+  /* height: 20px; */
+  padding: 2px 3px;
+  /* text-align: right; */
+  min-width: 50px;
+  /* background-color: c(white); */
+}
+.chat__submit-button:hover {
+  transition: all 2s;
+  color: #ffc107;
+  border-color: #ffc107;
+}
+.chat__submit-button.not-empty {
+  opacity: 1;
+}
+.chat__submit-button span {
+  position: relative;
+}
+.chat__messages-container {
+  max-height: calc(100vh - 140px);
+  overflow-y: auto;
+}
+.chat__toggle-button {
+  color: white;
+  opacity: 0.7;
+  cursor: pointer;
+  position: relative;
+}
+.chat__toggle-button:hover {
+  opacity: 1;
+}
+.chat__icons {
+  display: flex;
+  font-size: 16px;
+  justify-content: flex-end;
+  padding: 0 3px 3px;
+  color: white;
+}
+.chat__icons i {
+  background-color: rgba(166, 166, 166, 0.4);
+}
+.chat__icons i.show {
+  color: #ffc107;
+}
+.chat__icons i:hover {
+  cursor: pointer;
+  transition: all 2s;
+  color: #ffc107;
+  border-color: #ffc107;
+}
+.chat__history {
+  cursor: pointer;
+  margin-left: 3px;
+}
+.chat__history.shown {
+  color: white;
+}
+
+/*# sourceMappingURL=mazorca.css.map */

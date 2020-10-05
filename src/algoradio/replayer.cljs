@@ -1,4 +1,4 @@
-(ns algoradio.replayers
+(ns algoradio.replayer
   (:require
    [clojure.core.async :as a]
    [algoradio.editor :as editor]
@@ -8,7 +8,15 @@
 
 (def replay-map (atom {}))
 
-(js/console.log @replay-map)
+(defn play-editor-change! [app-state event]
+  (do (js/console.debug "Replay editor change" event (event :change))
+      (-> (editor/get-cm! app-state) .-doc
+          (.replaceRange
+           (-> event :change :text
+               (#(if (= ["" ""] %) ["\n"] %))
+               (nth 0) clj->js)
+           (-> event :change :from clj->js)
+           (-> event :change :to clj->js)))))
 
 (defn replay-event!
   [app-state {:keys [event_type audio_id type] :as event}]
@@ -23,14 +31,7 @@
     "stop" (if-let [{:keys [id audio] :as data} (@replay-map audio_id)]
              (do (js/console.debug "Replay stoping" data)
                  (player/stop! type audio id)))
-    "editor_change" (do (js/console.debug "Replay editor change" (event :change))
-                        (-> (editor/get-cm! app-state) .-doc
-                            (.replaceRange
-                             (-> event :change :text
-                                 (#(if (= ["" ""] %) ["\n"] %))
-                                 (nth 0) clj->js)
-                             (-> event :change :from clj->js)
-                             (-> event :change :to clj->js))))
+    "editor_change" (play-editor-change! app-state event)
     "editor_eval_mark" (do (js/console.debug "Replay editor change" (event :change))
                            (editor/mark-text! (event :mark)
                                               (editor/get-cm! app-state)))))

@@ -7,7 +7,7 @@
 
 (declare get-cm! eval-block! eval-line-or-selection!)
 
-(defn main [app-state]
+(defn main [app-state send-typing-event! send-eval-event!]
   [:div {:key (get @app-state ::key)
          :id "editor-container"
          :class "editor"
@@ -21,13 +21,15 @@
                (and ctrl? enter?) (do (.preventDefault e)
                                       (eval-block! (get-cm! app-state)
                                                    app-state
-                                                   editor-id))
+                                                   editor-id
+                                                   send-eval-event!))
 
                (and shift? enter?) (do (.preventDefault e)
                                        (eval-line-or-selection!
                                         (get-cm! app-state)
                                         app-state
-                                        editor-id)))))}
+                                        editor-id
+                                        send-eval-event!)))))}
 
    [:> react-codemirror
     {:ref  (fn [ref] (when-not (@app-state ::instance)
@@ -42,7 +44,9 @@
                   (swap! app-state assoc ::text text)
                   (history/add-editor-change! app-state
                                               (get @app-state ::key)
-                                              change))}]])
+                                              change)
+                  (when (.-origin change) ;; this prevents feedback cycles
+                    (send-typing-event! change)))}]])
 (defn get-cm! [app-state]
   (-> @app-state ::instance .getCodeMirror))
 
@@ -97,7 +101,7 @@
    :end to
    :code (.getSelection cm)})
 
-(defn eval-line-or-selection! [cm app-state editor-id]
+(defn eval-line-or-selection! [cm app-state editor-id send-eval-event!]
   (let [from (.-line (.getCursor cm "from"))
         to (.-line (.getCursor cm "to"))
         selection? (not= from to)
@@ -107,14 +111,17 @@
     (mark-text! mark cm)
     (js/eval code)
     (js/console.log code)
-    (history/add-editor-eval! app-state editor-id mark)))
+    (history/add-editor-eval! app-state editor-id mark)
+    (send-eval-event! mark)
+    ))
 
-(defn eval-block! [cm app-state editor-id]
+(defn eval-block! [cm app-state editor-id send-eval-event!]
   (let [block (get-block cm)]
     (mark-text! block cm)
     (js/eval (->> block :code))
     (js/console.log (->> block :code))
-    (history/add-editor-eval! app-state editor-id block)))
+    (history/add-editor-eval! app-state editor-id block)
+    (send-eval-event! block)))
 
 (defn remove-comment-lines! [app-state]
   (let [text (-> (get @app-state ::text "")

@@ -1,41 +1,22 @@
 (ns algoradio.chat
-  (:require-macros [cljs.core.async.macros :refer [go go-loop]])
-  (:require [cljs.core.async :as a]
-            [clojure.string :as str]
-            [cljs.reader :refer [read-string]]
-            [cljs.core.async.impl.protocols :refer [closed?]]
-            [reagent.core :as r]
+  (:require [algoradio.alert :refer [create-alert!]]
             [algoradio.state :refer [app-state]]
-            [algoradio.alert :refer [create-alert!]]
-            [haslett.client :as ws]
-            [haslett.format :as fmt]))
-
-(defonce out-chan (a/chan))
-(defonce in-chan (a/chan))
-
-(defonce conn (ws/connect "ws://localhost:3456/ws"
-                          {:sink out-chan
-                           :source in-chan}))
-
-(defn send-message!
-  ([conn type msg] (send-message! conn type msg {}))
-  ([conn type msg opts]
-   (a/go (a/>! out-chan {:type type :msg msg :opts opts}))))
-
-(defonce ws-id (atom nil))
+            [algoradio.websockets
+             :refer
+             [make-conn make-receiver on-message send-message!]]
+            [cljs.core.async :as a]
+            [reagent.core :as r])
+  (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
 (defonce state (r/atom {::messages ()
                         ::textarea-height 23
-                        ::show-latest-messages? true}))
+                        ::show-chat? true
+                        ::show-latest-messages? true
+                        ::ws-id nil}))
 
 (defonce clock (r/atom 0))
 
-(defonce start-clock! (memoize (fn [clock]
-                                (js/console.log "Starting clock")
-                                (go-loop []
-                                  (a/<! (a/timeout 1000))
-                                  (swap! clock + 1000)
-                                  (recur)))))
+(defonce conn (make-conn "ws://localhost:3456/ws") )
 
 (defn on-new-message [msg]
   (swap! state update ::messages conj msg)
@@ -44,7 +25,7 @@
 (defn router [msg]
   (condp = (:type msg)
     :ping (send-message! conn :pong nil)
-    :id (reset! ws-id (:msg msg))
+    :id (swap! state assoc ::ws-id (:msg msg))
     :chat (on-new-message msg)
     :username-has-been-set? (if (-> msg :msg :username)
                               (swap! state assoc ::username-data (:msg msg))
@@ -54,26 +35,21 @@
                                    :error "Username has already been chosen")))
     (js/console.error "Unknown message type:" msg)))
 
+(defonce receiver (make-receiver conn router))
 
-(defn on-message [msg]
-  (try (let [msg (read-string msg)] (router msg))
-       (catch :default e (js/console.error "Could not read message" e msg)))
-  (js/console.debug "Got message" (:type (read-string msg))))
-
-(defonce receiver
-  (a/go-loop []
-    (if (and (not (closed? in-chan)) (ws/connected? (a/<! conn)))
-      (let [msg (a/<! in-chan)]
-        (when msg (on-message msg))
-        (recur)))
-    (js/console.info "Channel has been closed")))
+(defonce start-clock! (memoize (fn [clock]
+                                 (js/console.log "Starting clock")
+                                 (go-loop []
+                                   (a/<! (a/timeout 1000))
+                                   (swap! clock + 1000)
+                                   (recur)))))
 
 (defn submit-message [ev]
   (.preventDefault ev)
   (when (or (not (.-keyCode ev)) (= 13 (.-keyCode ev)))
     (send-message! conn
                    :chat (@state ::chat-message)
-                   {:user-id @ws-id :date (js/Date.now)})
+                   {:user-id (@state ::ws-id) :date (js/Date.now)})
     (swap! state merge {::chat-message nil ::textarea-height 21})))
 
 (defn get-latest-messages [show-latest-messages? now messages]
@@ -98,7 +74,7 @@
                      [:p {:class "chat__message-text"}
                       [:span {:class "chat__username"}
                        (or username (apply str "anonymous-"
-                                           (->> @ws-id (take-last 3))))]
+                                           (->> (@state ::ws-id) (take-last 3))))]
                       (str ": " msg)]]))
              reverse)])
      [:div {:class "chat__form-container"}
@@ -144,17 +120,19 @@
 
 (defn username-field []
   [:div {:class "chat_login"}
-   [:form {:on-submit
+   [:label {:class "chat__username-input-label"} "Choose a username to start chatting"]
+   [:form {:class "chat__form"
+           :on-submit
            (fn [ev]
              (.preventDefault ev)
              (let [username (@state ::username-field)]
                (when (valid-username? username)
                  (println username)
-                 (send-message! conn :set-username username {:user-id @ws-id}))))}
-    [:label "Choose a username to start chatting"
-     [:input {:on-change (fn [ev]
-                           (swap! state assoc ::username-field (-> ev .-target .-value)))}]]
-    [:button {:type "submit"} "Send"]]])
+                 (send-message! conn :set-username username {:user-id (@state ::ws-id)}))))}
+
+    [:input {:on-change (fn [ev]
+                          (swap! state assoc ::username-field (-> ev .-target .-value)))}]
+    [:button {:class "chat__submit-button" :type "submit"} "Send"]]])
 
 (defn main []
   (reset! clock (js/Date.now))
@@ -174,6 +152,6 @@
           (username-field))]])}))
 
 (comment
-  (send-message! conn :set-username "Diego" {:user-id @ws-id})
-  (send-message! conn :chat "Holis" {:user-id @ws-id :date (js/Date.now)})
-  (a/go (a/>! in-chan {:msg "Hello World"})))
+  (send-message! conn :set-username "Diego" {:user-id (@state ::ws-id)})
+  (send-message! conn :chat "Holis" {:user-id (@state ::ws-id) :date (js/Date.now)})
+  (a/go (a/>! ((a/<! conn) :source) {:msg "Hello World"})))

@@ -15,6 +15,8 @@
             [algoradio.icons :as icons]
             [algoradio.instructions :as instructions]
             [algoradio.search :as search]
+            [algoradio.collab :as collab]
+            [algoradio.collab.core :as collab-core]
             [algoradio.source-info :as sources]
             [algoradio.state :refer [app-state]]
             [cljs.user :refer [spy]]
@@ -32,6 +34,7 @@
    {:component-did-mount
     (fn []
       (editor-api/setup! app-state)
+      (collab/init-receiver)
       (sources/rand-info!)
       (fs/replay-from-query-string! js/location.search))
     :reagent-render
@@ -43,7 +46,9 @@
        (when (isMobileOrTablet) (intro))
        [:div {:class "container main"}
         [:canvas {:id "hydra-canvas" :class "hydra-canvas"}]
-        (when-not (isMobileOrTablet) (editor/main app-state))
+        (when-not (isMobileOrTablet) (editor/main app-state
+                                                  collab-core/send-typing-event!
+                                                  collab-core/send-eval-event!))
         [:div {:class (str "search " (when (isMobileOrTablet) "is-mobile"))}
          (search/main app-state)
          (add-music/main app-state)]
@@ -56,7 +61,7 @@
         (fs/main app-state)
         (alert/main app-state)
         (history/save-template app-state)
-        [chat/main]
+        #_[chat/main]
         #_(convocatoria/main :es)]])}))
 
 (defn start []
@@ -68,7 +73,7 @@
 (defn ^:export init [opts]
   (let [opts* (js->clj opts)
         version (get opts* "version" "1.0.0")
-        intro-text (get opts* "introText" (instructions/intro version))]
+        intro-text (get opts* "introText" #_(instructions/intro version))]
     (swap! app-state assoc ::editor/text intro-text))
   (if-let [lists (-> opts js->clj (get "lists")
                      js->clj

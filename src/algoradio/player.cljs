@@ -8,9 +8,12 @@
             [algoradio.archive :as archive]
             [algoradio.archive.sounds :as archive*]
             [clojure.walk :as walk]
-            [clojure.set :as set]))
+            [clojure.set :as set]
+            [algoradio.collab.core :as collab]))
 
-(declare play-sound!)
+;; TODO collab mode has made this file pretty complex (i.e. preventing feedback)... too much coupling with the collab namespaces, ideally all this should be simplified
+
+(declare play-sound! update-density!)
 (defn get-playing-audio-by-type [app-state type]
   (->> (app-state ::now-playing)
        (filter (fn [s] (and (= type (:type s))
@@ -27,30 +30,43 @@
                   playing? (.playing audio)]
               (or loading? playing?)))
           now-playing))
-
 (defn update-now-playing! []
   (swap! app-state update ::now-playing update-now-playing))
 
-(defn notify-finished! [src type]
-  #_(js/console.log "ended")
-  (if (and @config/auto-play? (play? @app-state type))
+(defn notify-finished! [audio-data type]
+  (when (and @config/auto-play? (play? @app-state type)
+             (= (:originator-id audio-data)
+                (::collab/ws-id @collab/state)))
     (play-sound! type))
+  (when-not (= (:originator-id audio-data)
+               (::collab/ws-id @collab/state))
+    (update-density! dec type))
   (update-now-playing!)
   (freesound/get-audios! app-state type))
 
 (declare stop!)
 
 (defn play! [{:keys [src type] :as sound}
-             {:keys [vol start dur]
-              :or {vol config/default-volume}
+             {:keys [vol start dur send-to-collab? originator-id]
+              :or {vol config/default-volume
+                   send-to-collab? true}
               :as opts}]
-  (let [audio (Howl. (clj->js {:src [src]
+  (let [originator-id* (or originator-id (::collab/ws-id @collab/state))
+        audio (Howl. (clj->js {:src [src]
                                :html5 true
                                :volume 0}))
-        _ (js/console.log "Will load sound playing" type src)
+        _ (js/console.log "Will load sound for playback" type src originator-id)
+        id (.play audio)
+        audio-data {:id id
+                    :audio audio
+                    :src src
+                    :sound sound
+                    :type type
+                    :opts opts
+                    :originator-id originator-id*}
         _ (.on audio "load"
-               (fn []
-                 (js/console.log "Sound loaded")
+               (fn [data]
+                 (js/console.log "Sound loaded" id (audio-data :originator-id))
                  (js/console.debug "Sound loaded" audio)
                  (if-not (play? @app-state type)
                    (do
@@ -64,9 +80,9 @@
                        ;; TODO improve callback scheduling based on audio duration
                        (js/setTimeout #(when >5? (.fade audio vol 0 5000))
                                       (* 1000 (- duration (if >5? 5 0))))
-                       (js/setTimeout #(notify-finished! src type)
+                       (js/setTimeout #(notify-finished! audio-data type)
                                       (* 1000 (+ 0.5 duration))))))))
-        id (.play audio)]
+        ]
     (when start (.seek audio start))
     (when dur (js/setTimeout #(stop! type audio id) (* 1000 dur)))
     (.on audio "play"
@@ -74,15 +90,17 @@
            (swap! app-state update ::now-playing
                   #(-> %
                        update-now-playing
-                       (conj {:id id
-                              :audio audio
-                              :src src
-                              :sound sound
-                              :type type
-                              :opts opts})))
+                       (conj audio-data)))
            (history/add-play! app-state
                               (assoc sound :opts opts)
-                              id)))
+                              id)
+           (when send-to-collab?
+             (collab/send-play-event!
+              id
+              (assoc sound :opts opts)
+              originator-id*)
+             (swap! collab/state assoc-in [::collab/player-map id]
+                    {:id id :audio audio}))))
     {:id id :audio audio}))
 
 (defn play-sound!
@@ -100,13 +118,17 @@
   (swap! app-state update-in [::fields-density type]
          #(if % (max 0 (op %)) 1)))
 
-(defn stop! [type audio id]
-  (when audio
-    (js/console.log "Fading out" type id)
-    (.fade audio (.-_volume audio) 0 5000)
-    (update-density! dec type)
-    (js/setTimeout (fn [] (.stop audio) (update-now-playing!)) 5000)
-    (history/add-stop! app-state id type)))
+(defn stop!
+  ([type audio id] (stop! type audio id true))
+  ([type audio id send-to-collab?]
+   (when audio
+     (js/console.log "Fading out" type id)
+     (.fade audio (.-_volume audio) 0 5000)
+     (update-density! dec type)
+     (js/setTimeout (fn [] (.stop audio) (update-now-playing!)) 5000)
+     (history/add-stop! app-state id type)
+     (when send-to-collab?
+       (collab/send-stop-event! id type)))))
 
 #_(-> @app-state :freesounds (get "ocean"))
 

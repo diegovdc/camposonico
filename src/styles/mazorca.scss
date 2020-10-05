@@ -337,10 +337,10 @@ b {
 
 .info-icon {
   &__container {
-    $size: 30px;
+    $size: 16px;
     position: fixed;
-    bottom: 4px;
-    right: 4px;
+    top: 43px;
+    right: 183px;
     z-index: 10;
     width: $size;
     height: $size;
@@ -635,7 +635,7 @@ code {
     padding-right: 10px;
     display: flex;
     flex-direction: column;
-    z-index: 99;
+    z-index: 9;
     max-width: 300px;
     overflow-wrap: anywhere;
   }
@@ -749,5 +749,13 @@ code {
   }
   &__history.shown {
     color: white;
+  }
+
+  &__username-input-label {
+    font-size: 14px;
+    color: c(white);
+    background-color: c(background);
+    margin-bottom: 4px;
+    display: inline-block;
   }
 }
