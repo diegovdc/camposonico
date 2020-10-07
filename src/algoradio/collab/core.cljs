@@ -1,7 +1,8 @@
 (ns algoradio.collab.core
-  (:require [algoradio.websockets :refer [make-conn send-message!]]))
+  (:require [algoradio.websockets :refer [make-conn send-message!]]
+            [algoradio.config :as config]))
 
-(defonce conn (do (println "colllabibg") (make-conn "ws://localhost:3456/collab")) )
+(defonce conn (make-conn (str config/ws-uri "/collab")) )
 
 (defonce state (atom {::ws-id nil
                       ::player-map {}}))

@@ -5,7 +5,8 @@
              :refer
              [make-conn make-receiver on-message send-message!]]
             [cljs.core.async :as a]
-            [reagent.core :as r])
+            [reagent.core :as r]
+            [algoradio.config :as config])
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
 (defonce state (r/atom {::messages ()
@@ -16,7 +17,7 @@
 
 (defonce clock (r/atom 0))
 
-(defonce conn (make-conn "ws://localhost:3456/ws") )
+(defonce conn (make-conn (str config/ws-uri "/ws")) )
 
 (defn on-new-message [msg]
   (swap! state update ::messages conj msg)
