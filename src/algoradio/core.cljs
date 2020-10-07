@@ -61,7 +61,7 @@
         (fs/main app-state)
         (alert/main app-state)
         (history/save-template app-state)
-        #_[chat/main]
+        [chat/main]
         #_(convocatoria/main :es)]])}))
 
 (defn start []
