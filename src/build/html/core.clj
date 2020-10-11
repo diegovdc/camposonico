@@ -26,6 +26,7 @@
 
 (defn build-live! [version]
   (let [path "public/live/index.html"]
+    (println "Creating file at:" path)
     (io/make-parents path)
     (->> (get-manifest!)
          (filter #(= (:name %) :main))
