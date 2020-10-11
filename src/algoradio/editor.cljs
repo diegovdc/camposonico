@@ -1,13 +1,32 @@
 (ns algoradio.editor
   (:require [clojure.string :as str]
             [algoradio.history :as history]
-            ["react-codemirror" :as react-codemirror]
+            ["yjs" :as Y]
+            ["y-websocket" :refer [WebsocketProvider]]
+            ["y-codemirror" :refer [CodemirrorBinding]]
+            ["react-codemirror2" :as react-codemirror]
             ["codemirror/mode/javascript/javascript"]
             ["codemirror/addon/display/fullscreen"]))
 
+(defn init [app-state editor]
+  (let [y-doc (Y/Doc.)
+        provider (WebsocketProvider. "wss://demos.yjs.dev",
+                                     "camposonico",
+                                     y-doc)
+        y-text (.getText y-doc "codemirror")
+        binding (CodemirrorBinding. y-text editor (.-awareness provider))
+        ]
+    (.on (-> binding .-cm #_js/console.log) "change"
+         (fn [_ change]
+           (history/add-editor-change! app-state
+                                       (get @app-state ::key)
+                                       change)))
+    ))
+
+
 (declare get-cm! eval-block! eval-line-or-selection!)
 
-(defn main [app-state send-typing-event! send-eval-event!]
+(defn main [app-state is-live? send-eval-event!]
   [:div {:key (get @app-state ::key)
          :id "editor-container"
          :class "editor"
@@ -17,6 +36,9 @@
                  ctrl? (.-ctrlKey e)
                  enter? (= 13 #_enter (.-keyCode e))
                  shift? (.-shiftKey e)]
+             ;; TODO finish implementing input prevention
+             (when false #_ "prevent non logged users from inputing anything"
+                   (.preventDefault e))
              (cond
                (and ctrl? enter?) (do (.preventDefault e)
                                       (eval-block! (get-cm! app-state)
@@ -31,24 +53,25 @@
                                         editor-id
                                         send-eval-event!)))))}
 
-   [:> react-codemirror
-    {:ref  (fn [ref] (when-not (@app-state ::instance)
-                      (swap! app-state assoc ::instance ref)))
+   [:> (if is-live? react-codemirror/UnControlled react-codemirror/Controlled)
+    {:editor-did-mount  (fn [ref]
+                          (when is-live? (init app-state ref))
+                          (when-not (@app-state ::instance)
+                            (swap! app-state assoc ::instance ref)))
      :options {:theme "oceanic-next"
                :fullScreen true
                :scrollbarStyle "null"}
      :autoSave false
      :value (get @app-state ::text "")
-     :on-change (fn [text change]
-                  #_(js/console.log "text" text "change" change)
-                  (swap! app-state assoc ::text text)
+     :on-before-change (when-not is-live?
+                         (fn [editor data value]
+                           (swap! app-state assoc ::text value)))
+     :on-change (fn [text change value]
                   (history/add-editor-change! app-state
                                               (get @app-state ::key)
-                                              change)
-                  (when (.-origin change) ;; this prevents feedback cycles
-                    (send-typing-event! change)))}]])
+                                              change))}]])
 (defn get-cm! [app-state]
-  (-> @app-state ::instance .getCodeMirror))
+  (-> @app-state ::instance))
 
 (defn get-text [cm]
   (-> cm .-doc .getValue))

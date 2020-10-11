@@ -128,5 +128,7 @@
       [:script {:type "text/javascript", :src (str "/js/compiled/" main-js)}]
       [:script
        {:type "text/javascript", :src "/js/external-libs/index.js"}]
-      [:script "algoradio.core.init("opts");"]]])
+      [:script "algoradio.core.init("opts");"]
+      [:script {:src "https://kit.fontawesome.com/d1ccef923e.js"
+                :crossorigin "anonymous"}]]])
   )

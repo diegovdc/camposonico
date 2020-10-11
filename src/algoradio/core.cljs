@@ -6,6 +6,8 @@
             [algoradio.archive :as archive]
             [algoradio.archive.sounds :as archive*]
             [algoradio.chat :as chat]
+            [algoradio.collab :as collab]
+            [algoradio.collab.core :as collab-core]
             [algoradio.common :as common]
             [algoradio.editor :as editor]
             [algoradio.editor-api :as editor-api]
@@ -15,13 +17,14 @@
             [algoradio.icons :as icons]
             [algoradio.instructions :as instructions]
             [algoradio.search :as search]
-            [algoradio.collab :as collab]
-            [algoradio.collab.core :as collab-core]
             [algoradio.source-info :as sources]
             [algoradio.state :refer [app-state]]
             [cljs.user :refer [spy]]
+            [clojure.string :as str]
             [clojure.walk :as walk]
             [reagent.core :as reagent]))
+
+
 
 (defn intro []
   [:div {:class "intro"}
@@ -30,39 +33,42 @@
     "En la barra de búsqueda escribe el nombre de algún tipo de paisaje o \"tag\" relacionado (las búsquedas en inglés suelen arrojar más resultados)."]])
 #_(println js/camposonicoVersion)
 (defn campo-sonoro []
-  (reagent/create-class
-   {:component-did-mount
-    (fn []
-      (editor-api/setup! app-state)
-      (collab/init-receiver)
-      (sources/rand-info!)
-      (fs/replay-from-query-string! js/location.search))
-    :reagent-render
-    (fn []
-      [:div
-       {:on-key-up (fn [e]
-                     (when (= 27 (.-keyCode e))
-                       (sources/close! nil)))}
-       (when (isMobileOrTablet) (intro))
-       [:div {:class "container main"}
-        [:canvas {:id "hydra-canvas" :class "hydra-canvas"}]
-        (when-not (isMobileOrTablet) (editor/main app-state
-                                                  collab-core/send-typing-event!
-                                                  collab-core/send-eval-event!))
-        [:div {:class (str "search " (when (isMobileOrTablet) "is-mobile"))}
-         (search/main app-state)
-         (add-music/main app-state)]
-        [:div {:class (str "fields " (when (isMobileOrTablet) "is-mobile"))}
-         (fields/main @app-state)]
-        (sources/main app-state)
-        [:button {:class "info-icon__container"
-                  :on-click about/toggle-show-about} icons/info]
-        (when (@app-state ::about/show-about?) (about/main archive*/sounds))
-        (fs/main app-state)
-        (alert/main app-state)
-        (history/save-template app-state)
-        [chat/main]
-        #_(convocatoria/main :es)]])}))
+  (let [is-live? (str/includes? js/window.location.pathname "/live")]
+    (reagent/create-class
+     {:component-did-mount
+      (fn []
+        (editor-api/setup! app-state)
+        (when is-live? (collab/init-receiver))
+        (sources/rand-info!)
+        (fs/replay-from-query-string! js/location.search))
+      :reagent-render
+      (fn []
+        [:div
+         {:on-key-up (fn [e]
+                       (when (= 27 (.-keyCode e))
+                         (sources/close! nil)))}
+         (when (isMobileOrTablet) (intro))
+         [:div {:class "container main"}
+          [:canvas {:id "hydra-canvas" :class "hydra-canvas"}]
+          (when-not (isMobileOrTablet)
+            (editor/main app-state
+                         is-live?
+                         collab-core/send-eval-event!))
+          [:div {:class (str "search " (when (isMobileOrTablet) "is-mobile"))}
+           (search/main app-state)
+           (add-music/main app-state)]
+          [:div {:class (str "fields " (when (isMobileOrTablet) "is-mobile"))}
+           (fields/main @app-state)]
+          (sources/main app-state)
+          [:button {:class "info-icon__container"
+                    :on-click about/toggle-show-about} icons/info]
+          (when (@app-state ::about/show-about?) (about/main archive*/sounds))
+          (fs/main app-state)
+          (alert/main app-state)
+          (history/save-template app-state)
+          #_(when is-live? [chat/main])
+          #_(when is-live? (collab/login app-state))
+          #_(convocatoria/main :es)]])})))
 
 (defn start []
   (reagent/render-component [campo-sonoro]

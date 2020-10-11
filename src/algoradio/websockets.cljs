@@ -5,15 +5,23 @@
             [haslett.client :as ws]))
 
 
-(defn send-message!
+#_(defn send-message!
   ([conn type msg] (send-message! conn type msg {}))
   ([conn type msg opts]
    (a/go (a/>! ((a/<! conn) :sink) {:type type :msg msg :opts opts}))))
 
+#_{:sink out-chan :source in-chan}
+
+(defn send-message!
+  ([conn type msg] (send-message! conn type msg {}))
+  ([conn type msg opts]
+   (a/go (a/>! ((a/<! conn) :sink) (assoc msg :type type :opts opts)))))
+
 (defn on-message [router msg]
-  (try (let [msg (read-string msg)] (router msg))
-       (catch :default e (js/console.error "Could not read message" e msg)))
-  (js/console.debug "Got message" (:type (read-string msg))))
+  (try (let [msg (read-string msg)]
+         #_(js/console.debug "algoradio.websockets/on-message" msg)
+         (router msg))
+       (catch :default e (js/console.error "Could not read message" e msg))))
 
 (defn make-receiver [conn router]
   (a/go-loop []
@@ -24,5 +32,5 @@
     (js/console.info "Channel has been closed")))
 
 (defn make-conn [path]
-  (js/console.log "Connecting")
-  (ws/connect path #_{:sink out-chan :source in-chan}))
+  (js/console.debug "Connecting")
+  (ws/connect path))

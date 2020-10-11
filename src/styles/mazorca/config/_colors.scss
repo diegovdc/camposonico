@@ -1,18 +1,19 @@
 $colors: (
-	base:	#312822,
-	white:	#FFFFFF,
-        background: #1f1f35,
-        light-grey: #999,
-        checked: #ffc107,
-        purple: #ada3e5
-	);
+  base: #312822,
+  white: #ffffff,
+  background: #1f1f35,
+  light-grey: #999,
+  checked: #ffc107,
+  purple: #ada3e5,
+  light-blue: #b0fff0,
+);
 
-@function c($color:base) {
-	@return map-get($colors, $color);
+@function c($color: base) {
+  @return map-get($colors, $color);
 }
 
 //no borrar
 $colorForeground: c();
 $colorBackground: c(white);
 $colorFeatured: c(base);
-$colorError: #8A1010;
+$colorError: #8a1010;
