@@ -121,7 +121,7 @@
              ::login-initialized? true))
     (cond
       (get @app-state ::hide-login false) nil
-      (@app-state ::login-data)
+      (@app-state :algoradio.collab.init/login-data)
       [:div {:class "collab-login"}
        (created-session-alert (@app-state ::login-data))]
       :else

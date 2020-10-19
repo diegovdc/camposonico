@@ -107,7 +107,7 @@
 
 (defn check-for-connection []
   (go-loop [attempts 0]
-    (let [[val chan] (a/alts! [still-connected-buffer (a/timeout 2000)])]
+    (let [[val chan] (a/alts! [still-connected-buffer (a/timeout 10000)])]
       (cond
         (= chan still-connected-buffer) (do (js/console.debug "Still connected" val)
                                             (recur 0))
@@ -131,7 +131,7 @@
              (js/console.debug "Initing receiver")
              (start-play-loop event-buffer)
              (make-receiver collab/conn #'router)
-             (send-pong-every! collab/conn 1000))))
+             (send-pong-every! collab/conn 10000))))
 
 (comment
   (init-receiver)

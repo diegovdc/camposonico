@@ -16,7 +16,7 @@
                                      y-doc)
         y-text (.getText y-doc "codemirror")
         binding (CodemirrorBinding. y-text editor (.-awareness provider))
-        username (-> @app-state :algoradio.collab/login-data :username)]
+        username (-> @app-state :algoradio.collab.init/login-data :username)]
     (.setLocalStateField (.-awareness binding)
                          "user"
                          (clj->js {:name username
@@ -47,7 +47,7 @@
                ;; TODO finish implementing input prevention
                (when (and is-live?
                           (false? (-> @app-state
-                                      :algoradio.collab/login-data :valid-password?)))
+                                      :algoradio.collab.init/login-data :valid-password?)))
                  (.preventDefault e))
 
                (cond
