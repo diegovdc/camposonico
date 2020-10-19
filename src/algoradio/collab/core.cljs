@@ -11,6 +11,8 @@
                         :algoradio.chat/show-chat? true
                         :algoradio.chat/show-latest-messages? true}))
 
+(defn make-collab-url [session-path]
+  (str js/window.location.origin session-path))
 
 (defn send-typing-event! [event-data]
   (println "Sending type event" )

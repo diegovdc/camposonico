@@ -5,12 +5,9 @@
             [haslett.client :as ws]))
 
 
-#_(defn send-message!
-  ([conn type msg] (send-message! conn type msg {}))
-  ([conn type msg opts]
-   (a/go (a/>! ((a/<! conn) :sink) {:type type :msg msg :opts opts}))))
-
-#_{:sink out-chan :source in-chan}
+(comment
+  ;; NOTE {:sink out-chan :source in-chan}
+  )
 
 (defn send-message!
   ([conn type msg] (send-message! conn type msg {}))
@@ -19,7 +16,7 @@
 
 (defn on-message [router msg]
   (try (let [msg (read-string msg)]
-         #_(js/console.debug "algoradio.websockets/on-message" msg)
+         (js/console.debug "algoradio.websockets/on-message" msg)
          (router msg))
        (catch :default e (js/console.error "Could not read message" e msg))))
 

@@ -6,8 +6,9 @@
             [algoradio.archive :as archive]
             [algoradio.archive.sounds :as archive*]
             [algoradio.chat :as chat]
-            [algoradio.collab :as collab]
+            [algoradio.collab.init :as collab-init]
             [algoradio.collab.core :as collab-core]
+            [algoradio.collab.login :as collab-login]
             [algoradio.common :as common]
             [algoradio.editor :as editor]
             [algoradio.editor-api :as editor-api]
@@ -38,7 +39,7 @@
      {:component-did-mount
       (fn []
         (editor-api/setup! app-state)
-        (when is-live? (collab/init-receiver))
+        (when is-live? (collab-init/init-receiver))
         (sources/rand-info!)
         (fs/replay-from-query-string! js/location.search))
       :reagent-render
@@ -57,11 +58,11 @@
                              is-live?
                              nil
                              collab-core/send-eval-event!))
-            (and is-live? (@app-state ::collab/login-data))
+            (and is-live? (@app-state ::collab-init/login-data))
             (do (js/console.debug "STARTING LIVE SESSION")
                 (editor/main app-state
                              is-live?
-                             (@app-state ::collab/login-data)
+                             (@app-state ::collab-init/login-data)
                              collab-core/send-eval-event!))
             :default nil)
           [:div {:class (str "search " (when (isMobileOrTablet) "is-mobile"))}
@@ -78,7 +79,7 @@
           (history/save-template app-state)
           ;; TODO login to chat as well
           (when is-live? [chat/main])
-          (when is-live? (collab/login app-state))
+          (when is-live? (collab-login/login app-state))
           #_(convocatoria/main :es)]])})))
 
 (defn start []
