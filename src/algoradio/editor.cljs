@@ -3,6 +3,7 @@
             [algoradio.history :as history]
             ["yjs" :as Y]
             [algoradio.config :as config]
+            [algoradio.colors :as colors]
             ["y-websocket" :refer [WebsocketProvider]]
             ["y-codemirror" :refer [CodemirrorBinding]]
             ["react-codemirror2" :as react-codemirror]
@@ -15,8 +16,15 @@
                                      (str "camposonico-live-session-" session-name)
                                      y-doc)
         y-text (.getText y-doc "codemirror")
-        binding (CodemirrorBinding. y-text editor (.-awareness provider))]
-    (.on (-> binding .-cm #_js/console.log) "change"
+        binding (CodemirrorBinding. y-text editor (.-awareness provider))
+        username (-> @app-state :algoradio.collab/login-data :username)]
+    (.setLocalStateField (.-awareness binding)
+                         "user"
+                         (clj->js {:name username
+                                   :color (rand-nth colors/hex-colors)}))
+
+    (.on (-> binding .-cm)
+         "change"
          (fn [_ change]
            (history/add-editor-change! app-state
                                        (get @app-state ::key)
@@ -42,7 +50,7 @@
                (when (and is-live?
                           (false? (-> @app-state
                                       :algoradio.collab/login-data :valid-password?)))
-                     (.preventDefault e))
+                 (.preventDefault e))
                (cond
                  (and ctrl? enter?) (do (.preventDefault e)
                                         (eval-block! (get-cm! app-state)
