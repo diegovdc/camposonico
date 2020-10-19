@@ -29,5 +29,5 @@
     (js/console.info "Channel has been closed")))
 
 (defn make-conn [path]
-  (js/console.debug "Connecting")
+  (js/console.debug "[ws] Making connection")
   (ws/connect path))

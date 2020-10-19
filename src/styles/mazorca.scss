@@ -15,6 +15,9 @@
 @import "mazorca/_theme-helpers";
 @import "mazorca/_modules";
 
+@import url("https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono&display=swap");
+
 @mixin close {
   &__close {
     width: 20px;
@@ -65,6 +68,7 @@
 
 body {
   background-color: c(background);
+  font-family: "DM Mono", monospace !important;
 }
 
 h1 {
@@ -1610,8 +1614,41 @@ code {
   }
 }
 
+@keyframes sleepy {
+  0% {
+    opacity: 0.1;
+    font-size: 12px;
+    line-height: 1;
+  }
+  50% {
+    opacity: 1;
+    font-size: 35px;
+    line-height: 5;
+  }
+  100% {
+    opacity: 0.1;
+    font-size: 12px;
+    line-height: 1;
+  }
+}
+
 .collab {
+  &__sleep {
+    font-family: "Major Mono Display", monospace;
+    margin-bottom: 30px;
+    text-align: center;
+    &-z-1 {
+      animation: sleepy 5s infinite;
+    }
+    &-z-2 {
+      animation: sleepy 7s infinite;
+    }
+    &-z-3 {
+      animation: sleepy 9s infinite;
+    }
+  }
   &-login {
+    font-family: "Major Mono Display", monospace;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1655,6 +1692,7 @@ code {
         button {
           @include button;
           margin-left: 20px;
+          &:focus,
           &.selected {
             border-color: c(checked);
             color: c(checked);

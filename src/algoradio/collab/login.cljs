@@ -33,7 +33,7 @@
                              :create (validate-create-session data)
                              :join (validate-join-session data))]
     (if-not validation-message
-      (send-message! collab/conn :start-session
+      (send-message! (@collab/state ::collab/conn) :start-session
                      (assoc data :client-id (@collab/state ::collab/ws-id)))
       (alert/create-alert! app-state :error validation-message))))
 
@@ -94,6 +94,16 @@
 
 (comment (@collab/state ::collab/available-sessions))
 
+(defn render-waking-up-the-server []
+  [:div {:class "collab-login"}
+   [:div {:class "collab-login__container"}
+    [:h2 "Camposonico Live"]
+    [:div {:class "collab__sleep"}
+     [:span {:class "collab__sleep-z-1"} "z"]
+     [:span {:class "collab__sleep-z-2"} "z"]
+     [:span {:class "collab__sleep-z-3"} "z"]]
+    [:div "The server is waking up, please wait..."]]])
+
 (defn login [app-state]
   (let [create? (= :create (@app-state ::session-action))
         join? (= :join (@app-state ::session-action))
@@ -120,6 +130,7 @@
              ::session-action :join
              ::login-initialized? true))
     (cond
+      (not (@collab/state ::collab/conn)) (render-waking-up-the-server)
       (get @app-state ::hide-login false) nil
       (@app-state :algoradio.collab.init/login-data)
       [:div {:class "collab-login"}

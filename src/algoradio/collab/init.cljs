@@ -80,7 +80,7 @@
 
 (defn router [msg]
   (condp = (:type msg)
-    :ping (send-message! collab/conn :pong nil)
+    :ping (send-message! (@collab/state ::collab/conn) :pong nil)
     :still-connected? (go (a/>! still-connected-buffer msg))
     :id (do (js/console.debug "COLLAB CONNECTED"(-> msg :msg :available-sessions))
             (swap! collab/state assoc
@@ -99,7 +99,7 @@
             (swap! collab/state update :algoradio.chat/messages
                    conj (assoc msg :received-timestamp (js/Date.now))))
     :collab-event-broadcast (do (js/console.debug "Received event" msg)
-                              (a/go (a/>! event-buffer msg)))
+                                (a/go (a/>! event-buffer msg)))
     (js/console.error "Unknown message type:" (clj->js msg))))
 
 
@@ -122,16 +122,30 @@
   (a/go-loop []
     (a/<! (a/timeout ms))
     (when (ws/connected? (a/<! conn))
-      (send-message! collab/conn :pong {:client-id (@collab/state ::collab/ws-id)}))
+      (send-message! (@collab/state ::collab/conn) :pong {:client-id (@collab/state ::collab/ws-id)}))
     (recur)))
 
 
 (defonce init-receiver
   (memoize (fn []
              (js/console.debug "Initing receiver")
-             (start-play-loop event-buffer)
-             (make-receiver collab/conn #'router)
-             (send-pong-every! collab/conn 10000))))
+             (a/go-loop [connected? false]
+               (if-not connected?
+                 (let [conn (collab/create-connection)]
+                   (if (ws/connected? (a/<! conn))
+                     (do
+                       (swap! collab/state assoc ::collab/conn conn)
+                       (recur true))
+                     (do
+                       (js/console.debug "[ws] Failed to connect...")
+                       (a/<! (a/timeout 2000))
+                       (js/console.debug "[ws] TRYING TO CONNECT AGAIN...")
+                       (recur false)))))
+               (do
+                 (js/console.debug "[ws] WEBSOCKET CONNECTED!")
+                 (start-play-loop event-buffer)
+                 (make-receiver (@collab/state ::collab/conn) #'router)
+                 (send-pong-every! (@collab/state ::collab/conn) 10000))))))
 
 (comment
   (init-receiver)

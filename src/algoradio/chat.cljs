@@ -12,8 +12,6 @@
 
 (defonce clock (r/atom 0))
 
-(defonce conn (make-conn (str config/ws-uri "/collab")) )
-
 (defonce start-clock! (memoize (fn [clock]
                                  (js/console.log "Starting clock")
                                  (go-loop []
@@ -127,6 +125,6 @@
 
 (comment
   (-> @collab/state )
-  (send-message! conn :set-username "Diego" {:user-id (@state ::ws-id)})
-  (send-message! collab/conn :chat-message "Holis" {:user-id (-> @collab/state ::collab/ws-id) :date (js/Date.now)})
+  (send-message! (@collab/state ::collab/conn) :set-username "Diego" {:user-id (@state ::ws-id)})
+  (send-message! (@collab/state ::collab/conn) :chat-message "Holis" {:user-id (-> @collab/state ::collab/ws-id) :date (js/Date.now)})
   (a/go (a/>! ((a/<! conn) :source) {:msg "Hello World"})))
