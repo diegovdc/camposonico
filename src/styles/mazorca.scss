@@ -1624,6 +1624,9 @@ code {
     background-color: rgba(20, 0, 20, 0.8);
     color: white;
     font-size: 16px;
+    *::selection {
+      background-color: c(checked);
+    }
     &__container {
       max-width: 400px;
     }

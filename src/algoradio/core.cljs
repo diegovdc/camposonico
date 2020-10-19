@@ -44,16 +44,26 @@
       :reagent-render
       (fn []
         [:div
-         {:on-key-up (fn [e]
-                       (when (= 27 (.-keyCode e))
-                         (sources/close! nil)))}
+         {:on-key-up (fn [e] (when (= 27 (.-keyCode e)) (sources/close! nil)))}
          (when (isMobileOrTablet) (intro))
          [:div {:class "container main"}
           [:canvas {:id "hydra-canvas" :class "hydra-canvas"}]
-          (when-not (isMobileOrTablet)
-            (editor/main app-state
-                         is-live?
-                         collab-core/send-eval-event!))
+          (cond
+            (isMobileOrTablet)
+            nil
+            (not is-live?)
+            (do (js/console.debug "STARTING SOLO SESSION")
+                (editor/main app-state
+                             is-live?
+                             nil
+                             collab-core/send-eval-event!))
+            (and is-live? (@app-state ::collab/login-data))
+            (do (js/console.debug "STARTING LIVE SESSION")
+                (editor/main app-state
+                             is-live?
+                             (@app-state ::collab/login-data)
+                             collab-core/send-eval-event!))
+            :default nil)
           [:div {:class (str "search " (when (isMobileOrTablet) "is-mobile"))}
            (search/main app-state)
            (add-music/main app-state)]
@@ -66,8 +76,9 @@
           (fs/main app-state)
           (alert/main app-state)
           (history/save-template app-state)
-          #_(when is-live? [chat/main])
-          #_(when is-live? (collab/login app-state))
+          ;; TODO login to chat as well
+          (when is-live? [chat/main])
+          (when is-live? (collab/login app-state))
           #_(convocatoria/main :es)]])})))
 
 (defn start []

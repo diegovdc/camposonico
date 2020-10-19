@@ -12,7 +12,7 @@
         [:span {:class "alert__close-x"} "x"]]
        [:div
         {:class (str "alert__container alert__" (name type))}
-        [:p msg]]])))
+        [:div msg]]])))
 
 (defn create-alert! [app-state type msg]
   (swap! app-state assoc ::alert {:type type :msg msg}))

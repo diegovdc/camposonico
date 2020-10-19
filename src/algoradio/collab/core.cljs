@@ -1,10 +1,15 @@
 (ns algoradio.collab.core
   (:require [algoradio.websockets :refer [make-conn send-message!]]
-            [algoradio.config :as config]))
+            [algoradio.config :as config]
+            [reagent.core :as r]))
 
 (defonce conn (make-conn (str config/ws-uri "/collab")) )
 
-(defonce state (atom {::ws-id nil ::player-map {}}))
+(defonce state (r/atom {::ws-id nil ::player-map {}
+                        :algoradio.chat/textarea-height 23
+                        :algoradio.chat/messages ()
+                        :algoradio.chat/show-chat? true
+                        :algoradio.chat/show-latest-messages? true}))
 
 
 (defn send-typing-event! [event-data]
@@ -41,8 +46,17 @@
   (println "Sending stop event"  audio-type)
   (send-message! conn
                  :collab-event
-                 (str {:audio-id audio-id
-                       :audio-type audio-type})
-                 {:id (@state ::ws-id)
+                 {:event (str {:audio-id audio-id
+                               :audio-type audio-type})
+                  :client-id (@state ::ws-id)
                   :editor-id 1
-                  :type :stop}))
+                  :event-type :stop}))
+
+
+(defn send-chat-message! [message]
+  (send-message! conn
+                 :chat-message
+                 {:message message
+                  :client-id (@state ::ws-id)}))
+
+(comment (send-chat-message! "holissss"))

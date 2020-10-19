@@ -2,20 +2,20 @@
   (:require [clojure.string :as str]
             [algoradio.history :as history]
             ["yjs" :as Y]
+            [algoradio.config :as config]
             ["y-websocket" :refer [WebsocketProvider]]
             ["y-codemirror" :refer [CodemirrorBinding]]
             ["react-codemirror2" :as react-codemirror]
             ["codemirror/mode/javascript/javascript"]
             ["codemirror/addon/display/fullscreen"]))
 
-(defn init [app-state editor]
+(defn init [app-state editor session-name]
   (let [y-doc (Y/Doc.)
-        provider (WebsocketProvider. "wss://demos.yjs.dev",
-                                     "camposonico",
+        provider (WebsocketProvider. "wss://demos.yjs.dev"
+                                     (str "camposonico-live-session-" session-name)
                                      y-doc)
         y-text (.getText y-doc "codemirror")
-        binding (CodemirrorBinding. y-text editor (.-awareness provider))
-        ]
+        binding (CodemirrorBinding. y-text editor (.-awareness provider))]
     (.on (-> binding .-cm #_js/console.log) "change"
          (fn [_ change]
            (history/add-editor-change! app-state
@@ -26,50 +26,51 @@
 
 (declare get-cm! eval-block! eval-line-or-selection!)
 
-(defn main [app-state is-live? send-eval-event!]
-  [:div {:key (get @app-state ::key)
-         :id "editor-container"
-         :class "editor"
-         :on-key-down
-         (fn [e]
-           (let [editor-id (get @app-state :algoradio.editor/key)
-                 ctrl? (.-ctrlKey e)
-                 enter? (= 13 #_enter (.-keyCode e))
-                 shift? (.-shiftKey e)]
-             ;; TODO finish implementing input prevention
-             (when false #_ "prevent non logged users from inputing anything"
-                   (.preventDefault e))
-             (cond
-               (and ctrl? enter?) (do (.preventDefault e)
-                                      (eval-block! (get-cm! app-state)
-                                                   app-state
-                                                   editor-id
-                                                   send-eval-event!))
+(defn main [app-state is-live? user-data send-eval-event!]
+  (let [session-name (:session-name user-data)]
+    [:div {:key (get @app-state ::key)
+           :id "editor-container"
+           :class "editor"
+           :on-key-down
+           (fn [e]
+             (let [editor-id (get @app-state :algoradio.editor/key)
+                   ctrl? (.-ctrlKey e)
+                   enter? (= 13 #_enter (.-keyCode e))
+                   shift? (.-shiftKey e)]
+               ;; TODO finish implementing input prevention
+               (when false #_ "prevent non logged users from inputing anything"
+                     (.preventDefault e))
+               (cond
+                 (and ctrl? enter?) (do (.preventDefault e)
+                                        (eval-block! (get-cm! app-state)
+                                                     app-state
+                                                     editor-id
+                                                     send-eval-event!))
 
-               (and shift? enter?) (do (.preventDefault e)
-                                       (eval-line-or-selection!
-                                        (get-cm! app-state)
-                                        app-state
-                                        editor-id
-                                        send-eval-event!)))))}
+                 (and shift? enter?) (do (.preventDefault e)
+                                         (eval-line-or-selection!
+                                          (get-cm! app-state)
+                                          app-state
+                                          editor-id
+                                          send-eval-event!)))))}
 
-   [:> (if is-live? react-codemirror/UnControlled react-codemirror/Controlled)
-    {:editor-did-mount  (fn [ref]
-                          (when is-live? (init app-state ref))
-                          (when-not (@app-state ::instance)
-                            (swap! app-state assoc ::instance ref)))
-     :options {:theme "oceanic-next"
-               :fullScreen true
-               :scrollbarStyle "null"}
-     :autoSave false
-     :value (get @app-state ::text "")
-     :on-before-change (when-not is-live?
-                         (fn [editor data value]
-                           (swap! app-state assoc ::text value)))
-     :on-change (fn [text change value]
-                  (history/add-editor-change! app-state
-                                              (get @app-state ::key)
-                                              change))}]])
+     [:> (if is-live? react-codemirror/UnControlled react-codemirror/Controlled)
+      {:editor-did-mount  (fn [ref]
+                            (when is-live? (init app-state ref session-name))
+                            (when-not (@app-state ::instance)
+                              (swap! app-state assoc ::instance ref)))
+       :options {:theme "oceanic-next"
+                 :fullScreen true
+                 :scrollbarStyle "null"}
+       :autoSave false
+       :value (-> @app-state (get ::text))
+       :on-before-change (when-not is-live?
+                           (fn [editor data value]
+                             (swap! app-state assoc ::text value)))
+       :on-change (fn [text change value]
+                    (history/add-editor-change! app-state
+                                                (get @app-state ::key)
+                                                change))}]]))
 (defn get-cm! [app-state]
   (-> @app-state ::instance))
 
@@ -87,8 +88,8 @@
   [text-vec direction start-line]
   (let [next-line ({:up dec :down inc} direction)
         at-end? (fn [line] (case direction
-                            :up (= line 0)
-                            :down (= line (dec (count text-vec)))))]
+                             :up (= line 0)
+                             :down (= line (dec (count text-vec)))))]
     (loop [line start-line]
       (cond
         (empty? (str/trim (nth text-vec line ""))) line

@@ -9,7 +9,7 @@
                  :freesounds {}
                  :freesounds-pages {}
                  ::archive/already-played #{}
-                 ::editor/text nil
+                 ;; ::editor/text nil
                  ::editor/key 1}))
 
 (defn get-sounds []

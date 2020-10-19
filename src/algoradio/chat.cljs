@@ -1,6 +1,7 @@
 (ns algoradio.chat
   (:require [algoradio.alert :refer [create-alert!]]
             [algoradio.state :refer [app-state]]
+            [algoradio.collab.core :as collab]
             [algoradio.websockets
              :refer
              [make-conn make-receiver on-message send-message!]]
@@ -17,7 +18,7 @@
 
 (defonce clock (r/atom 0))
 
-(defonce conn (make-conn (str config/ws-uri "/ws")) )
+(defonce conn (make-conn (str config/ws-uri "/collab")) )
 
 (defn on-new-message [msg]
   (swap! state update ::messages conj msg)
@@ -48,42 +49,40 @@
 (defn submit-message [ev]
   (.preventDefault ev)
   (when (or (not (.-keyCode ev)) (= 13 (.-keyCode ev)))
-    (send-message! conn
-                   :chat (@state ::chat-message)
-                   {:user-id (@state ::ws-id) :date (js/Date.now)})
-    (swap! state merge {::chat-message nil ::textarea-height 21})))
+    (collab/send-chat-message! (@collab/state ::chat-message))
+    (swap! collab/state merge {::chat-message nil ::textarea-height 23})))
 
 (defn get-latest-messages [show-latest-messages? now messages]
   (js/console.log show-latest-messages?)
   (if show-latest-messages?
-    (take-while #(-> % :opts :date (> (- now 10000))) messages)
+    (take-while #(-> % :received-timestamp (> (- now 10000))) messages)
     messages))
 
 (defn chat []
-  (let [show-chat? (@state ::show-chat?)
-        show-latest-messages? (@state ::show-latest-messages?)]
+  (let [show-chat? (@collab/state ::show-chat?)
+        show-latest-messages? (@collab/state ::show-latest-messages?)]
     [:div
      (when show-chat?
        [:div {:id "chat-messages-container"
               :class "chat__messages-container"}
-        (->> (@state ::messages)
+        (->> (@collab/state ::messages)
              (get-latest-messages show-latest-messages? @clock)
-             (map (fn [{:keys [msg]
-                       {:keys [date username]} :opts}]
-                    [:div {:key (str username "_" date)
+             (map (fn [{:keys [timestamp username message]}]
+                    [:div {:key (str username "_" timestamp)
                            :class "chat__message-container"}
                      [:p {:class "chat__message-text"}
                       [:span {:class "chat__username"}
                        (or username (apply str "anonymous-"
-                                           (->> (@state ::ws-id) (take-last 3))))]
-                      (str ": " msg)]]))
+                                           (->> (@collab/state ::collab/ws-id)
+                                                (take-last 3))))]
+                      (str ": " message)]]))
              reverse)])
      [:div {:class "chat__form-container"}
       [:div {:class "chat__icons"}
        [:i {:class (str "fas chat_toggle-button "
                         (str "fa-comment" (when show-chat? "-slash")))
             :title (if show-chat? "Hide chat" "Show chat")
-            :on-click (fn [] (swap! state
+            :on-click (fn [] (swap! collab/state
                                    #(-> %
                                         (update ::show-chat? not)
                                         (assoc ::show-latest-messages? false))))}]
@@ -93,25 +92,25 @@
               :title (if show-latest-messages?
                        "Show full chat history"
                        "Only show latest messages")
-              :on-click #(swap! state update ::show-latest-messages? not)}])]
+              :on-click #(swap! collab/state update ::show-latest-messages? not)}])]
       (when show-chat?
         [:form {:class "chat__form"
                 :on-submit submit-message
                 :on-key-up submit-message}
          [:textarea {:id "chat-message"
                      :class "chat__textarea"
-                     :value (@state ::chat-message)
-                     :style {:height (@state ::textarea-height)
+                     :value (@collab/state ::chat-message)
+                     :style {:height (@collab/state ::textarea-height)
                              :padding-top 1
                              :padding-bottom 1}
                      :on-change (fn [ev]
                                   (when-not (-> ev .-target .-value last (= "\n"))
-                                    (swap! state assoc ::chat-message (-> ev .-target .-value))
-                                    (swap! state assoc
+                                    (swap! collab/state assoc ::chat-message (-> ev .-target .-value))
+                                    (swap! collab/state assoc
                                            ::textarea-height
                                            (-> ev .-target .-scrollHeight))))}]
          [:button {:class (str "chat__submit-button "
-                               (when (< 0 (count (@state ::chat-message)))
+                               (when (< 0 (count (@collab/state ::chat-message)))
                                  "not-empty"))
                    :id "chat-submit-button"
                    :on-click submit-message}
@@ -148,11 +147,10 @@
     (fn []
       [:div {:class "chat"}
        [:div {:class "chat__container"}
-        (if (-> @state ::username-data :username-has-been-set?)
-          (chat)
-          (username-field))]])}))
+        (chat)]])}))
 
 (comment
+  (-> @collab/state )
   (send-message! conn :set-username "Diego" {:user-id (@state ::ws-id)})
-  (send-message! conn :chat "Holis" {:user-id (@state ::ws-id) :date (js/Date.now)})
+  (send-message! collab/conn :chat-message "Holis" {:user-id (-> @collab/state ::collab/ws-id) :date (js/Date.now)})
   (a/go (a/>! ((a/<! conn) :source) {:msg "Hello World"})))
