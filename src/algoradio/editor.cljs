@@ -37,8 +37,11 @@
                    ctrl? (.-ctrlKey e)
                    enter? (= 13 #_enter (.-keyCode e))
                    shift? (.-shiftKey e)]
+
                ;; TODO finish implementing input prevention
-               (when false #_ "prevent non logged users from inputing anything"
+               (when (and is-live?
+                          (false? (-> @app-state
+                                      :algoradio.collab/login-data :valid-password?)))
                      (.preventDefault e))
                (cond
                  (and ctrl? enter?) (do (.preventDefault e)
