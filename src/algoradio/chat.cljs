@@ -10,34 +10,9 @@
             [algoradio.config :as config])
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
-(defonce state (r/atom {::messages ()
-                        ::textarea-height 23
-                        ::show-chat? true
-                        ::show-latest-messages? true
-                        ::ws-id nil}))
-
 (defonce clock (r/atom 0))
 
 (defonce conn (make-conn (str config/ws-uri "/collab")) )
-
-(defn on-new-message [msg]
-  (swap! state update ::messages conj msg)
-  (js/console.log (@state ::messages)))
-
-(defn router [msg]
-  (condp = (:type msg)
-    :ping (send-message! conn :pong nil)
-    :id (swap! state assoc ::ws-id (:msg msg))
-    :chat (on-new-message msg)
-    :username-has-been-set? (if (-> msg :msg :username)
-                              (swap! state assoc ::username-data (:msg msg))
-                              (do (js/console.error (-> msg :msg :error))
-                                  (create-alert!
-                                   app-state
-                                   :error "Username has already been chosen")))
-    (js/console.error "Unknown message type:" msg)))
-
-(defonce receiver (make-receiver conn router))
 
 (defonce start-clock! (memoize (fn [clock]
                                  (js/console.log "Starting clock")
@@ -45,7 +20,6 @@
                                    (a/<! (a/timeout 1000))
                                    (swap! clock + 1000)
                                    (recur)))))
-
 (defn submit-message [ev]
   (.preventDefault ev)
   (when (or (not (.-keyCode ev)) (= 13 (.-keyCode ev)))
@@ -118,21 +92,23 @@
 
 (defn valid-username? [username] (and (string? username) (> (count username ) 0)))
 
-(defn username-field []
-  [:div {:class "chat_login"}
-   [:label {:class "chat__username-input-label"} "Choose a username to start chatting"]
-   [:form {:class "chat__form"
-           :on-submit
-           (fn [ev]
-             (.preventDefault ev)
-             (let [username (@state ::username-field)]
-               (when (valid-username? username)
-                 (println username)
-                 (send-message! conn :set-username username {:user-id (@state ::ws-id)}))))}
+(comment
+  ;;  Currently unused, might be used later
+  (defn username-field []
+    [:div {:class "chat_login"}
+     [:label {:class "chat__username-input-label"} "Choose a username to start chatting"]
+     [:form {:class "chat__form"
+             :on-submit
+             (fn [ev]
+               (.preventDefault ev)
+               (let [username (@state ::username-field)]
+                 (when (valid-username? username)
+                   (println username)
+                   (send-message! conn :set-username username {:user-id (@state ::ws-id)}))))}
 
-    [:input {:on-change (fn [ev]
-                          (swap! state assoc ::username-field (-> ev .-target .-value)))}]
-    [:button {:class "chat__submit-button" :type "submit"} "Send"]]])
+      [:input {:on-change (fn [ev]
+                            (swap! state assoc ::username-field (-> ev .-target .-value)))}]
+      [:button {:class "chat__submit-button" :type "submit"} "Send"]]]))
 
 (defn main []
   (reset! clock (js/Date.now))

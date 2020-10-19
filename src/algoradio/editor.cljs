@@ -1,9 +1,8 @@
 (ns algoradio.editor
   (:require [clojure.string :as str]
             [algoradio.history :as history]
-            ["yjs" :as Y]
-            [algoradio.config :as config]
             [algoradio.colors :as colors]
+            ["yjs" :as Y]
             ["y-websocket" :refer [WebsocketProvider]]
             ["y-codemirror" :refer [CodemirrorBinding]]
             ["react-codemirror2" :as react-codemirror]
@@ -28,8 +27,7 @@
          (fn [_ change]
            (history/add-editor-change! app-state
                                        (get @app-state ::key)
-                                       change)))
-    ))
+                                       change)))))
 
 
 (declare get-cm! eval-block! eval-line-or-selection!)
@@ -51,6 +49,7 @@
                           (false? (-> @app-state
                                       :algoradio.collab/login-data :valid-password?)))
                  (.preventDefault e))
+
                (cond
                  (and ctrl? enter?) (do (.preventDefault e)
                                         (eval-block! (get-cm! app-state)

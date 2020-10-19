@@ -16,7 +16,7 @@
             [haslett.client :as ws]
             [clojure.string :as str])
   (:require-macros  [cljs.core.async.macros :refer [go go-loop]]))
-(-> @collab/state)
+
 (defn make-collab-url [session-path]
   (str js/window.location.origin session-path))
 
@@ -40,7 +40,7 @@
       (do (js/setTimeout finish-joining 500) "Joining!"))))
 
 (defn on-collab-event [msg]
-  (js/console.debug "collab" msg)
+  (js/console.debug "collab event" msg (-> msg :event-type))
   (condp = (-> msg :event-type)
     :editor-change  (->> msg :data
                          js/JSON.parse
@@ -70,9 +70,7 @@
                     (player/stop! (event :audio-type) audio id false)))))
     (js/console.error "Unknown event type" (clj->js (msg :event-type)))))
 
-(-> @collab/state)
-
-(def event-buffer (a/chan))
+(defonce event-buffer (a/chan))
 
 (defn get-and-replay-history! []
   (-> (axios/get (str config/api "/collab-history/1"))
@@ -87,7 +85,6 @@
                       (a/>! event-buffer)))))))
 
 (defn play-loop-callback [event-data]
-  (println "playloopcallback")
   (condp  = (type event-data)
     cljs.core/PersistentVector (doseq [ev event-data] (on-collab-event ev))
     cljs.core/PersistentHashMap (on-collab-event event-data)
@@ -99,7 +96,7 @@
 (defn start-play-loop [event-buffer]
   (a/go-loop []
     (let [event-data (a/<! event-buffer)]
-      (println "play loop")
+      (js/console.debug "playloop event")
       (#'play-loop-callback event-data))
     (recur)))
 
@@ -108,14 +105,11 @@
 (defn router [msg]
   (condp = (:type msg)
     :ping (send-message! collab/conn :pong nil)
-    :still-connected? (do #_(println msg)
-                          (go (a/>! still-connected-buffer msg)))
-    :id (do
-          (js/console.debug "COLLAB CONNECTED"(-> msg :msg :available-sessions))
-          (swap! collab/state assoc
-                 ::collab/ws-id (-> msg :msg :client-id)
-                 ::collab/available-sessions (-> msg :msg :available-sessions))
-          #_(get-and-replay-history!))
+    :still-connected? (go (a/>! still-connected-buffer msg))
+    :id (do (js/console.debug "COLLAB CONNECTED"(-> msg :msg :available-sessions))
+            (swap! collab/state assoc
+                   ::collab/ws-id (-> msg :msg :client-id)
+                   ::collab/available-sessions (-> msg :msg :available-sessions)))
     :start-session (do (println msg (msg :success?))
                        (if (true? (msg :success?))
                          (do
@@ -128,9 +122,9 @@
     :chat (when (and (msg :username) (> (count (msg :message)) 0))
             (swap! collab/state update :algoradio.chat/messages
                    conj (assoc msg :received-timestamp (js/Date.now))))
-    :collab-event-broadcast (a/go (a/>! event-buffer msg))
+    :collab-event-broadcast (do (js/console.debug "Received event" msg)
+                              (a/go (a/>! event-buffer msg)))
     (js/console.error "Unknown message type:" (clj->js msg))))
-
 
 
 (comment (-> @collab/state))
@@ -177,10 +171,6 @@
       (str "One or more fields in the form are empty: "
            (str/join ", " ((apply juxt missing-fields) messages))))) )
 
-#_(validate-join-session {:session-action (@app-state ::session-action)
-                          :session-name 1
-                          :password 2
-                          :username 4})
 (defn send-start-session!
   [data]
   (let [validation-message (case (data :session-action)
@@ -189,23 +179,23 @@
     (if-not validation-message
       (send-message! collab/conn :start-session
                      (assoc data :client-id (@collab/state ::collab/ws-id)))
-      (alert/create-alert! app-state :error validation-message)))
-  )
+      (alert/create-alert! app-state :error validation-message))))
 
 
 (defonce init-receiver
   (memoize (fn []
+             (js/console.debug "Initing receiver")
              (start-play-loop event-buffer)
              (make-receiver collab/conn #'router)
              (send-pong-every! collab/conn 1000))))
 
-(init-receiver)
-
-#_(send-start-session!
+(comment
+  (init-receiver)
+  (send-start-session!
    {:session-action (@app-state ::session-action)
     :session-name (@app-state ::session-name)
     :password (@app-state ::password)
-    :username (@app-state ::username)})
+    :username (@app-state ::username)}))
 
 (defn render-create-session
   [create? set-session-name set-password set-username send-start-session-button]
