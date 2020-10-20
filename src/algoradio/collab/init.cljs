@@ -116,8 +116,6 @@
         :else (do (js/console.error "WebSocket disconnected: should reconnect")
                   (recur (inc attempts)))))))
 
-(defonce checker (check-for-connection))
-
 (defn send-pong-every! [conn ms]
   (a/go-loop []
     (a/<! (a/timeout ms))
@@ -143,6 +141,7 @@
                        (recur false)))))
                (do
                  (js/console.debug "[ws] WEBSOCKET CONNECTED!")
+                 (check-for-connection)
                  (start-play-loop event-buffer)
                  (make-receiver (@collab/state ::collab/conn) #'router)
                  (send-pong-every! (@collab/state ::collab/conn) 10000))))))

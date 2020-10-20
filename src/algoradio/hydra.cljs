@@ -22,7 +22,7 @@
   (init!)
 
   (-> (js/shape 3)
-      (.scrollX )
+      (.scrollX 0.1 0.1 )
       (.out))
 
   (js/console.log (js/document.getElementById "hydra-canvas"))

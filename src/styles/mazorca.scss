@@ -1000,6 +1000,17 @@ b {
   &__flashed-text {
     background-color: c(checked);
   }
+
+  span[role="presentation"] {
+    text-shadow: rgba(0, 0, 0, 0.5) 2px 2px 4px;
+    background-color: rgba(0, 0, 0, 0.5);
+    line-height: 1.16;
+    border-radius: 3px;
+  }
+  .CodeMirror-cursors .CodeMirror-cursor {
+    border-left: 4px solid #ec7b09;
+    border-radius: 5px;
+  }
 }
 
 .search {

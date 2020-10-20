@@ -12,7 +12,8 @@
 (defn send-message!
   ([conn type msg] (send-message! conn type msg {}))
   ([conn type msg opts]
-   (a/go (a/>! ((a/<! conn) :sink) (assoc msg :type type :opts opts)))))
+   (when conn
+     (a/go (a/>! ((a/<! conn) :sink) (assoc msg :type type :opts opts))))))
 
 (defn on-message [router msg]
   (try (let [msg (read-string msg)]

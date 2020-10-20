@@ -1,5 +1,6 @@
 (ns algoradio.editor-api
-  (:require [algoradio.hydra :as hydra]
+  (:require [algoradio.js-loader :refer [load-script]]
+            [algoradio.hydra :as hydra]
             [algoradio.source-info :as sources]
             [algoradio.editor :as editor]
             [algoradio.history :as history]
@@ -10,11 +11,19 @@
             [algoradio.config :as config]
             [algoradio.state :as state]
             [algoradio.archive :as archive]
-            [clojure.walk :as walk]))
+            [clojure.walk :as walk]
+            [clojure.set :as set]))
 
 (declare load-audios!)
 
 (defn setup! [app-state]
+  (set! (.. js/window -loadScript)
+        (fn [opts]
+          (js/console.log opts)
+          (load-script
+           (-> opts js->clj
+               walk/keywordize-keys
+               (set/rename-keys {:onLoad :on-load})))))
   (set! (.. js/window -initHydra) hydra/init!)
   (set! (.. js/window -randNth) rand-nth)
   (set! (.. js/window -load) (partial load-audios! app-state))

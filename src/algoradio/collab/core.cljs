@@ -27,7 +27,7 @@
                   :event (js/JSON.stringify event-data)}))
 
 (defn send-eval-event! [event-data]
-  (js/console.debug "Sending eval event" event-data)
+  (js/console.debug "Sending eval event" (str event-data))
   (send-message! (::conn @state)
                  :collab-event
                  {:event-type :editor-eval
@@ -36,7 +36,7 @@
                   :event (str {:mark event-data})}))
 
 (defn send-play-event! [audio-id event-data originator-id]
-  (js/console.debug "Sending play event" event-data)
+  (js/console.debug "Sending play event" (str event-data))
 
   (send-message! (::conn @state)
                  :collab-event
@@ -48,7 +48,7 @@
                                      :originator-id originator-id))}))
 
 (defn send-stop-event! [audio-id audio-type]
-  (js/console.debug "Sending stop event"  audio-type)
+  (js/console.debug "Sending stop event" (str audio-type))
   (send-message! (::conn @state)
                  :collab-event
                  {:event (str {:audio-id audio-id
