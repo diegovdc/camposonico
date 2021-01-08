@@ -53,12 +53,13 @@
       (.then #(-> % js->clj walk/keywordize-keys :data))
       (.then (fn [events]
                (a/go
-                 (->> events
-                      ;; TODO what to do with play and editor eval events?
-                      ;; Probably, allow `load` events, state events like variables, etc
-                      (filter #(= (% :type) "editor-change"))
-                      (mapv (fn [ev] {:msg (update ev :type keyword)}))
-                      (a/>! event-buffer)))))))
+                 (let [data (try (->> events
+                                      ;; TODO what to do with play and editor eval events?
+                                      ;; Probably, allow `load` events, state events like variables, etc
+                                      (filter #(= (% :type) "editor-change"))
+                                      (mapv (fn [ev] {:msg (update ev :type keyword)})))
+                                 (catch js/Error e (js/console.error e)))]
+                   (when data (a/>! event-buffer data))))))))
 
 (defn play-loop-callback [event-data]
   (condp  = (type event-data)
@@ -71,9 +72,11 @@
 
 (defn start-play-loop [event-buffer]
   (a/go-loop []
-    (let [event-data (a/<! event-buffer)]
-      (js/console.debug "playloop event")
-      (#'play-loop-callback event-data))
+    (try
+      (let [event-data (a/<! event-buffer)]
+        (js/console.debug "playloop event")
+        (#'play-loop-callback event-data))
+      (catch js/Error e (js/console.log e)))
     (recur)))
 
 (def still-connected-buffer (a/chan))
@@ -118,9 +121,13 @@
 
 (defn send-pong-every! [conn ms]
   (a/go-loop []
-    (a/<! (a/timeout ms))
-    (when (ws/connected? (a/<! conn))
-      (send-message! (@collab/state ::collab/conn) :pong {:client-id (@collab/state ::collab/ws-id)}))
+    (try
+      (do
+        (a/<! (a/timeout ms))
+        (when (ws/connected? (a/<! conn))
+          (send-message! (@collab/state ::collab/conn)
+                         :pong {:client-id (@collab/state ::collab/ws-id)})))
+      (catch js/Error e (js/console.error e)))
     (recur)))
 
 
