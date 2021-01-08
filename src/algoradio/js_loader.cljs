@@ -11,5 +11,5 @@
 (comment
   (load-script {:src "https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.62/Tone.js"
                 :on-load js/console.log})
-  (load-script {:src "https://unpkg.com/hydra-synth@1.3.0/dist/hydra-synth.js"
+  (load-script {:src "https://unpkg.com/hydra-synth@1.3.6/dist/hydra-synth.js"
                 :on-load js/console.log}))
