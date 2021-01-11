@@ -48,7 +48,9 @@
          {:on-key-up (fn [e] (when (= 27 (.-keyCode e)) (sources/close! nil)))}
          (when (isMobileOrTablet) (intro))
          [:div {:class "container main"}
-          [:canvas {:id "hydra-canvas" :class "hydra-canvas"}]
+          [:canvas {:id "hydra-canvas"
+                    :class "hydra-canvas"
+                    :style {:imageRendering "high-quality"}}]
           (cond
             (isMobileOrTablet)
             nil
